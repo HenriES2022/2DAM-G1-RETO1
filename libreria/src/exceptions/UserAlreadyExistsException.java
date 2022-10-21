@@ -16,6 +16,7 @@ public class UserAlreadyExistsException extends Exception {
      * detail message.
      */
     public UserAlreadyExistsException() {
+        super();
     }
 
     /**

@@ -16,6 +16,7 @@ public class IncorrectLoginException extends Exception {
      * detail message.
      */
     public IncorrectLoginException() {
+        super();
     }
 
     /**

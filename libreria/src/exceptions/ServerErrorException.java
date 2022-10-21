@@ -16,6 +16,7 @@ public class ServerErrorException extends Exception {
      * detail message.
      */
     public ServerErrorException() {
+        super();
     }
 
     /**
