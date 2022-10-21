@@ -5,6 +5,8 @@
  */
 package main;
 
+import enumerations.UserPrivilege;
+import enumerations.UserStatus;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;

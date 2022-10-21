@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main;
+package enumerations;
 
 /**
  * This enumeration indicates the posible values of the user privileges

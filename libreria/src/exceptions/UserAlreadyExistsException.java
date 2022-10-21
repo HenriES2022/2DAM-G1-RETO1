@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main;
+package exceptions;
 
 /**
  *This exception is throwed when a user is going to register with a user that actually exist

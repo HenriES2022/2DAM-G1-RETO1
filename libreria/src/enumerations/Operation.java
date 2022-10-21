@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main;
+package enumerations;
 
 /**
  *This is the enumeration where we have all the posible orders to the servers 

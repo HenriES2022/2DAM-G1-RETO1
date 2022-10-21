@@ -5,6 +5,7 @@
  */
 package main;
 
+import enumerations.Operation;
 import java.util.Objects;
 
 /**
