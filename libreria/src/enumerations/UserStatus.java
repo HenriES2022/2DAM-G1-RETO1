@@ -7,8 +7,11 @@ package enumerations;
 
 /**
  *The enumeration where we indicate the user status
- * <li>ENABLED - If the user is active so can be used in the application</li>
+ * <ul>
+ *  <li>ENABLED - If the user is active so can be used in the application</li>
  * <li>DISABLED - If the user is inactive so can't be used in the application</li>
+ * </ul>
+ *
  * @author iorit
  */
 public enum UserStatus {

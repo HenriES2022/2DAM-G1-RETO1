@@ -7,8 +7,11 @@ package enumerations;
 
 /**
  * This enumeration indicates the posible values of the user privileges
- * <li>USER - If the user is a common user</li>
- * <li>ADMIN - If the user is an administrator</li>
+ * <ul>
+ *  <li>USER - If the user is a common user</li>
+ *  <li>ADMIN - If the user is an administrator</li>
+ * </ul>
+ * 
  * @author iorit
  */
 public enum UserPrivilege {
