@@ -46,7 +46,9 @@ public class SignUpViewController {
     private Boolean correctEmail = false;
     private Boolean correctPassword = false;
     private static Alert alert = null;
-    private static final Logger LOG = Logger.getLogger(view.signUp.SignUpViewController.class);;
+    private static final Logger LOG = Logger.getLogger(view.signUp.SignUpViewController.class);
+
+    ;
 
     /**
      * This method startes the Sign Up window
@@ -80,15 +82,15 @@ public class SignUpViewController {
         txtPassword.focusedProperty().addListener((Observable focusChanged) -> {
             validateText(txtPassword);
         });
-        
+
         myStage.setOnCloseRequest((WindowEvent windowEvent) -> {
             LOG.info("Opening exit alert confirmation");
             alert = new Alert(Alert.AlertType.CONFIRMATION, "Quieres cerrar el programa?", ButtonType.YES, ButtonType.NO);
             alert.showAndWait();
-            
+
             if (alert.getResult() == ButtonType.YES) {
                 Platform.exit();
-            } else{
+            } else {
                 windowEvent.consume();
             }
         });
@@ -97,31 +99,32 @@ public class SignUpViewController {
 
     /**
      * This methods validates that the text in the text fields are correct
+     *
      * @param field The text field that we are going to check
      */
     private void validateText(TextField field) {
-        
+
         if (txtEmail.getText().trim().equalsIgnoreCase("")
                 || txtPassword.getText().trim().equalsIgnoreCase("")
                 || txtFullName.getText().trim().equalsIgnoreCase("")
                 || txtUsername.getText().trim().equalsIgnoreCase("")) {
 
             btnSignUp.setDisable(true);
-        } else {
-            btnSignUp.setDisable(false);
-            if (field.equals(txtFullName) && field.getText().length()>100) {
-                btnSignUp.setDisable(true);
-                alert = new Alert(Alert.AlertType.ERROR, "El nombre completo no puede tener mas de 100 caracteres");
-            }
-            
-            if (field.equals(txtPassword)) {
-                correctPassword = passwordValidator(txtPassword.getText());
-            }
-            if (field.equals(txtEmail)) {
-                correctEmail = emailValidator(txtEmail.getText());
-                if (correctEmail) {
-                    
-                } 
+        }
+
+        if (field.equals(txtFullName) && field.getText().length() > 100) {
+            btnSignUp.setDisable(true);
+            alert = new Alert(Alert.AlertType.ERROR, "El nombre completo no puede tener mas de 100 caracteres");
+        }
+
+        if (field.equals(txtPassword)) {
+            correctPassword = passwordValidator(txtPassword.getText());
+            btnSignUp.setDisable(true);
+        }
+        if (field.equals(txtEmail)) {
+            correctEmail = emailValidator(txtEmail.getText());
+            if (correctEmail) {
+
             }
         }
 
@@ -129,26 +132,59 @@ public class SignUpViewController {
 
     /**
      * This method validates that the introduced email is sintacticaly correct
+     *
      * @param email The email we are going to check
-     * @return Returns True if the email matches the pattern we use to check the email, False if dosen't match
+     * @return Returns True if the email matches the pattern we use to check the
+     * email, False if dosen't match
      */
     private Boolean emailValidator(String email) {
         if (email.length() <= 100) {
             return Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")
-                .matcher(email)
-                .matches();
+                    + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")
+                    .matcher(email)
+                    .matches();
         }
         return false;
     }
 
     /**
      * this method validates that the password is correct
+     *
      * @param password The password we are going to validate
      * @return Returns True if the password is correct, False if is not.
      */
     private Boolean passwordValidator(String password) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        char[] passwordLowerCase = password.toLowerCase().toCharArray();
+        char[] passwordUpperCase = password.toUpperCase().toCharArray();
+        char[] specialCharacters = {'!', '¡', '@', '#', '$', '%', '&', '¿', '?', '"'};
+        boolean containsUpperCase = false;
+        boolean containsLowerCase = false;
+        boolean containsSpecialCharacters = false;
+        if (password.length() < 8) {
+            alert = new Alert(Alert.AlertType.ERROR, "La contraseña debe de tener al mentos 8 caracteres", ButtonType.OK);
+        } else {
+            for (int i = 0; i < password.length(); i++) {
+                if (password.charAt(i) == passwordUpperCase[i]) {
+                    containsUpperCase = true;
+                }
+                if (password.charAt(i) == passwordLowerCase[i]) {
+                    containsLowerCase = true;
+                }
+
+                for (int j = 0; j < specialCharacters.length; j++) {
+                    if (password.charAt(i) == specialCharacters[j]) {
+                        containsSpecialCharacters = true;
+                    }
+                }
+            }
+
+            if (containsSpecialCharacters && containsLowerCase && containsUpperCase) {
+                return true;
+            }
+            alert = new Alert(Alert.AlertType.ERROR, "La contraseña tiene que tener como minimo una letra mayuscula, una minuscula y un caracter especial", ButtonType.OK);
+
+        }
+        return false;
     }
 
 }
