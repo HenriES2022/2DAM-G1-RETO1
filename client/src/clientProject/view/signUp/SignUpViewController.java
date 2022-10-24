@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view.signUp;
+package clientProject.view.signUp;
 
 import com.sun.istack.internal.logging.Logger;
 import java.util.regex.Pattern;
@@ -46,7 +46,7 @@ public class SignUpViewController {
     private Boolean correctEmail = false;
     private Boolean correctPassword = false;
     private static Alert alert = null;
-    private static final Logger LOG = Logger.getLogger(view.signUp.SignUpViewController.class);
+    private static final Logger LOG = Logger.getLogger(clientProject.view.signUp.SignUpViewController.class);
 
     ;
 
