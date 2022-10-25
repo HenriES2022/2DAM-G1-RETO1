@@ -7,6 +7,7 @@ package model;
 
 import enumerations.UserPrivilege;
 import enumerations.UserStatus;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +16,11 @@ import java.util.Objects;
 /**
  * This is the class were we are going to manage the user info
  *
- * @author 2dam
+ * @author Ioritz
  */
-public class User {
+public class User implements Serializable{
 
+    
     /**
      * The integer field used to identify the user
      */

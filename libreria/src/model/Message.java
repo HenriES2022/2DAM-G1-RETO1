@@ -6,6 +6,7 @@
 package model;
 
 import enumerations.Operation;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Objects;
  *
  * @author iorit
  */
-public class Message {
+public class Message implements Serializable{
 
     /**
      * A user objet reference to send the user info to the server or obtain it
