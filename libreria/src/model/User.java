@@ -12,12 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
 /**
- *This is the class were we are going to manage the user info
+ * This is the class were we are going to manage the user info
+ *
  * @author 2dam
  */
 public class User {
+
     /**
      * The integer field used to identify the user
      */
@@ -190,6 +191,5 @@ public class User {
     public void setSignInHistory(List<Timestamp> signInHistory) {
         this.signInHistory = signInHistory;
     }
-    
-    
+
 }

@@ -6,14 +6,21 @@
 package enumerations;
 
 /**
- * This enumeration indicates the posible values of the user privileges
+ * This enumeration indicates the possible values of the user privileges
  * <ul>
- *  <li>USER - If the user is a common user</li>
- *  <li>ADMIN - If the user is an administrator</li>
+ * <li>USER - If the user is a common user</li>
+ * <li>ADMIN - If the user is an administrator</li>
  * </ul>
- * 
+ *
  * @author iorit
  */
 public enum UserPrivilege {
-    USER, ADMIN
+    /**
+     * User is a common user
+     */
+    USER,
+    /**
+     * User is an administrator
+     */
+    ADMIN
 }

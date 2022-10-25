@@ -6,7 +6,9 @@
 package exceptions;
 
 /**
- *This exception is throwed when a user is going to register with a user that actually exist
+ * This exception is thrown when a user is going to register with a user that
+ * actually exist
+ *
  * @author iorit
  */
 public class UserAlreadyExistsException extends Exception {

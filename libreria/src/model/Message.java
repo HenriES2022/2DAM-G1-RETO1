@@ -10,27 +10,30 @@ import java.util.Objects;
 
 /**
  * This class is for encapsulate the user we are going to send to the server
- * whith the operation we are going with this info, and only have to send one message
- * 
+ * with the operation we are going with this info, and only have to send one
+ * message
+ *
  * @author iorit
  */
 public class Message {
+
     /**
-     * A user objet reference to send the user info to the server or obtaine it from the server
+     * A user objet reference to send the user info to the server or obtain it
+     * from the server
      */
     private User userData = null;
     /**
-     * The opeariton that the server is going to do with this data
+     * The operation that the server is going to do with this data
      */
     private Operation operation = null;
-    
-   
+
     /**
-     * Empty costructor.
+     * Empty constructor.
      */
-    public Message(){
-        
+    public Message() {
+
     }
+
     //Getters and Setters
     public User getUserData() {
         return userData;
@@ -78,9 +81,4 @@ public class Message {
         return true;
     }
 
-    
-
-    
-    
-    
 }

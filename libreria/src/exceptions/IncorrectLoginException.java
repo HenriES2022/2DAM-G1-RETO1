@@ -6,7 +6,8 @@
 package exceptions;
 
 /**
- *This exception is trowed when the login data(user or password) is incorrect
+ * This exception is thrown when the login data(user or password) is incorrect
+ *
  * @author iorit
  */
 public class IncorrectLoginException extends Exception {

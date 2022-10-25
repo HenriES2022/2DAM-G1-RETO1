@@ -15,5 +15,12 @@ package enumerations;
  * @author iorit
  */
 public enum UserStatus {
-    ENABLED, DISABLED
+    /**
+     * user is active so can be used in the application
+     */
+    ENABLED, 
+    /**
+     * user is inactive so can't be used in the application
+     */
+    DISABLED
 }

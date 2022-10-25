@@ -6,7 +6,8 @@
 package exceptions;
 
 /**
- *This exception is throwed when an error has happened in the server
+ * This exception is thrown when an error has happened in the server
+ *
  * @author iorit
  */
 public class ServerErrorException extends Exception {
