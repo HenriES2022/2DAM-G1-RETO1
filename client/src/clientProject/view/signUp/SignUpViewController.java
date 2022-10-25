@@ -5,9 +5,8 @@
  */
 package clientProject.view.signUp;
 
-import com.sun.istack.internal.logging.Logger;
 import enumerations.Operation;
-import exceptions.ServerErrorException;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.beans.Observable;
@@ -52,10 +51,10 @@ public class SignUpViewController {
     private Boolean correctPassword = false;
     private Boolean correctFullName = true;
     private Boolean correctUserName = true;
-    private ClientSocketFactory myFactory;
-    private ClientSocket clientSocket;
+    /*private ClientSocketFactory myFactory;
+    private ClientSocket clientSocket;*/
     private static Alert alert = null;
-    private static final Logger LOG = Logger.getLogger(clientProject.view.signUp.SignUpViewController.class);
+    private static final Logger LOG = Logger.getLogger("clientProject.view.signUp.SignUpViewController.class");
 
     /**
      * This method startes the Sign Up window
@@ -245,7 +244,7 @@ public class SignUpViewController {
         Operation operation = null;
 
         LOG.info("Setting up the required variables");
-        clientSocket = myFactory.getImplementation();
+        //clientSocket = myFactory.getImplementation();
         user = new User();
         user.setFullName(txtFullName.getText());
         user.setEmail(txtEmail.getText());
@@ -258,8 +257,8 @@ public class SignUpViewController {
         message.setUserData(user);
         message.setOperation(operation);
 
-        try {
-            message = clientSocket.connectToServer(message);
+        //try {
+            /*message = clientSocket.connectToServer(message);
 
             operation = message.getOperation();
 
@@ -269,12 +268,14 @@ public class SignUpViewController {
             } else if (operation.equals(Operation.OK)) {
                 alert = new Alert(Alert.AlertType.INFORMATION, "El usuario ha sido registrado correctamente", ButtonType.OK);
                 LOG.info("The sign up has be done correctly. Exiting method...");
-            }
-        } catch (ServerErrorException e) {
+            }*/
+            
+            System.out.println(user.getEmail());
+        /*} catch (ServerErrorException e) {
             LOG.severe(e.getMessage());
             alert = new Alert(Alert.AlertType.ERROR, "Error al conectarse con el servidor, intentelo de nuevo mas tarde", ButtonType.OK);
 
-        }
+        }*/
 
     }
 }
