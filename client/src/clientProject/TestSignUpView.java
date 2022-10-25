@@ -22,17 +22,17 @@ import javafx.stage.Stage;
  *
  * @author iorit
  */
-public class TestSignUpView extends Application{
+public class TestSignUpView extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-         Button btn = new Button();
+        Button btn = new Button();
         btn.setText("Test signUp");
         primaryStage.resizableProperty().setValue(false);
         btn.setOnAction((ActionEvent ActionEvent) -> {
             try {
                 primaryStage.hide();
-                
+
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("view/signUp/SignUpView.fxml"));
                 Parent root = (Parent) loader.load();
                 SignUpViewController controller = ((SignUpViewController) loader.getController());
@@ -53,9 +53,9 @@ public class TestSignUpView extends Application{
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-    
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         launch(args);
     }
-    
+
 }
