@@ -5,7 +5,7 @@
  */
 package clientProject;
 
-import clientProject.view.signInn.SignInViewController;
+import clientProject.view.signIn.SignInViewController;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author 2dam
+ * @author Joritz
  */
 public class TestSignInView extends Application {
 
@@ -32,15 +32,15 @@ public class TestSignInView extends Application {
         btn.setOnAction((ActionEvent ActionEvent) -> {
             try {
                 primaryStage.hide();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("view/signInn/SignInView.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("view/signIn/SignInView.fxml"));
                 Parent root = (Parent) loader.load();
                 SignInViewController controller = ((SignInViewController) loader.getController());
                 controller.initStage(root);
+                controller.setStage(primaryStage);
                 primaryStage.show();
             } catch (IOException ex) {
                 Logger.getLogger(TestLoggedView.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         });
 
         StackPane root = new StackPane();

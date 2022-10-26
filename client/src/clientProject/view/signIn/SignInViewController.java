@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package clientProject.view.signInn;
+package clientProject.view.signIn;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -28,8 +26,8 @@ import javafx.stage.WindowEvent;
  */
 public class SignInViewController {
 
-    private static final Logger LOG = Logger.getLogger("vista.SignIn");
-    private Stage stage;
+    private static final Logger LOG = Logger.getLogger("vista.SignIn.SignInViewController");
+    private Stage stage = new Stage();
 
     @FXML
     private TextField txtUser;
@@ -40,24 +38,11 @@ public class SignInViewController {
     @FXML
     private Button btnSignUp;
 
-    /**
-     * Initializes the controller class.
-     */
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }
-
-    void setStage(Stage primaryStage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public void initStage(Parent root) {
         LOG.info("Initiating Sign In View stage");
         Scene scene = new Scene(root);
-
         stage.setScene(scene);
         stage.setTitle("Iniciar Sesion");
-        stage.initModality(Modality.NONE);
 
         stage.setOnCloseRequest((WindowEvent WindowEvent) -> {
             LOG.info("Opening exit alert confirmation");
@@ -78,8 +63,14 @@ public class SignInViewController {
             btnSignIn.setDisable(true);
             btnSignUp.setDisable(false);
             stage.setResizable(false);
+            if(txtUser.getText() != null && txtPassword.getText() != null){
+                btnSignIn.setDisable(false);
+            }
         });
-        
-        
+        stage.showAndWait();
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }
