@@ -106,7 +106,7 @@ public class SignUpViewController {
             alert = new Alert(Alert.AlertType.CONFIRMATION, "Quieres cerrar el programa?", ButtonType.YES, ButtonType.NO);
             alert.showAndWait();
 
-            if (alert.getResult() == ButtonType.YES) {
+            if (alert.getResult().equals(ButtonType.YES)) {
                 LOG.info("Closing the application");
                 Platform.exit();
             } else {
@@ -114,6 +114,7 @@ public class SignUpViewController {
                 windowEvent.consume();
             }
         });
+        myStage.showAndWait();
     }
 
     /**
