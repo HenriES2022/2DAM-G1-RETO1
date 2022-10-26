@@ -21,7 +21,13 @@
             <Font size="14.0" />
          </font>
       </TextField>
+      
       <TextField fx:id="txtEmail" layoutX="440.0" layoutY="167.0" prefHeight="30.0" prefWidth="210.0" promptText="Introduce el email">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="txtUsername" layoutX="440.0" layoutY="223.0" prefHeight="30.0" prefWidth="210.0" promptText="Introduce el nombre de usuario">
          <font>
             <Font size="14.0" />
          </font>

@@ -49,8 +49,8 @@ public class SignUpViewController {
     private Scene myScene = null;
     private Boolean correctEmail = false;
     private Boolean correctPassword = false;
-    private Boolean correctFullName = true;
-    private Boolean correctUserName = true;
+    private Boolean correctFullName = false;
+    private Boolean correctUserName = false;
     /*private ClientSocketFactory myFactory;
     private ClientSocket clientSocket;*/
     private static Alert alert = null;
@@ -80,18 +80,17 @@ public class SignUpViewController {
             validateText(txtFullName);
         });
 
-        txtUsername.focusedProperty().addListener((Observable focusChanged) -> {
-            validateText(txtUsername);
-        });
-
         txtEmail.focusedProperty().addListener((Observable focusChanged) -> {
             validateText(txtEmail);
+        });
+
+        txtUsername.focusedProperty().addListener((Observable focusChanged) -> {
+            validateText(txtUsername);
         });
 
         txtPassword.focusedProperty().addListener((Observable focusChanged) -> {
             validateText(txtPassword);
         });
-
         btnBack.setOnAction((ActionEvent) -> {
             LOG.info("Closing the window");
             myStage.close();
@@ -137,43 +136,58 @@ public class SignUpViewController {
             if (field.getText().length() > 100) {
                 btnSignUp.setDisable(true);
                 alert = new Alert(Alert.AlertType.ERROR, "El nombre completo no puede tener mas de 100 caracteres");
+                alert.showAndWait();
+                txtFullName.setText("");
+                correctFullName = false;
+            } else if (field.getText().length() == 0) {
                 correctFullName = false;
             } else {
                 correctFullName = true;
-                btnSignUp.setDisable(true);
-                alert = new Alert(Alert.AlertType.ERROR, "El nombre completo no puede tener mas de 100 caracteres");
             }
 
-        }
-
-        if (field.equals(txtPassword)) {
+        } else if (field.equals(txtPassword)) {
             LOG.info("Validating the password field");
-            correctPassword = passwordValidator(txtPassword.getText());
-            if (!correctPassword) {
+            if (field.getText().length() > 0) {
+                correctPassword = passwordValidator(field.getText());
+                if (!correctPassword) {
+                    btnSignUp.setDisable(true);
+                    txtPassword.setText("");
+                }
+            } else {
+                correctPassword = false;
+            }
+
+        } else if (field.equals(txtEmail)) {
+            LOG.info("Validationg the email field");
+
+            if (field.getText().length() > 0) {
+                correctEmail = emailValidator(field.getText());
+                if (!correctEmail) {
+                    alert = new Alert(Alert.AlertType.ERROR, "El email no es correcto", ButtonType.OK);
+                    alert.showAndWait();
+                    txtEmail.setText("");
+                }
+            } else {
                 btnSignUp.setDisable(true);
             }
-        }
-        if (field.equals(txtEmail)) {
-            LOG.info("Validationg the email field");
-            correctEmail = emailValidator(txtEmail.getText());
-            if (!correctEmail) {
-                alert = new Alert(Alert.AlertType.ERROR, "El email no es correcto", ButtonType.OK);
-            }
-        }
 
-        if (field.equals(txtUsername)) {
+        } else if (field.equals(txtUsername)) {
             LOG.info("Validating the username field");
             if (field.getText().length() > 50) {
                 btnSignUp.setDisable(true);
                 alert = new Alert(Alert.AlertType.ERROR, "El nombre de usuario debe de tener menos de 50 caracteres", ButtonType.OK);
+                alert.showAndWait();
+
+                txtUsername.setText("");
+                correctUserName = false;
+            } else if (field.getText().length() == 0) {
                 correctUserName = false;
             } else {
                 correctUserName = true;
             }
 
         }
-
-        if (correctEmail && correctFullName && correctPassword && correctUserName) {
+        if (correctFullName && correctEmail && correctPassword && correctUserName) {
             btnSignUp.setDisable(false);
         }
     }
@@ -202,36 +216,44 @@ public class SignUpViewController {
      * @return Returns True if the password is correct, False if is not.
      */
     private Boolean passwordValidator(String password) {
-        char[] passwordLowerCase = password.toLowerCase().toCharArray();
-        char[] passwordUpperCase = password.toUpperCase().toCharArray();
-        char[] specialCharacters = {'!', '¡', '@', '#', '$', '%', '&', '¿', '?', '"'};
+        String passwordWithOutNumber = null;
+        String passwordNumbers = "0123456789";
+        String passwordWithOutSpecialCharacters = null;
+        char[] passwordLowerCase;
+        char[] passwordUpperCase;
+        String specialCharacters = "!¡@#$%&¿?";
         boolean containsUpperCase = false;
         boolean containsLowerCase = false;
         boolean containsSpecialCharacters = false;
+        boolean containsNumber = false;
         if (password.length() < 8) {
             alert = new Alert(Alert.AlertType.ERROR, "La contraseña debe de tener al mentos 8 caracteres", ButtonType.OK);
+            alert.showAndWait();
         } else {
-            for (int i = 0; i < password.length(); i++) {
-                if (password.charAt(i) == passwordUpperCase[i]) {
+            containsNumber = passwordHasNumbers(password.toLowerCase(), passwordNumbers.toLowerCase());
+            passwordWithOutNumber = loadPasswordWithowNumbers(password.toLowerCase(), passwordNumbers.toLowerCase());
+            passwordWithOutSpecialCharacters = loadPasswordWithoutSpecialCharacters(passwordWithOutNumber, specialCharacters);
+            containsSpecialCharacters = passwordHasSpecialCharacters(passwordWithOutNumber, specialCharacters);
+            passwordLowerCase = passwordWithOutNumber.toLowerCase().toCharArray();
+            passwordUpperCase = passwordWithOutNumber.toUpperCase().toCharArray();
+
+            for (int i = 0; i < passwordWithOutSpecialCharacters.length(); i++) {
+                if (passwordWithOutSpecialCharacters.charAt(i) == passwordUpperCase[i]) {
                     containsUpperCase = true;
                 }
-                if (password.charAt(i) == passwordLowerCase[i]) {
+                if (passwordWithOutSpecialCharacters.charAt(i) == passwordLowerCase[i]) {
                     containsLowerCase = true;
                 }
 
-                for (int j = 0; j < specialCharacters.length; j++) {
-                    if (password.charAt(i) == specialCharacters[j]) {
-                        containsSpecialCharacters = true;
-                    }
-                }
             }
-
-            if (containsSpecialCharacters && containsLowerCase && containsUpperCase) {
+            if (containsSpecialCharacters && containsLowerCase && containsUpperCase && containsNumber) {
                 return true;
+            } else {
+                alert = new Alert(Alert.AlertType.ERROR, "La contraseña tiene que tener como minimo una letra mayuscula, una minuscula y un caracter especial", ButtonType.OK);
+                alert.showAndWait();
             }
-            alert = new Alert(Alert.AlertType.ERROR, "La contraseña tiene que tener como minimo una letra mayuscula, una minuscula y un caracter especial", ButtonType.OK);
-
         }
+
         return false;
     }
 
@@ -259,24 +281,89 @@ public class SignUpViewController {
         message.setOperation(operation);
 
         //try {
-            /*message = clientSocket.connectToServer(message);
+        /*message = clientSocket.connectToServer(message);
 
             operation = message.getOperation();
 
             if (operation.equals(Operation.USER_EXISTS)) {
                 alert = new Alert(Alert.AlertType.ERROR, "El usuario ya existe, pruebe con otro", ButtonType.OK);
+                alert.showAndWait();
                 LOG.warning("The user attemped to sign up all ready exists");
             } else if (operation.equals(Operation.OK)) {
                 alert = new Alert(Alert.AlertType.INFORMATION, "El usuario ha sido registrado correctamente", ButtonType.OK);
+                alert.showAndWait();
                 LOG.info("The sign up has be done correctly. Exiting method...");
             }*/
-            
-            System.out.println(user.getEmail());
+        System.out.println(user.getEmail());
         /*} catch (ServerErrorException e) {
             LOG.severe(e.getMessage());
             alert = new Alert(Alert.AlertType.ERROR, "Error al conectarse con el servidor, intentelo de nuevo mas tarde", ButtonType.OK);
-
+            alert.showAndWait();
         }*/
 
+    }
+
+    private String loadPasswordWithowNumbers(String password, String passwordNumbers) {
+        String pass = "";
+        Boolean isNumber;
+
+        for (int i = 0; i < password.length(); i++) {
+            isNumber = false;
+            for (int j = 0; j < passwordNumbers.length(); j++) {
+                if (password.charAt(i) == passwordNumbers.charAt(j)) {
+                    isNumber = true;
+                }
+            }
+            if (!isNumber) {
+                pass = pass + password.charAt(i);
+            }
+        }
+
+        return pass;
+    }
+
+    private boolean passwordHasNumbers(String password, String passwordNumbers) {
+        for (int i = 0; i < password.length(); i++) {
+            for (int j = 0; j < passwordNumbers.length(); j++) {
+                if (password.charAt(i) == passwordNumbers.charAt(j)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean passwordHasSpecialCharacters(String passwordWithOutNumber, String specialCharacters) {
+        String characters = specialCharacters.toString();
+        for (int i = 0; i < passwordWithOutNumber.length(); i++) {
+            for (int j = 0; j < characters.length(); j++) {
+                if (passwordWithOutNumber.charAt(i) == characters.charAt(j)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private String loadPasswordWithoutSpecialCharacters(String passwordWithOutNumber, String specialCharacters) {
+        String pass = "";
+        boolean isSpecial;
+
+        for (int i = 0; i < passwordWithOutNumber.length(); i++) {
+            isSpecial = false;
+            for (int j = 0; j < specialCharacters.length(); j++) {
+                if (passwordWithOutNumber.charAt(i) == specialCharacters.charAt(j)) {
+                    isSpecial = true;
+                }
+
+            }
+            if (!isSpecial) {
+                pass = pass + passwordWithOutNumber.charAt(i);
+            }
+        }
+
+        return pass;
     }
 }
