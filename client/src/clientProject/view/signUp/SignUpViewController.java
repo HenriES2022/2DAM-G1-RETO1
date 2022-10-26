@@ -230,23 +230,18 @@ public class SignUpViewController {
             alert = new Alert(Alert.AlertType.ERROR, "La contraseña debe de tener al mentos 8 caracteres", ButtonType.OK);
             alert.showAndWait();
         } else {
-            containsNumber = passwordHasNumbers(password.toLowerCase(), passwordNumbers.toLowerCase());
-            passwordWithOutNumber = loadPasswordWithowNumbers(password.toLowerCase(), passwordNumbers.toLowerCase());
+            passwordWithOutNumber = loadPasswordWithowNumbers(password, passwordNumbers);
             passwordWithOutSpecialCharacters = loadPasswordWithoutSpecialCharacters(passwordWithOutNumber, specialCharacters);
+
+            passwordLowerCase = passwordWithOutSpecialCharacters.toLowerCase().toCharArray();
+            passwordUpperCase = passwordWithOutSpecialCharacters.toUpperCase().toCharArray();
+
             containsSpecialCharacters = passwordHasSpecialCharacters(passwordWithOutNumber, specialCharacters);
-            passwordLowerCase = passwordWithOutNumber.toLowerCase().toCharArray();
-            passwordUpperCase = passwordWithOutNumber.toUpperCase().toCharArray();
+            containsNumber = passwordHasNumbers(password.toLowerCase(), passwordNumbers.toLowerCase());
+            containsUpperCase = passwordHasUpperCase(passwordWithOutSpecialCharacters, passwordUpperCase);
+            containsLowerCase = passwordHasLowerCase(passwordWithOutSpecialCharacters, passwordLowerCase);
 
-            for (int i = 0; i < passwordWithOutSpecialCharacters.length(); i++) {
-                if (passwordWithOutSpecialCharacters.charAt(i) == passwordUpperCase[i]) {
-                    containsUpperCase = true;
-                }
-                if (passwordWithOutSpecialCharacters.charAt(i) == passwordLowerCase[i]) {
-                    containsLowerCase = true;
-                }
-
-            }
-            if (containsSpecialCharacters && containsLowerCase && containsUpperCase && containsNumber) {
+            if (containsLowerCase && containsNumber && containsSpecialCharacters && containsUpperCase) {
                 return true;
             } else {
                 alert = new Alert(Alert.AlertType.ERROR, "La contraseña tiene que tener como minimo una letra mayuscula, una minuscula y un caracter especial", ButtonType.OK);
@@ -365,5 +360,25 @@ public class SignUpViewController {
         }
 
         return pass;
+    }
+
+    private boolean passwordHasLowerCase(String passwordWithOutSpecialCharacters, char[] passwordLowerCase) {
+        for (int i = 0; i < passwordWithOutSpecialCharacters.length(); i++) {
+            if (passwordWithOutSpecialCharacters.charAt(i) == passwordLowerCase[i]) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    private boolean passwordHasUpperCase(String passwordWithOutSpecialCharacters, char[] passwordUpperCase) {
+        for (int i = 0; i < passwordWithOutSpecialCharacters.length(); i++) {
+            if (passwordWithOutSpecialCharacters.charAt(i) == passwordUpperCase[i]) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }
