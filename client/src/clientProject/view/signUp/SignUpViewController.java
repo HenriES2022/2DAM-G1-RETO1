@@ -5,9 +5,8 @@
  */
 package clientProject.view.signUp;
 
-import com.sun.istack.internal.logging.Logger;
 import enumerations.Operation;
-import exceptions.ServerErrorException;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.beans.Observable;
@@ -50,12 +49,12 @@ public class SignUpViewController {
     private Scene myScene = null;
     private Boolean correctEmail = false;
     private Boolean correctPassword = false;
-    private Boolean correctFullName = true;
-    private Boolean correctUserName = true;
-    private ClientSocketFactory myFactory;
-    private ClientSocket clientSocket;
+    private Boolean correctFullName = false;
+    private Boolean correctUserName = false;
+    /*private ClientSocketFactory myFactory;
+    private ClientSocket clientSocket;*/
     private static Alert alert = null;
-    private static final Logger LOG = Logger.getLogger(clientProject.view.signUp.SignUpViewController.class);
+    private static final Logger LOG = Logger.getLogger("clientProject.view.signUp.SignUpViewController.class");
 
     /**
      * This method startes the Sign Up window
@@ -81,18 +80,17 @@ public class SignUpViewController {
             validateText(txtFullName);
         });
 
-        txtUsername.focusedProperty().addListener((Observable focusChanged) -> {
-            validateText(txtUsername);
-        });
-
         txtEmail.focusedProperty().addListener((Observable focusChanged) -> {
             validateText(txtEmail);
+        });
+
+        txtUsername.focusedProperty().addListener((Observable focusChanged) -> {
+            validateText(txtUsername);
         });
 
         txtPassword.focusedProperty().addListener((Observable focusChanged) -> {
             validateText(txtPassword);
         });
-
         btnBack.setOnAction((ActionEvent) -> {
             LOG.info("Closing the window");
             myStage.close();
@@ -115,6 +113,7 @@ public class SignUpViewController {
                 windowEvent.consume();
             }
         });
+        myStage.showAndWait();
     }
 
     /**
@@ -137,43 +136,59 @@ public class SignUpViewController {
             if (field.getText().length() > 100) {
                 btnSignUp.setDisable(true);
                 alert = new Alert(Alert.AlertType.ERROR, "El nombre completo no puede tener mas de 100 caracteres");
+                alert.showAndWait();
+                txtFullName.setText("");
+                correctFullName = false;
+            } else if (field.getText().length() == 0) {
                 correctFullName = false;
             } else {
                 correctFullName = true;
-                btnSignUp.setDisable(true);
-                alert = new Alert(Alert.AlertType.ERROR, "El nombre completo no puede tener mas de 100 caracteres");
             }
 
-        }
-
-        if (field.equals(txtPassword)) {
+        } else if (field.equals(txtPassword)) {
             LOG.info("Validating the password field");
-            correctPassword = passwordValidator(txtPassword.getText());
-            if (!correctPassword) {
+            if (field.getText().length() > 0) {
+                correctPassword = passwordValidator(field.getText());
+                if (!correctPassword) {
+                    btnSignUp.setDisable(true);
+                    txtPassword.setText("");
+                }
+            } else {
+                correctPassword = false;
+            }
+
+        } else if (field.equals(txtEmail)) {
+            LOG.info("Validationg the email field");
+            
+            if (field.getText().length() > 0) {
+                correctEmail = emailValidator(field.getText());
+                if (!correctEmail) {
+                    alert = new Alert(Alert.AlertType.ERROR, "El email no es correcto", ButtonType.OK);
+                    alert.showAndWait();
+                    txtEmail.setText("");
+                }
+            } else{
                 btnSignUp.setDisable(true);
             }
-        }
-        if (field.equals(txtEmail)) {
-            LOG.info("Validationg the email field");
-            correctEmail = emailValidator(txtEmail.getText());
-            if (!correctEmail) {
-                alert = new Alert(Alert.AlertType.ERROR, "El email no es correcto", ButtonType.OK);
-            }
-        }
 
-        if (field.equals(txtUsername)) {
+        } else if (field.equals(txtUsername)) {
             LOG.info("Validating the username field");
             if (field.getText().length() > 50) {
                 btnSignUp.setDisable(true);
                 alert = new Alert(Alert.AlertType.ERROR, "El nombre de usuario debe de tener menos de 50 caracteres", ButtonType.OK);
+                alert.showAndWait();
+
+                txtUsername.setText("");
                 correctUserName = false;
-            } else {
+            } else if(field.getText().length() == 0){
+                correctUserName = false;
+            } 
+            else {
                 correctUserName = true;
             }
 
         }
-
-        if (correctEmail && correctFullName && correctPassword && correctUserName) {
+        if (correctFullName && correctEmail && correctPassword && correctUserName) {
             btnSignUp.setDisable(false);
         }
     }
@@ -210,6 +225,7 @@ public class SignUpViewController {
         boolean containsSpecialCharacters = false;
         if (password.length() < 8) {
             alert = new Alert(Alert.AlertType.ERROR, "La contraseña debe de tener al mentos 8 caracteres", ButtonType.OK);
+            alert.showAndWait();
         } else {
             for (int i = 0; i < password.length(); i++) {
                 if (password.charAt(i) == passwordUpperCase[i]) {
@@ -226,12 +242,12 @@ public class SignUpViewController {
                 }
             }
 
-            if (containsSpecialCharacters && containsLowerCase && containsUpperCase) {
-                return true;
-            }
-            alert = new Alert(Alert.AlertType.ERROR, "La contraseña tiene que tener como minimo una letra mayuscula, una minuscula y un caracter especial", ButtonType.OK);
-
         }
+        if (containsSpecialCharacters && containsLowerCase && containsUpperCase) {
+            return true;
+        }
+        alert = new Alert(Alert.AlertType.ERROR, "La contraseña tiene que tener como minimo una letra mayuscula, una minuscula y un caracter especial", ButtonType.OK);
+        alert.showAndWait();
         return false;
     }
 
@@ -245,7 +261,7 @@ public class SignUpViewController {
         Operation operation = null;
 
         LOG.info("Setting up the required variables");
-        clientSocket = myFactory.getImplementation();
+        //clientSocket = myFactory.getImplementation();
         user = new User();
         user.setFullName(txtFullName.getText());
         user.setEmail(txtEmail.getText());
@@ -258,23 +274,26 @@ public class SignUpViewController {
         message.setUserData(user);
         message.setOperation(operation);
 
-        try {
-            message = clientSocket.connectToServer(message);
+        //try {
+        /*message = clientSocket.connectToServer(message);
 
             operation = message.getOperation();
 
             if (operation.equals(Operation.USER_EXISTS)) {
                 alert = new Alert(Alert.AlertType.ERROR, "El usuario ya existe, pruebe con otro", ButtonType.OK);
+                alert.showAndWait();
                 LOG.warning("The user attemped to sign up all ready exists");
             } else if (operation.equals(Operation.OK)) {
                 alert = new Alert(Alert.AlertType.INFORMATION, "El usuario ha sido registrado correctamente", ButtonType.OK);
+                alert.showAndWait();
                 LOG.info("The sign up has be done correctly. Exiting method...");
-            }
-        } catch (ServerErrorException e) {
+            }*/
+        System.out.println(user.getEmail());
+        /*} catch (ServerErrorException e) {
             LOG.severe(e.getMessage());
             alert = new Alert(Alert.AlertType.ERROR, "Error al conectarse con el servidor, intentelo de nuevo mas tarde", ButtonType.OK);
-
-        }
+            alert.showAndWait();
+        }*/
 
     }
 }
