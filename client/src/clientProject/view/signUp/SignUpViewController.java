@@ -26,12 +26,11 @@ import model.User;
 
 /**
  * FXML Controller class
- *
+ * This is the SignUpView scene controller 
  * @author ioritz
  */
 public class SignUpViewController {
 
-    // private static final Logger logger = Logger.getLogger(type);
     @FXML
     private TextField txtFullName;
     @FXML
@@ -297,7 +296,13 @@ public class SignUpViewController {
         }*/
 
     }
-
+    /**
+     * This method recovers an string with the passworn without the numbers 
+     * @param password The password that has the numbers we are going to remove
+     * @param passwordNumbers An array with the numers to check if the password has one of them
+     * @return Returns a empty string if the original password has not numbers, a string with the password without numbers <br>
+     * if the originial password has numbers
+     */
     private String loadPasswordWithowNumbers(String password, String passwordNumbers) {
         String pass = "";
         Boolean isNumber;
@@ -317,6 +322,12 @@ public class SignUpViewController {
         return pass;
     }
 
+    /**
+     * This method obtains if the password has numbers or not
+     * @param password The password were we are going to search for numbers
+     * @param passwordNumbers An array with the numers to check if the password has one of them
+     * @return Returns true if the password has numbers, false if has not
+     */
     private boolean passwordHasNumbers(String password, String passwordNumbers) {
         for (int i = 0; i < password.length(); i++) {
             for (int j = 0; j < passwordNumbers.length(); j++) {
@@ -328,7 +339,13 @@ public class SignUpViewController {
 
         return false;
     }
-
+    /**
+     * This method search if the password has any special character
+     * @param passwordWithOutNumber The string with the password with out numbers
+     * @param specialCharacters The array with the special characters to searh if the password has one<br>
+     * of this character
+     * @return Returns true if the password has any speciall character, false if has not
+     */
     private boolean passwordHasSpecialCharacters(String passwordWithOutNumber, String specialCharacters) {
         String characters = specialCharacters.toString();
         for (int i = 0; i < passwordWithOutNumber.length(); i++) {
@@ -341,7 +358,13 @@ public class SignUpViewController {
 
         return false;
     }
-
+    /**
+     * This method obtains the password without any special character from a password with out numbers
+     * @param passwordWithOutNumber The string with the password without numbers
+     * @param specialCharacters The string with the special characters to search if the password has any of these
+     * @return Returns the password with out any special characters, or a empty string if the password has not any <br>
+     * speciall character
+     */
     private String loadPasswordWithoutSpecialCharacters(String passwordWithOutNumber, String specialCharacters) {
         String pass = "";
         boolean isSpecial;
@@ -362,6 +385,12 @@ public class SignUpViewController {
         return pass;
     }
 
+    /**
+     * This method check if the password has any lower case character
+     * @param passwordWithOutSpecialCharacters The password with out special characters were we are going to search
+     * @param passwordLowerCase An array with the password with out special characters in lower case to compare
+     * @return Returns true if there is any character in lower case, false if there is not any
+     */
     private boolean passwordHasLowerCase(String passwordWithOutSpecialCharacters, char[] passwordLowerCase) {
         for (int i = 0; i < passwordWithOutSpecialCharacters.length(); i++) {
             if (passwordWithOutSpecialCharacters.charAt(i) == passwordLowerCase[i]) {
@@ -371,7 +400,12 @@ public class SignUpViewController {
         
         return false;
     }
-
+    /**
+     * This methods checks if the password has any upper case character
+     * @param passwordWithOutSpecialCharacters The password with out special characters were we are going to search
+     * @param passwordUpperCase An array with the password with out special characters in upper case to compare
+     * @return Returns true if there is any character in upper case, false if there is not any
+     */
     private boolean passwordHasUpperCase(String passwordWithOutSpecialCharacters, char[] passwordUpperCase) {
         for (int i = 0; i < passwordWithOutSpecialCharacters.length(); i++) {
             if (passwordWithOutSpecialCharacters.charAt(i) == passwordUpperCase[i]) {
