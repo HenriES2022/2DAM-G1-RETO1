@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -55,6 +56,12 @@ public class SignUpViewController {
     private Label txtEmailError;
     @FXML
     private Label txtPasswordError;
+    @FXML
+    private CheckBox checkShowPassword;
+    @FXML
+    private Label txtPasswordConfirmError;
+    @FXML
+    private PasswordField txtConfirmPassword;
 
     private Stage myStage = null;
     private Scene myScene = null;
@@ -62,6 +69,7 @@ public class SignUpViewController {
     private Boolean correctPassword = false;
     private Boolean correctFullName = false;
     private Boolean correctUserName = false;
+    private Boolean correctPasswordConfirmation = false;
     /*private ClientSocketFactory myFactory;
     private ClientSocket clientSocket;*/
     private static Alert alert = null;
@@ -86,12 +94,18 @@ public class SignUpViewController {
             btnSignUp.setDisable(true);
             btnBack.setDisable(false);
             txtFullName.requestFocus();
+
+            txtEmailError.setText("");
+            txtFullNameError.setText("");
+            txtPasswordError.setText("");
+            txtUsernameError.setText("");
+            txtPasswordConfirmError.setText("");
         });
 
-        
-
-        txtFullName.textProperty().addListener((Observable focusChanged) -> {
+        txtFullName.textProperty().addListener((Observable) -> {
             LOG.info("Validating the full name field");
+            
+            //Validating that the text of the full name don't have more than 100 characters or the text isn't empty
             if (txtFullName.getText().length() > 100) {
                 btnSignUp.setDisable(true);
                 txtFullNameError.setVisible(true);
@@ -105,35 +119,39 @@ public class SignUpViewController {
                 correctFullName = true;
                 txtFullNameError.setVisible(false);
             }
-            if (correctFullName && correctEmail && correctPassword && correctUserName ) {
+            if (correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation) {
                 btnSignUp.setDisable(false);
             }
         });
 
-        txtEmail.textProperty().addListener((Observable focusChanged) -> {
+        txtEmail.textProperty().addListener((Observable) -> {
             LOG.info("Validationg the email field");
-
+            
+            //Validating that the text field is not empty
             if (txtEmail.getText().length() > 0) {
                 correctEmail = emailValidator(txtEmail.getText());
+                //if the email is not correct, show an error message
                 if (!correctEmail) {
                     txtEmailError.setVisible(true);
                     txtEmailError.setText("El email no es correcto");
                     btnSignUp.setDisable(true);
-
+                    //if the validation was correct dont show nothing
                 } else {
                     txtEmailError.setVisible(false);
                 }
             } else {
                 btnSignUp.setDisable(true);
             }
-            
-            if (correctFullName && correctEmail && correctPassword && correctUserName ) {
+
+            if (correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation) {
                 btnSignUp.setDisable(false);
             }
         });
 
-        txtUsername.textProperty().addListener((Observable focusChanged) -> {
+        txtUsername.textProperty().addListener((Observable) -> {
             LOG.info("Validating the username field");
+            
+            //Validating if the text field has not more tha 50 characters
             if (txtUsername.getText().length() > 50) {
                 btnSignUp.setDisable(true);
 
@@ -141,23 +159,31 @@ public class SignUpViewController {
                 txtUsernameError.setText("El nombre de usuario debe de tener menos de 50 caracteres");
 
                 correctUserName = false;
-            } else if (txtUsername.getText().length() == 0) {
+               
+            } 
+            //If the text is empty
+            else if (txtUsername.getText().length() == 0) {
                 correctUserName = false;
                 txtUsernameError.setVisible(false);
-            } else {
+            } 
+            //If the text is correct
+            else {
                 correctUserName = true;
                 txtUsernameError.setVisible(false);
             }
-            
-            if (correctFullName && correctEmail && correctPassword && correctUserName ) {
+
+            if (correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation) {
                 btnSignUp.setDisable(false);
             }
         });
 
-        txtPassword.textProperty().addListener((Observable focusChanged) -> {
+        txtPassword.textProperty().addListener((Observable) -> {
             LOG.info("Validating the password field");
+            
+            //Validating that the field is not empty
             if (txtPassword.getText().length() > 0) {
                 correctPassword = passwordValidator(txtPassword.getText());
+                //If the password is not correct
                 if (!correctPassword) {
                     btnSignUp.setDisable(true);
 
@@ -165,11 +191,35 @@ public class SignUpViewController {
             } else {
                 correctPassword = false;
             }
-            
-            if (correctFullName && correctEmail && correctPassword && correctUserName ) {
+
+            if (correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation) {
                 btnSignUp.setDisable(false);
             }
         });
+        
+        txtConfirmPassword.textProperty().addListener((Observable) -> {
+            LOG.info("Validating that the password and the password confirmation is the same");
+            if (txtConfirmPassword.getText().equals(txtPassword.getText())) {
+                correctPasswordConfirmation = true;
+                txtPasswordConfirmError.setVisible(false);
+            }
+            else if(txtConfirmPassword.getText().length() == 0){
+                correctPasswordConfirmation = false;
+                btnSignUp.setDisable(true);
+                txtPasswordConfirmError.setVisible(false);
+            }
+            else{
+                correctPasswordConfirmation = false;
+                txtPasswordConfirmError.setText("La contraseña no coincide");
+                txtPasswordConfirmError.setVisible(true);
+                btnSignUp.setDisable(true);
+            }
+            
+            if (correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation) {
+                btnSignUp.setDisable(false);
+            }
+        });
+        
 
         btnBack.setOnAction((ActionEvent) -> {
             LOG.info("Closing the window");
@@ -179,11 +229,6 @@ public class SignUpViewController {
         btnSignUp.setOnAction((ActionEvent) -> {
             signUp();
         });
-
-        txtEmailError.setText("");
-        txtFullNameError.setText("");
-        txtPasswordError.setText("");
-        txtUsernameError.setText("");
 
         myStage.setOnCloseRequest((WindowEvent windowEvent) -> {
             LOG.info("Opening exit alert confirmation");

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="413.0" prefWidth="764.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientProject.view.signUp.SignUpViewController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="539.0" prefWidth="764.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientProject.view.signUp.SignUpViewController">
    <children>
       <TextField fx:id="txtFullName" layoutX="437.0" layoutY="79.0" prefHeight="30.0" prefWidth="228.0" promptText="Introduce el nombre completo">
          <font>
@@ -54,17 +54,22 @@
             <Font size="14.0" />
          </font>
       </PasswordField>
-      <Button fx:id="btnSignUp" layoutX="432.0" layoutY="357.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Registrarse">
+      <PasswordField fx:id="txtConfirmPassword" layoutX="438.0" layoutY="411.0" prefHeight="30.0" prefWidth="228.0" promptText="Intorduce la contraseña">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </PasswordField>
+      <Button fx:id="btnSignUp" layoutX="427.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Registrarse">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="btnBack" layoutX="575.0" layoutY="357.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Vovler">
+      <Button fx:id="btnBack" layoutX="576.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Vovler">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <ImageView fitHeight="420.0" fitWidth="353.0" layoutY="-4.0" pickOnBounds="true">
+      <ImageView fitHeight="546.0" fitWidth="410.0" layoutY="-4.0" pickOnBounds="true">
          <image>
             <Image url="@SignUpImage.png" />
          </image>
@@ -77,6 +82,13 @@
       <Label fx:id="txtFullNameError" layoutX="440.0" layoutY="109.0" text="Label" textFill="RED" visible="false" />
       <Label fx:id="txtEmailError" layoutX="439.0" layoutY="181.0" text="Label" textFill="RED" visible="false" />
       <Label fx:id="txtUsernameError" layoutX="440.0" layoutY="257.0" text="Label" textFill="RED" visible="false" />
-      <Label fx:id="txtPasswordError" layoutX="440.0" layoutY="324.0" text="Label" textFill="RED" visible="false" />
+      <Label fx:id="txtPasswordError" layoutX="447.0" layoutY="334.0" text="Label" textFill="RED" visible="false" />
+      
+      <Label fx:id="txtPasswordConfirmError" layoutX="447.0" layoutY="447.0" text="Label" textFill="RED" visible="false" />
+      <Label layoutX="440.0" layoutY="384.0" text="Confirmar contraseña:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </Pane>

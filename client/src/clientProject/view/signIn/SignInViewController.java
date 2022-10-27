@@ -73,6 +73,7 @@ public class SignInViewController {
             btnSignIn.setDisable(true);
             btnSignUp.setDisable(false);
             stage.setResizable(false);
+            
         });
 
         btnSignIn.setOnAction((ActionEvent) -> {
