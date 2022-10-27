@@ -229,7 +229,7 @@ public class SignUpViewController {
         btnSignUp.setOnAction((ActionEvent) -> {
             signUp();
         });
-
+        //Atiende al evento de cerrar la ventana
         myStage.setOnCloseRequest((WindowEvent windowEvent) -> {
             LOG.info("Opening exit alert confirmation");
             alert = new Alert(Alert.AlertType.CONFIRMATION, "Quieres cerrar el programa?", ButtonType.YES, ButtonType.NO);
@@ -334,7 +334,6 @@ public class SignUpViewController {
                 alert.showAndWait();
                 LOG.info("The sign up has be done correctly. Exiting method...");
             }*/
-        System.out.println(user.getEmail());
         /*} catch (ServerErrorException e) {
             LOG.severe(e.getMessage());
             alert = new Alert(Alert.AlertType.ERROR, "Error al conectarse con el servidor, intentelo de nuevo mas tarde", ButtonType.OK);
