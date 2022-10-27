@@ -438,7 +438,6 @@ public class SignUpViewController {
                 return true;
             }
         }
-
         return false;
     }
 

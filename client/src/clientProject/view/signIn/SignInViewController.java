@@ -5,15 +5,16 @@
  */
 package clientProject.view.signIn;
 
-import clientProject.view.logged.LoggedViewController;
 import clientProject.view.signUp.SignUpViewController;
 import enumerations.Operation;
+import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -21,8 +22,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import model.Message;
@@ -36,7 +35,7 @@ import model.User;
 public class SignInViewController {
 
     private static final Logger LOG = Logger.getLogger("vista.SignIn.SignInViewController");
-    private Stage stage = new Stage();
+    private Stage stage;
 
     @FXML
     private TextField txtUser;
@@ -52,6 +51,7 @@ public class SignInViewController {
     public void initStage(Parent root) {
         LOG.info("Initiating Sign In View stage");
         Scene scene = new Scene(root);
+        Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle("Iniciar Sesion");
         txtUser.textProperty().addListener(this::campChanges);
@@ -116,6 +116,7 @@ public class SignInViewController {
 
     private void signUp() {
         try {
+            //stage.hide();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../signUp/SignUpView.fxml"));
             Parent root = (Parent) loader.load();
             SignUpViewController signUp = ((SignUpViewController) loader.getController());
@@ -129,4 +130,23 @@ public class SignInViewController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+    /**@Override
+    public void start(Stage primaryStage) {
+        try {
+            primaryStage.hide();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("SignInView.fxml"));
+            Parent root = (Parent) loader.load();
+            SignInViewController controller = ((SignInViewController) loader.getController());
+            controller.initStage(root);
+            controller.setStage(primaryStage);
+            primaryStage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(SignInViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void a(String[] args){
+        launch(args);
+    }**/
 }
