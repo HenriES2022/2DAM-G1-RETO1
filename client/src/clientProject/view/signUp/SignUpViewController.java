@@ -267,7 +267,7 @@ public class SignUpViewController {
         user.setFullName(txtFullName.getText());
         user.setEmail(txtEmail.getText());
         user.setPassword(txtPassword.getText());
-        user.setLogin(txtUsername.getText());
+        user.setLogin(txtUsername.getText().trim());
 
         operation = Operation.SING_UP;
 
