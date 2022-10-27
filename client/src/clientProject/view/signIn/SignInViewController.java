@@ -117,9 +117,10 @@ public class SignInViewController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("clientProject/view/signUp/SignUpView.fxml"));
             Parent root = (Parent)loader.load();
             SignUpViewController signUp = ((SignUpViewController)loader.getController());
+            signUp.setStage(stage);
             signUp.initStage(root);
         } catch (Exception ex) {
-            LOG.info("No se puede abrir la ventana /n" + ex.getLocalizedMessage());
+            LOG.info("No se puede abrir la ventana " + ex.getLocalizedMessage());
         }
     }
 
