@@ -26,12 +26,11 @@ import model.User;
 
 /**
  * FXML Controller class
- *
+ * This is the SignUpView scene controller 
  * @author ioritz
  */
 public class SignUpViewController {
 
-    // private static final Logger logger = Logger.getLogger(type);
     @FXML
     private TextField txtFullName;
     @FXML
@@ -105,7 +104,7 @@ public class SignUpViewController {
             alert = new Alert(Alert.AlertType.CONFIRMATION, "Quieres cerrar el programa?", ButtonType.YES, ButtonType.NO);
             alert.showAndWait();
 
-            if (alert.getResult() == ButtonType.YES) {
+            if (alert.getResult().equals(ButtonType.YES)) {
                 LOG.info("Closing the application");
                 Platform.exit();
             } else {
@@ -159,7 +158,7 @@ public class SignUpViewController {
 
         } else if (field.equals(txtEmail)) {
             LOG.info("Validationg the email field");
-            
+
             if (field.getText().length() > 0) {
                 correctEmail = emailValidator(field.getText());
                 if (!correctEmail) {
@@ -167,7 +166,7 @@ public class SignUpViewController {
                     alert.showAndWait();
                     txtEmail.setText("");
                 }
-            } else{
+            } else {
                 btnSignUp.setDisable(true);
             }
 
@@ -180,10 +179,9 @@ public class SignUpViewController {
 
                 txtUsername.setText("");
                 correctUserName = false;
-            } else if(field.getText().length() == 0){
+            } else if (field.getText().length() == 0) {
                 correctUserName = false;
-            } 
-            else {
+            } else {
                 correctUserName = true;
             }
 
@@ -217,37 +215,39 @@ public class SignUpViewController {
      * @return Returns True if the password is correct, False if is not.
      */
     private Boolean passwordValidator(String password) {
-        char[] passwordLowerCase = password.toLowerCase().toCharArray();
-        char[] passwordUpperCase = password.toUpperCase().toCharArray();
-        char[] specialCharacters = {'!', '¡', '@', '#', '$', '%', '&', '¿', '?', '"'};
+        String passwordWithOutNumber = null;
+        String passwordNumbers = "0123456789";
+        String passwordWithOutSpecialCharacters = null;
+        char[] passwordLowerCase;
+        char[] passwordUpperCase;
+        String specialCharacters = "!¡@#$%&¿?";
         boolean containsUpperCase = false;
         boolean containsLowerCase = false;
         boolean containsSpecialCharacters = false;
+        boolean containsNumber = false;
         if (password.length() < 8) {
             alert = new Alert(Alert.AlertType.ERROR, "La contraseña debe de tener al mentos 8 caracteres", ButtonType.OK);
             alert.showAndWait();
         } else {
-            for (int i = 0; i < password.length(); i++) {
-                if (password.charAt(i) == passwordUpperCase[i]) {
-                    containsUpperCase = true;
-                }
-                if (password.charAt(i) == passwordLowerCase[i]) {
-                    containsLowerCase = true;
-                }
+            passwordWithOutNumber = loadPasswordWithowNumbers(password, passwordNumbers);
+            passwordWithOutSpecialCharacters = loadPasswordWithoutSpecialCharacters(passwordWithOutNumber, specialCharacters);
 
-                for (int j = 0; j < specialCharacters.length; j++) {
-                    if (password.charAt(i) == specialCharacters[j]) {
-                        containsSpecialCharacters = true;
-                    }
-                }
+            passwordLowerCase = passwordWithOutSpecialCharacters.toLowerCase().toCharArray();
+            passwordUpperCase = passwordWithOutSpecialCharacters.toUpperCase().toCharArray();
+
+            containsSpecialCharacters = passwordHasSpecialCharacters(passwordWithOutNumber, specialCharacters);
+            containsNumber = passwordHasNumbers(password.toLowerCase(), passwordNumbers.toLowerCase());
+            containsUpperCase = passwordHasUpperCase(passwordWithOutSpecialCharacters, passwordUpperCase);
+            containsLowerCase = passwordHasLowerCase(passwordWithOutSpecialCharacters, passwordLowerCase);
+
+            if (containsLowerCase && containsNumber && containsSpecialCharacters && containsUpperCase) {
+                return true;
+            } else {
+                alert = new Alert(Alert.AlertType.ERROR, "La contraseña tiene que tener como minimo una letra mayuscula, una minuscula y un caracter especial", ButtonType.OK);
+                alert.showAndWait();
             }
+        }
 
-        }
-        if (containsSpecialCharacters && containsLowerCase && containsUpperCase) {
-            return true;
-        }
-        alert = new Alert(Alert.AlertType.ERROR, "La contraseña tiene que tener como minimo una letra mayuscula, una minuscula y un caracter especial", ButtonType.OK);
-        alert.showAndWait();
         return false;
     }
 
@@ -295,5 +295,124 @@ public class SignUpViewController {
             alert.showAndWait();
         }*/
 
+    }
+    /**
+     * This method recovers an string with the passworn without the numbers 
+     * @param password The password that has the numbers we are going to remove
+     * @param passwordNumbers An array with the numers to check if the password has one of them
+     * @return Returns a empty string if the original password has not numbers, a string with the password without numbers <br>
+     * if the originial password has numbers
+     */
+    private String loadPasswordWithowNumbers(String password, String passwordNumbers) {
+        String pass = "";
+        Boolean isNumber;
+
+        for (int i = 0; i < password.length(); i++) {
+            isNumber = false;
+            for (int j = 0; j < passwordNumbers.length(); j++) {
+                if (password.charAt(i) == passwordNumbers.charAt(j)) {
+                    isNumber = true;
+                }
+            }
+            if (!isNumber) {
+                pass = pass + password.charAt(i);
+            }
+        }
+
+        return pass;
+    }
+
+    /**
+     * This method obtains if the password has numbers or not
+     * @param password The password were we are going to search for numbers
+     * @param passwordNumbers An array with the numers to check if the password has one of them
+     * @return Returns true if the password has numbers, false if has not
+     */
+    private boolean passwordHasNumbers(String password, String passwordNumbers) {
+        for (int i = 0; i < password.length(); i++) {
+            for (int j = 0; j < passwordNumbers.length(); j++) {
+                if (password.charAt(i) == passwordNumbers.charAt(j)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+    /**
+     * This method search if the password has any special character
+     * @param passwordWithOutNumber The string with the password with out numbers
+     * @param specialCharacters The array with the special characters to searh if the password has one<br>
+     * of this character
+     * @return Returns true if the password has any speciall character, false if has not
+     */
+    private boolean passwordHasSpecialCharacters(String passwordWithOutNumber, String specialCharacters) {
+        String characters = specialCharacters.toString();
+        for (int i = 0; i < passwordWithOutNumber.length(); i++) {
+            for (int j = 0; j < characters.length(); j++) {
+                if (passwordWithOutNumber.charAt(i) == characters.charAt(j)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+    /**
+     * This method obtains the password without any special character from a password with out numbers
+     * @param passwordWithOutNumber The string with the password without numbers
+     * @param specialCharacters The string with the special characters to search if the password has any of these
+     * @return Returns the password with out any special characters, or a empty string if the password has not any <br>
+     * speciall character
+     */
+    private String loadPasswordWithoutSpecialCharacters(String passwordWithOutNumber, String specialCharacters) {
+        String pass = "";
+        boolean isSpecial;
+
+        for (int i = 0; i < passwordWithOutNumber.length(); i++) {
+            isSpecial = false;
+            for (int j = 0; j < specialCharacters.length(); j++) {
+                if (passwordWithOutNumber.charAt(i) == specialCharacters.charAt(j)) {
+                    isSpecial = true;
+                }
+
+            }
+            if (!isSpecial) {
+                pass = pass + passwordWithOutNumber.charAt(i);
+            }
+        }
+
+        return pass;
+    }
+
+    /**
+     * This method check if the password has any lower case character
+     * @param passwordWithOutSpecialCharacters The password with out special characters were we are going to search
+     * @param passwordLowerCase An array with the password with out special characters in lower case to compare
+     * @return Returns true if there is any character in lower case, false if there is not any
+     */
+    private boolean passwordHasLowerCase(String passwordWithOutSpecialCharacters, char[] passwordLowerCase) {
+        for (int i = 0; i < passwordWithOutSpecialCharacters.length(); i++) {
+            if (passwordWithOutSpecialCharacters.charAt(i) == passwordLowerCase[i]) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    /**
+     * This methods checks if the password has any upper case character
+     * @param passwordWithOutSpecialCharacters The password with out special characters were we are going to search
+     * @param passwordUpperCase An array with the password with out special characters in upper case to compare
+     * @return Returns true if there is any character in upper case, false if there is not any
+     */
+    private boolean passwordHasUpperCase(String passwordWithOutSpecialCharacters, char[] passwordUpperCase) {
+        for (int i = 0; i < passwordWithOutSpecialCharacters.length(); i++) {
+            if (passwordWithOutSpecialCharacters.charAt(i) == passwordUpperCase[i]) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }
