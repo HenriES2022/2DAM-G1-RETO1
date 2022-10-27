@@ -9,70 +9,74 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="379.0" prefWidth="704.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientProject.view.signUp.SignUpViewController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="413.0" prefWidth="764.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientProject.view.signUp.SignUpViewController">
    <children>
-      <TextField fx:id="txtFullName" layoutX="438.0" layoutY="98.0" prefHeight="30.0" prefWidth="210.0" promptText="Introduce el nombre completo">
+      <TextField fx:id="txtFullName" layoutX="437.0" layoutY="79.0" prefHeight="30.0" prefWidth="228.0" promptText="Introduce el nombre completo">
          <font>
             <Font size="14.0" />
          </font>
       </TextField>
       
-      <TextField fx:id="txtEmail" layoutX="438.0" layoutY="160.0" prefHeight="30.0" prefWidth="210.0" promptText="Introduce el email">
+      <TextField fx:id="txtEmail" layoutX="436.0" layoutY="146.0" prefHeight="30.0" prefWidth="228.0" promptText="Introduce el email">
          <font>
             <Font size="14.0" />
          </font>
       </TextField>
       
-      <TextField fx:id="txtUsername" layoutX="438.0" layoutY="223.0" prefHeight="30.0" prefWidth="210.0" promptText="Introduce el nombre de usuario">
+      <TextField fx:id="txtUsername" layoutX="438.0" layoutY="223.0" prefHeight="30.0" prefWidth="228.0" promptText="Introduce el nombre de usuario">
          <font>
             <Font size="14.0" />
          </font>
       </TextField>
       
-      <Label layoutX="439.0" layoutY="78.0" text="Nombre Completo:">
+      <Label layoutX="438.0" layoutY="59.0" text="Nombre Completo:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="440.0" layoutY="265.0" text="Contraseña:">
+      <Label layoutX="440.0" layoutY="274.0" text="Contraseña:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="440.0" layoutY="203.0" text="Usuario:">
+      <Label layoutX="436.0" layoutY="198.0" text="Usuario:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="437.0" layoutY="140.0" text="Email:">
+      <Label layoutX="435.0" layoutY="126.0" text="Email:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <PasswordField fx:id="txtPassword" layoutX="440.0" layoutY="285.0" prefHeight="30.0" prefWidth="210.0" promptText="Intorduce la contraseña">
+      <PasswordField fx:id="txtPassword" layoutX="436.0" layoutY="294.0" prefHeight="30.0" prefWidth="228.0" promptText="Intorduce la contraseña">
          <font>
             <Font size="14.0" />
          </font>
       </PasswordField>
-      <Button fx:id="btnSignUp" layoutX="432.0" layoutY="335.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Registrarse">
+      <Button fx:id="btnSignUp" layoutX="432.0" layoutY="357.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Registrarse">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="btnBack" layoutX="548.0" layoutY="335.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Vovler">
+      <Button fx:id="btnBack" layoutX="575.0" layoutY="357.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Vovler">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <ImageView fitHeight="387.0" fitWidth="353.0" layoutY="-4.0" pickOnBounds="true">
+      <ImageView fitHeight="420.0" fitWidth="353.0" layoutY="-4.0" pickOnBounds="true">
          <image>
             <Image url="@SignUpImage.png" />
          </image>
       </ImageView>
-      <Label layoutX="455.0" layoutY="22.0" text="Registro">
+      <Label layoutX="453.0" layoutY="14.0" text="Registro">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
+      <Label fx:id="txtFullNameError" layoutX="440.0" layoutY="109.0" text="Label" textFill="RED" visible="false" />
+      <Label fx:id="txtEmailError" layoutX="439.0" layoutY="181.0" text="Label" textFill="RED" visible="false" />
+      <Label fx:id="txtUsernameError" layoutX="440.0" layoutY="257.0" text="Label" textFill="RED" visible="false" />
+      <Label fx:id="txtPasswordError" layoutX="440.0" layoutY="324.0" text="Label" textFill="RED" visible="false" />
    </children>
 </Pane>
