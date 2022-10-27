@@ -116,7 +116,6 @@ public class SignInViewController {
 
     private void signUp() {
         try {
-            //stage.hide();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../signUp/SignUpView.fxml"));
             Parent root = (Parent) loader.load();
             SignUpViewController signUp = ((SignUpViewController) loader.getController());
@@ -130,23 +129,4 @@ public class SignInViewController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-
-    /**@Override
-    public void start(Stage primaryStage) {
-        try {
-            primaryStage.hide();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("SignInView.fxml"));
-            Parent root = (Parent) loader.load();
-            SignInViewController controller = ((SignInViewController) loader.getController());
-            controller.initStage(root);
-            controller.setStage(primaryStage);
-            primaryStage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(SignInViewController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public void a(String[] args){
-        launch(args);
-    }**/
 }
