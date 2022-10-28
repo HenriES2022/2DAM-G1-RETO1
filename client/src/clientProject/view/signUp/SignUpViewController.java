@@ -6,6 +6,10 @@
 package clientProject.view.signUp;
 
 import enumerations.Operation;
+import exceptions.ServerErrorException;
+import exceptions.ServerFullException;
+import exceptions.UserAlreadyExistsException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -67,8 +71,8 @@ public class SignUpViewController {
     private Boolean correctFullName = false;
     private Boolean correctUserName = false;
     private Boolean correctPasswordConfirmation = false;
-    /*private ClientSocketFactory myFactory;
-    private ClientSocket clientSocket;*/
+    private ClientSocketFactory myFactory;
+    private ClientSocket clientSocket;
     private static Alert alert = null;
     private Pattern pattern = null;
     private Matcher matcher = null;
@@ -205,14 +209,14 @@ public class SignUpViewController {
         txtConfirmPassword.textProperty().addListener((Observable) -> {
             try {
                 txtPasswordConfirmError.setVisible(false);
-                
+
                 if (!txtConfirmPassword.getText().equals(txtPassword.getText())) {
                     throw new Exception("La contraseña no coincide");
                 }
                 if (txtConfirmPassword.getText().length() == 0) {
                     throw new Exception("El campo no puede estar vacio");
                 }
-                
+
                 correctPasswordConfirmation = true;
             } catch (Exception e) {
                 txtPasswordConfirmError.setVisible(true);
@@ -220,7 +224,7 @@ public class SignUpViewController {
                 correctPasswordConfirmation = false;
                 btnSignUp.setDisable(true);
             }
-            
+
             if (correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation) {
                 btnSignUp.setDisable(false);
             }
@@ -305,36 +309,41 @@ public class SignUpViewController {
         User user = null;
 
         LOG.info("Setting up the required variables");
-        /*clientSocket = myFactory.getImplementation();
+        clientSocket = myFactory.getImplementation();
         user = new User();
         user.setFullName(txtFullName.getText());
         user.setEmail(txtEmail.getText());
         user.setPassword(txtPassword.getText());
         user.setLogin(txtUsername.getText().trim());
 
-
-
         message = new Message();
         message.setUserData(user);
         message.setOperation(Operation.SING_UP);
 
         try {
-        message = clientSocket.connectToServer(message);
+            message = clientSocket.connectToServer(message);
 
             if (message.getOperation().equals(Operation.USER_EXISTS)) {
-                alert = new Alert(Alert.AlertType.ERROR, "El usuario ya existe, pruebe con otro", ButtonType.OK);
-                alert.showAndWait();
-                LOG.warning("The user attemped to sign up all ready exists");
+                throw new UserAlreadyExistsException("El usuario ya existe, pruebe con otro");
             } else if (message.getOperation().equals(Operation.OK)) {
                 alert = new Alert(Alert.AlertType.INFORMATION, "El usuario ha sido registrado correctamente", ButtonType.OK);
                 alert.showAndWait();
                 LOG.info("The sign up has be done correctly. Exiting method...");
+            } else if (message.getOperation().equals(Operation.SERVER_FULL)) {
+                throw new ServerFullException("El servdor esta lleno, intentelo mas tarde");
             }
         } catch (ServerErrorException e) {
             LOG.severe(e.getMessage());
             alert = new Alert(Alert.AlertType.ERROR, "Error al conectarse con el servidor, intentelo de nuevo mas tarde", ButtonType.OK);
             alert.showAndWait();
-        }*/
+        } catch (UserAlreadyExistsException ex) {
+            LOG.warnign(ex.getMessage());
+            alert  = new Alert(Alert.AlertType.ERROR, "El usuario ya existe, pruebe con otro", ButtonType.OK);
+            alert.showAndWait();
+            
+        } catch (ServerFullException ex) {
+            LOG.severe(ex.getMessage());
+            alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
+        }
     }
 }
-
