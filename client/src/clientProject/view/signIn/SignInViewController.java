@@ -7,7 +7,10 @@ package clientProject.view.signIn;
 
 import clientProject.view.signUp.SignUpViewController;
 import enumerations.Operation;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -33,6 +36,10 @@ import model.User;
 public class SignInViewController {
 
     private static final Logger LOG = Logger.getLogger("vista.SignIn.SignInViewController");
+    private Pattern pattern = null;
+    private Matcher matcher = null;
+    private Boolean correctUserName = false;
+    private Boolean correctPassword = false;
 
     @FXML
     private TextField txtUser;
@@ -49,8 +56,40 @@ public class SignInViewController {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle("Iniciar Sesion");
-        txtUser.textProperty().addListener(this::campChanges);
-        txtPassword.textProperty().addListener(this::campChanges);
+        
+        LOG.info("Validating the username field");
+        txtUser.textProperty().addListener((Observable) -> {
+            try {
+                String usernamePattern = "^(?=.*[a-z])(?=.*[A-Z]).{0,50}$";
+                pattern.compile(usernamePattern);
+                matcher = pattern.matcher(txtUser.getText());
+                if (txtUser.getText().length() > 50) {
+                    throw new Exception("El nombre de usuario no puede tener mas de 50 caracteres");
+                } else if (txtUser.getText().length() == 0) {
+                    throw new Exception("El campo no puede estar vacio");
+                }
+
+                correctUserName = true;
+            } catch (Exception ex) {
+                btnSignIn.setDisable(true);
+            }
+            if (correctUserName && correctPassword) {
+                btnSignIn.setDisable(false);
+            }
+        });
+
+        LOG.info("Validating the password field");
+        txtPassword.textProperty().addListener((Observable) -> {
+            try {
+                correctPassword = passwordValidator(txtPassword.getText());
+            } catch (Exception e) {
+                btnSignIn.setDisable(true);
+                correctPassword = false;
+            }
+            if (correctUserName && correctPassword) {
+                btnSignIn.setDisable(false);
+            }
+        });
 
         stage.setOnCloseRequest((WindowEvent WindowEvent) -> {
             LOG.info("Opening exit alert confirmation");
@@ -78,16 +117,6 @@ public class SignInViewController {
         stage.show();
     }
 
-    private void campChanges(ObservableValue observable,
-            String oldValue,
-            String newValue) {
-        if (this.txtUser.getText().trim().isEmpty() || this.txtPassword.getText().trim().isEmpty()) {
-            btnSignIn.setDisable(true);
-        } else {
-            btnSignIn.setDisable(false);
-        }
-    }
-
     private void signIn(ActionEvent e) {
         LOG.info("Starting the sign in and looking for all equired objects");
         User user = new User();
@@ -109,5 +138,22 @@ public class SignInViewController {
         } catch (Exception ex) {
             LOG.info("No se puede abrir la ventana " + ex.getLocalizedMessage());
         }
+    }
+
+    private Boolean passwordValidator(String password) throws Exception {
+        String PASSWORD_PATTERN
+                = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!¡@#$%&¿?]).{8,100}$";
+
+        if (password.length() < 8) {
+            throw new Exception("La contraseña debe de tener al mentos 8 caracteres");
+        } else {
+            pattern = Pattern.compile(PASSWORD_PATTERN);
+            matcher = pattern.matcher(password);
+
+            if (matcher.matches()) {
+                return true;
+            }
+        }
+        throw new Exception("La contraseña no es valida, debe tener al menos una mayuscula, \n una minuscula, un numero y un caracter especial");
     }
 }
