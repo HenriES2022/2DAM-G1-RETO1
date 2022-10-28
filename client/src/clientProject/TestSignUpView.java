@@ -37,7 +37,7 @@ public class TestSignUpView extends Application {
                 Parent root = (Parent) loader.load();
                 SignUpViewController controller = ((SignUpViewController) loader.getController());
                 controller.initStage(root);
-                primaryStage.show();
+                
             } catch (IOException ex) {
                 Logger.getLogger(TestLoggedView.class.getName()).log(Level.SEVERE, null, ex);
             }
