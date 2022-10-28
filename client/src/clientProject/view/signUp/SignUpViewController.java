@@ -282,6 +282,7 @@ public class SignUpViewController {
      *
      * @param password The password we are going to validate
      * @return Returns True if the password is correct, False if is not.
+     *@throws Exception if the password length is less than 8 characters or if the password is not correct
      */
     private Boolean passwordValidator(String password) throws Exception {
         String PASSWORD_PATTERN
@@ -302,6 +303,7 @@ public class SignUpViewController {
 
     /**
      * This method sends de user to the server to register it
+     * @param event the event that method is going to be launched by
      */
     private void signUp(ActionEvent event) {
         LOG.info("Starting the sign up and setting up all equired objects");
@@ -337,7 +339,7 @@ public class SignUpViewController {
             alert = new Alert(Alert.AlertType.ERROR, "Error al conectarse con el servidor, intentelo de nuevo mas tarde", ButtonType.OK);
             alert.showAndWait();
         } catch (UserAlreadyExistsException ex) {
-            LOG.warnign(ex.getMessage());
+            LOG.warning(ex.getMessage());
             alert  = new Alert(Alert.AlertType.ERROR, "El usuario ya existe, pruebe con otro", ButtonType.OK);
             alert.showAndWait();
             
