@@ -7,10 +7,7 @@ package clientProject.view.signIn;
 
 import clientProject.view.signUp.SignUpViewController;
 import enumerations.Operation;
-import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -76,6 +73,7 @@ public class SignInViewController {
             btnSignIn.setDisable(true);
             btnSignUp.setDisable(false);
             stage.setResizable(false);
+            
         });
 
         btnSignIn.setOnAction((ActionEvent) -> {
@@ -116,9 +114,11 @@ public class SignInViewController {
 
     private void signUp() {
         try {
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../signUp/SignUpView.fxml"));
             Parent root = (Parent) loader.load();
             SignUpViewController signUp = ((SignUpViewController) loader.getController());
+
             signUp.initStage(root);
             stage.show();
         } catch (Exception ex) {
