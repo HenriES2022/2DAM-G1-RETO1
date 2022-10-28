@@ -78,5 +78,10 @@ public enum Operation {
      * Answer given by the server when the any actions done with the server has
      * trowed an ServerErrorException
      */
-    SERVER_ERROR
+    SERVER_ERROR,
+    /**
+     * Answer given by the server when connecting to the server and there's
+     * already 10 connection open
+     */
+    SERVER_FULL
 }
