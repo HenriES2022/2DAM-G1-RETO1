@@ -31,13 +31,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            primaryStage.hide();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("view/signIn/SignInView.fxml"));
             Parent root = (Parent) loader.load();
             SignInViewController controller = ((SignInViewController) loader.getController());
             controller.initStage(root);
-            controller.setStage(primaryStage);
-            primaryStage.show();
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }

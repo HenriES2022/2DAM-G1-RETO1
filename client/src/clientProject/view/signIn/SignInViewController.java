@@ -10,6 +10,7 @@ import enumerations.Operation;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -32,7 +33,6 @@ import model.User;
 public class SignInViewController {
 
     private static final Logger LOG = Logger.getLogger("vista.SignIn.SignInViewController");
-    private Stage stage;
 
     @FXML
     private TextField txtUser;
@@ -42,8 +42,6 @@ public class SignInViewController {
     private Button btnSignIn;
     @FXML
     private Button btnSignUp;
-
-    public User user = new User();
 
     public void initStage(Parent root) {
         LOG.info("Initiating Sign In View stage");
@@ -73,17 +71,11 @@ public class SignInViewController {
             btnSignIn.setDisable(true);
             btnSignUp.setDisable(false);
             stage.setResizable(false);
-            
         });
 
-        btnSignIn.setOnAction((ActionEvent) -> {
-            signIn();
-        });
-
-        btnSignUp.setOnAction((ActionEvent) -> {
-            signUp();
-        });
-        stage.showAndWait();
+        btnSignIn.setOnAction(this::signIn);
+        btnSignUp.setOnAction(this::signUp);
+        stage.show();
     }
 
     private void campChanges(ObservableValue observable,
@@ -96,37 +88,26 @@ public class SignInViewController {
         }
     }
 
-    private void signIn() {
+    private void signIn(ActionEvent e) {
         LOG.info("Starting the sign in and looking for all equired objects");
-        Message message = null;
-        User user = null;
-        Operation operation = null;
+        User user = new User();
 
         user.setFullName(txtUser.getText());
         user.setPassword(txtPassword.getText());
 
-        operation = operation.SING_IN;
-
-        message = new Message();
+        Message message = new Message();
         message.setUserData(user);
-        message.setOperation(operation);
+        message.setOperation(Operation.SING_IN);
     }
 
-    private void signUp() {
+    private void signUp(ActionEvent e) {
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../signUp/SignUpView.fxml"));
-            Parent root = (Parent) loader.load();
+            Parent rootSignUp = (Parent) loader.load();
             SignUpViewController signUp = ((SignUpViewController) loader.getController());
-
-            signUp.initStage(root);
-            stage.show();
+            signUp.initStage(rootSignUp);
         } catch (Exception ex) {
             LOG.info("No se puede abrir la ventana " + ex.getLocalizedMessage());
         }
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
     }
 }
