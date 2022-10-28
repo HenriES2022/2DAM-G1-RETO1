@@ -34,8 +34,6 @@ import model.User;
  */
 public class SignUpViewController {
 
-    private Stage stage = new Stage();
-
     @FXML
     private TextField txtFullName;
     @FXML
@@ -57,8 +55,6 @@ public class SignUpViewController {
     @FXML
     private Label txtPasswordError;
     @FXML
-    private CheckBox checkShowPassword;
-    @FXML
     private Label txtPasswordConfirmError;
     @FXML
     private PasswordField txtConfirmPassword;
@@ -70,8 +66,8 @@ public class SignUpViewController {
     private Boolean correctFullName = false;
     private Boolean correctUserName = false;
     private Boolean correctPasswordConfirmation = false;
-    /*private ClientSocketFactory myFactory;
-    private ClientSocket clientSocket;*/
+    private ClientSocketFactory myFactory;
+    private ClientSocket clientSocket;
     private static Alert alert = null;
     private static final Logger LOG = Logger.getLogger("clientProject.view.signUp.SignUpViewController.class");
 
@@ -300,28 +296,23 @@ public class SignUpViewController {
         LOG.info("Starting the sign up and setting up all equired objects");
         Message message = null;
         User user = null;
-        Operation operation = null;
-        /*this.validateText(txtEmail);
-        this.validateText(txtFullName);
-        this.validateText(txtUsername);
-        this.validateText(txtPassword);*/
 
         LOG.info("Setting up the required variables");
-        //clientSocket = myFactory.getImplementation();
+        clientSocket = myFactory.getImplementation();
         user = new User();
         user.setFullName(txtFullName.getText());
         user.setEmail(txtEmail.getText());
         user.setPassword(txtPassword.getText());
         user.setLogin(txtUsername.getText().trim());
 
-        operation = Operation.SING_UP;
+
 
         message = new Message();
         message.setUserData(user);
-        message.setOperation(operation);
+        message.setOperation(Operation.SING_UP);
 
-        //try {
-        /*message = clientSocket.connectToServer(message);
+        try {
+        message = clientSocket.connectToServer(message);
 
             operation = message.getOperation();
 
@@ -333,12 +324,11 @@ public class SignUpViewController {
                 alert = new Alert(Alert.AlertType.INFORMATION, "El usuario ha sido registrado correctamente", ButtonType.OK);
                 alert.showAndWait();
                 LOG.info("The sign up has be done correctly. Exiting method...");
-            }*/
-        /*} catch (ServerErrorException e) {
+            }
+        } catch (ServerErrorException e) {
             LOG.severe(e.getMessage());
             alert = new Alert(Alert.AlertType.ERROR, "Error al conectarse con el servidor, intentelo de nuevo mas tarde", ButtonType.OK);
             alert.showAndWait();
-        }*/
-
+        }
     }
 }
