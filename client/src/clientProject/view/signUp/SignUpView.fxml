@@ -17,13 +17,13 @@
          </font>
       </TextField>
       
-      <TextField fx:id="txtEmail" layoutX="436.0" layoutY="146.0" prefHeight="30.0" prefWidth="228.0" promptText="Introduce el email">
+      <TextField fx:id="txtEmail" layoutX="437.0" layoutY="158.0" prefHeight="30.0" prefWidth="228.0" promptText="Introduce el email">
          <font>
             <Font size="14.0" />
          </font>
       </TextField>
       
-      <TextField fx:id="txtUsername" layoutX="438.0" layoutY="223.0" prefHeight="30.0" prefWidth="228.0" promptText="Introduce el nombre de usuario">
+      <TextField fx:id="txtUsername" layoutX="438.0" layoutY="236.0" prefHeight="30.0" prefWidth="228.0" promptText="Introduce el nombre de usuario">
          <font>
             <Font size="14.0" />
          </font>
@@ -34,22 +34,22 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="440.0" layoutY="274.0" text="Contraseña:">
+      <Label layoutX="438.0" layoutY="291.0" text="Contraseña:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="436.0" layoutY="198.0" text="Usuario:">
+      <Label layoutX="435.0" layoutY="216.0" text="Usuario:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="435.0" layoutY="126.0" text="Email:">
+      <Label layoutX="434.0" layoutY="138.0" text="Email:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <PasswordField fx:id="txtPassword" layoutX="436.0" layoutY="294.0" prefHeight="30.0" prefWidth="228.0" promptText="Intorduce la contraseña">
+      <PasswordField fx:id="txtPassword" layoutX="437.0" layoutY="311.0" prefHeight="30.0" prefWidth="228.0" promptText="Intorduce la contraseña">
          <font>
             <Font size="14.0" />
          </font>
@@ -64,7 +64,7 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="btnBack" layoutX="576.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Vovler">
+      <Button fx:id="btnBack" layoutX="576.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Volver">
          <font>
             <Font size="14.0" />
          </font>
@@ -80,9 +80,9 @@
          </font>
       </Label>
       <Label fx:id="txtFullNameError" layoutX="440.0" layoutY="109.0" text="Label" textFill="RED" visible="false" />
-      <Label fx:id="txtEmailError" layoutX="439.0" layoutY="181.0" text="Label" textFill="RED" visible="false" />
-      <Label fx:id="txtUsernameError" layoutX="440.0" layoutY="257.0" text="Label" textFill="RED" visible="false" />
-      <Label fx:id="txtPasswordError" layoutX="447.0" layoutY="334.0" text="Label" textFill="RED" visible="false" />
+      <Label fx:id="txtEmailError" layoutX="439.0" layoutY="188.0" text="Label" textFill="RED" visible="false" />
+      <Label fx:id="txtUsernameError" layoutX="439.0" layoutY="269.0" text="Label" textFill="RED" visible="false" />
+      <Label fx:id="txtPasswordError" layoutX="447.0" layoutY="341.0" text="Label" textFill="RED" visible="false" />
       
       <Label fx:id="txtPasswordConfirmError" layoutX="447.0" layoutY="447.0" text="Label" textFill="RED" visible="false" />
       <Label layoutX="440.0" layoutY="384.0" text="Confirmar contraseña:">
