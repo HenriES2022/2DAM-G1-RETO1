@@ -4,14 +4,22 @@
  */
 package serverProject.model.database;
 
+import java.util.ResourceBundle;
+
 /**
  *
  * @author yeguo
  */
 public abstract class DBFactory {
 
+    private static final String DB_TYPE = ResourceBundle.getBundle("serverProject.config").getString("model");
+    private static final String MYSQL = "mysql";
+
     public static DB getDB() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if (DB_TYPE.equalsIgnoreCase(MYSQL)) {
+            return new DBImplPoolMysql();
+        }
+        return null;
     }
 
 }

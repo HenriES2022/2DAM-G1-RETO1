@@ -11,7 +11,7 @@ import java.util.Stack;
  *
  * @author yeguo
  */
-public class DBImplPool implements DB, AutoCloseable {
+public class DBImplPoolMysql implements DB, AutoCloseable {
 
     private Stack pool = new Stack();
 

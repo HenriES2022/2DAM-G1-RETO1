@@ -4,14 +4,22 @@
  */
 package serverProject.model.dao;
 
+import java.util.ResourceBundle;
+
 /**
  *
  * @author yeguo
  */
 public abstract class DAOFactory {
 
+    private static final String DB_TYPE = ResourceBundle.getBundle("serverProject").getString("model");
+    private static final String MYSQL = "mysql";
+
     public static DAO getDAO() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (DB_TYPE.equalsIgnoreCase(MYSQL)) {
+            return new DAOImplementationMysql();
+        }
+        return null;
     }
 
 }
