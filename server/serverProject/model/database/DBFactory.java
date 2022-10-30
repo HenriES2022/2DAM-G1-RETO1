@@ -11,13 +11,14 @@ import java.util.ResourceBundle;
  * @author yeguo
  */
 public abstract class DBFactory {
+
+    private static final String DB_TYPE = ResourceBundle.getBundle("serverProject.config").getString("model");
+    private static final String MYSQL = "mysql";
+
     public static DB getDB() {
-        Integer intialSize = 5;
-        String url, user, password;
-        Stack pool = new Stack();
-        
-        
-        
+        if (DB_TYPE.equalsIgnoreCase(MYSQL)) {
+            return new DBImplPoolMysql();
+        }
         return null;
     }
 

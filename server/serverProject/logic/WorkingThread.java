@@ -21,6 +21,7 @@ import exceptions.*;
  */
 public class WorkingThread extends Thread {
 
+    private static int threadCount = 0;
     private static final Logger LOG = Logger.getLogger("serverProject.logic.WorkingThread");
     private static final DAO DAO = DAOFactory.getDAO();
     private final Socket sc;
@@ -31,9 +32,14 @@ public class WorkingThread extends Thread {
         this.sc = sc;
     }
 
+    public int getThreadCount() {
+        return threadCount;
+    }
+
     @Override
     public void run() {
         try ( ObjectOutputStream oos = new ObjectOutputStream(sc.getOutputStream());  ObjectInputStream ois = new ObjectInputStream(sc.getInputStream());) {
+            threadCount++;
             // Retrieve Msg from the client
             Message msg = (Message) ois.readObject();
 
@@ -43,15 +49,17 @@ public class WorkingThread extends Thread {
             } else {
                 response = DAO.signUp(msg.getUserData());
             }
-
+            
             // Send Message to the client
             oos.writeObject(response);
 
-        } catch (IOException | ClassNotFoundException ex) {
-            LOG.log(Level.SEVERE, "Error while opening the I/O streams", ex);
-
-        } catch (UserAlreadyExistsException | IncorrectLoginException e) {
-            LOG.log(Level.SEVERE, null, e);
+        } catch (UserAlreadyExistsException | IncorrectLoginException ex) {
+            LOG.warning(ex.getMessage());
+        } catch (ServerErrorException e) {
+            LOG.severe(e.getMessage());
+        } catch (IOException | ClassNotFoundException exc) {
+            String error = "Error while opening the I/O streams " + exc.getMessage();
+            LOG.severe(error);
         }
 
     }

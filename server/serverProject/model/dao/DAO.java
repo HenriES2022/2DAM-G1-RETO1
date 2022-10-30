@@ -6,6 +6,7 @@ package serverProject.model.dao;
 
 import exceptions.UserAlreadyExistsException;
 import exceptions.IncorrectLoginException;
+import exceptions.ServerErrorException;
 import model.Message;
 import model.User;
 
@@ -23,8 +24,9 @@ public interface DAO {
      * @param user Pass the user with all the date for the signIn
      * @return Returns a message
      * @throws IncorrectLoginException
+     * @throws exceptions.ServerErrorException
      */
-    public Message signIn(User user) throws IncorrectLoginException;
+    public Message signIn(User user) throws IncorrectLoginException, ServerErrorException;
 
     /**
      * This method passes a User (Username and Password) to SignUp and returns a
@@ -35,14 +37,8 @@ public interface DAO {
      * @return Returns a {@code boolean} depending if the the signUp was done
      * successfully
      * @throws UserAlreadyExistsException
+     * @throws exceptions.ServerErrorException
      */
-    public Message signUp(User user) throws UserAlreadyExistsException;
-
-    /**
-     * This method is to check if the user's history
-     *
-     * @return Boolean
-     */
-    public Boolean checkSignInHistory();
+    public Message signUp(User user) throws UserAlreadyExistsException, ServerErrorException;
 
 }
