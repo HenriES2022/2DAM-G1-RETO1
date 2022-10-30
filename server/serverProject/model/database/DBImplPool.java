@@ -14,6 +14,17 @@ import java.util.Stack;
 public class DBImplPool implements DB, AutoCloseable {
 
     private Stack pool = new Stack();
+    private Stack usingConnections = new Stack();
+    private String url;
+    private String user;
+    private String password;
+    
+    public DBImplPool(String url, String user, String password, Stack pool){
+        this.url = url;
+        this.user = user;
+        this.password = password;
+        this.pool = pool;
+    }
 
     @Override
     public synchronized Boolean saveConnection() {

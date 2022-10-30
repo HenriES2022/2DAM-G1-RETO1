@@ -4,14 +4,21 @@
  */
 package serverProject.model.database;
 
+import java.util.ResourceBundle;
+
 /**
  *
  * @author yeguo
  */
 public abstract class DBFactory {
-
     public static DB getDB() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        Integer intialSize = 5;
+        String url, user, password;
+        Stack pool = new Stack();
+        
+        
+        
+        return null;
     }
 
 }
