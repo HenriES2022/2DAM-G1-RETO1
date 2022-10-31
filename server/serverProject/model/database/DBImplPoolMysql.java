@@ -17,26 +17,27 @@ import java.util.logging.Logger;
  */
 public class DBImplPoolMysql implements DB, AutoCloseable {
 
-    private Stack pool = new Stack();
-    private Stack usingConnections = new Stack();
+    private static Stack pool = new Stack();
+    private static Stack usingConnections = new Stack();
     private static final Logger LOG = Logger.getLogger("serverProject.model.database.DBImplPoolMysql");
     private static final String URL = ResourceBundle.getBundle("serverProject.config").getString("url");
     private static final String USER = ResourceBundle.getBundle("serverProject.config").getString("user");
     private static final String PASSWORD = ResourceBundle.getBundle("serverProject.config").getString("pass");
+    private Connection conex;
 
     @Override
     public synchronized Boolean saveConnection() {
-       return null;
+        pool.push(conex);
+        return pool.remove(conex);
     }
 
     @Override
     public synchronized Connection getConnection() {
-        Connection conex = null;
         try {
             if (pool.isEmpty()) {
                 return DriverManager.getConnection(URL, USER, PASSWORD);
             }
-            
+
             conex = (Connection) pool.pop();
             usingConnections.push(conex);
         } catch (SQLException e) {
