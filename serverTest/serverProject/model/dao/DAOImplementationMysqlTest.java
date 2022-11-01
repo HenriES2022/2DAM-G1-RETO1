@@ -5,14 +5,11 @@
 package serverProject.model.dao;
 
 import enumerations.Operation;
-import enumerations.UserPrivilege;
-import enumerations.UserStatus;
 import exceptions.IncorrectLoginException;
 import exceptions.UserAlreadyExistsException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -24,9 +21,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import exceptions.ServerErrorException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.security.*;
 
 /**
