@@ -19,6 +19,7 @@ import exceptions.ServerErrorException;
 import exceptions.UserAlreadyExistsException;
 import java.sql.Timestamp;
 import java.util.List;
+import sun.security.rsa.RSACore;
 
 /**
  *
@@ -69,11 +70,11 @@ public class DAOImplementationMysql implements DAO {
     // Statement for the sign up
     private final static String SIGN_UP
             = "INSERT INTO USER(login, email, full_name, user_password)"
-            + "values(?,?,?,?,?,MD5(?))";
+            + "values(?,?,?,MD5(?))";
 
     // Statement checks if user already exists
     private final static String SIGN_UP_USER_CHECK
-            = "SELECT IF(LOGIN = ?, true, false) FROM user";
+            = "SELECT login FROM user WHERE login like ?";
 
     // Message
     private Message msg;
@@ -89,7 +90,7 @@ public class DAOImplementationMysql implements DAO {
     public Message signIn(User user) throws IncorrectLoginException, ServerErrorException {
         // Try-catch with resources
         try ( //Connection con = dbImpl.getConnection();  
-                 PreparedStatement stat = con.prepareStatement(SIGN_IN);  PreparedStatement statHistory = con.prepareStatement(SIGN_IN_HISTORY_CHECK);  PreparedStatement statDel = con.prepareStatement(SIGN_IN_HISTORY_DEL);  PreparedStatement statAdd = con.prepareStatement(SIGN_IN_HISTORY_ADD)) {
+                 PreparedStatement stat = con.prepareStatement(SIGN_IN);  PreparedStatement statHistory = con.prepareStatement(SIGN_IN_HISTORY);  PreparedStatement statHistoryCheck = con.prepareStatement(SIGN_IN_HISTORY_CHECK);  PreparedStatement statDel = con.prepareStatement(SIGN_IN_HISTORY_DEL);  PreparedStatement statAdd = con.prepareStatement(SIGN_IN_HISTORY_ADD)) {
 
             // Create the msg object
             msg = new Message();
@@ -121,25 +122,25 @@ public class DAOImplementationMysql implements DAO {
                 statAdd.executeUpdate();
 
                 // Getting SignIn history of the user
-                statHistory.setInt(1, id);
-                ResultSet rsHistoryCheck = statHistory.executeQuery();
+                statHistoryCheck.setInt(1, id);
+                ResultSet rsHistoryCheck = statHistoryCheck.executeQuery();
+                rsHistoryCheck.next();
 
-                if (rsHistoryCheck.next()) {
-                    if (rsHistoryCheck.getInt(1) == TRUE) {
-                        LOG.info("User already loged in 10 times, proceding to remove oldest record");
-                        statDel.setInt(1, id);
-                        statDel.executeUpdate();
-                    }
+                if (rsHistoryCheck.getByte(1) == TRUE) {
+                    LOG.info("User already loged in 10 times, proceding to remove oldest record");
+                    statDel.setInt(1, id);
+                    statDel.executeUpdate();
                 }
 
-                // TODO REMOVE THIS COMMENT
                 // SignIn history
-                /**
-                 * List<Timestamp> history = user.getSignInHistory(); while
-                 * (rsHistory.next()) { // Loop to save login history
-                 * history.add(rsHistory.getTimestamp(1)); }
-                 * user.setSignInHistory(history);
-                 */
+                statHistory.setInt(1, id);
+                ResultSet rsHistory = statHistory.executeQuery();
+                List<Timestamp> loginHistory = user.getSignInHistory();
+                while (rsHistory.next()) { // Loop to save login history
+                    loginHistory.add(rsHistory.getTimestamp(1));
+                }
+                user.setSignInHistory(loginHistory);
+
                 // Create the message
                 msg.setUserData(user);
                 msg.setOperation(Operation.OK);
@@ -156,24 +157,28 @@ public class DAOImplementationMysql implements DAO {
 
     @Override
     public Message signUp(User user) throws UserAlreadyExistsException, ServerErrorException {
-        // TODO check if username exists
         // Try-catch with resources
         try ( //Connection con = dbImpl.getConnection();  
-                 PreparedStatement stat = con.prepareStatement(SIGN_UP);
-                PreparedStatement statCheckUser = con.prepareStatement(SIGN_UP_USER_CHECK)) {
+                 PreparedStatement statSignUp = con.prepareStatement(SIGN_UP);  PreparedStatement statCheckUser = con.prepareStatement(SIGN_UP_USER_CHECK)) {
             // Create msg object
             msg = new Message();
 
-            // Setting user data for insert
-            stat.setString(1, user.getLogin());
-            stat.setString(2, user.getEmail());
-            stat.setString(3, user.getFullName());
-            stat.setString(4, user.getPassword());
-
-            // Execute update
-            if (stat.executeUpdate() <= 0) {
-                throw new UserAlreadyExistsException("Error can't register a existent user");
+            statCheckUser.setString(1, user.getLogin());
+            ResultSet rsCheckUser = statCheckUser.executeQuery();
+            if (rsCheckUser.next()) {
+                if (rsCheckUser.getString(1).equalsIgnoreCase(user.getLogin())) {
+                    throw new UserAlreadyExistsException("Error user already register");
+                }
             }
+
+            // Setting user data for insert
+            statSignUp.setString(1, user.getLogin());
+            statSignUp.setString(2, user.getEmail());
+            statSignUp.setString(3, user.getFullName());
+            statSignUp.setString(4, user.getPassword());
+
+            // Execute Insert
+            statSignUp.executeUpdate();
 
             msg.setOperation(Operation.OK);
             LOG.info("'OK': User created correctly");
