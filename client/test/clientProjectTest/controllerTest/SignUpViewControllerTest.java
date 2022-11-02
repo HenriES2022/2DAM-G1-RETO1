@@ -16,30 +16,18 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author iorit
+ * @author GAME
  */
 public class SignUpViewControllerTest {
+    private static SignUpViewController myController = null;
     
     public SignUpViewControllerTest() {
-        SignUpViewController controller = new SignUpViewController();
-        assertNotNull("The instance of the controller must not be null", controller);
+        assertNotNull("Controller must not be null", myController);
     }
     
     @BeforeClass
     public static void setUpClass() {
-        
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
+        myController = new SignUpViewController();
     }
 
     /**
