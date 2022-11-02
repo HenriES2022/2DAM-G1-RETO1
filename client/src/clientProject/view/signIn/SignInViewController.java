@@ -7,12 +7,10 @@ package clientProject.view.signIn;
 
 import clientProject.view.signUp.SignUpViewController;
 import enumerations.Operation;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

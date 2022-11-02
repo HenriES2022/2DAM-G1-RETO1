@@ -10,5 +10,7 @@ package clientProject.logic;
  * @author Joritz
  */
 public class ClientSocketFactory {
-    
+    public void getImplementation(){
+        ClientSocketImplementation implement = new ClientSocketImplementation();
+    }
 }
