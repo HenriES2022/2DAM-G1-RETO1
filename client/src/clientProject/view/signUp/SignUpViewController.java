@@ -5,6 +5,8 @@
  */
 package clientProject.view.signUp;
 
+import clientProject.logic.ClientSocket;
+import clientProject.logic.ClientSocketFactory;
 import enumerations.Operation;
 import exceptions.ServerErrorException;
 import exceptions.ServerFullException;
