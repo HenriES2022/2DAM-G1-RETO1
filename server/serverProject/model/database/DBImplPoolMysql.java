@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 public class DBImplPoolMysql implements DB, AutoCloseable {
 
     private static Stack pool = new Stack();
-    private static Stack usingConnections = new Stack();
     private static final Logger LOG = Logger.getLogger("serverProject.model.database.DBImplPoolMysql");
     private static final String URL = ResourceBundle.getBundle("serverProject.config").getString("url");
     private static final String USER = ResourceBundle.getBundle("serverProject.config").getString("user");
@@ -39,7 +38,6 @@ public class DBImplPoolMysql implements DB, AutoCloseable {
             }
 
             conex = (Connection) pool.pop();
-            usingConnections.push(conex);
         } catch (SQLException e) {
             LOG.severe(e.getMessage());
         }
