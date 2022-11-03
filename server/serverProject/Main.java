@@ -29,7 +29,6 @@ public class Main {
                 DataOutputStream flujo = new DataOutputStream(aux);
                 WorkingThread thread = new WorkingThread(skCliente);
                 thread.run();
-                flujo.writeUTF("Silencio Hippie");
                 skCliente.close();
             }
         } catch (IOException ex) {
