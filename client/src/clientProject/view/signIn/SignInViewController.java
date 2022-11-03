@@ -125,6 +125,8 @@ public class SignInViewController {
         Message message = new Message();
         message.setUserData(user);
         message.setOperation(Operation.SING_IN);
+        
+        
     }
 
     private void signUp(ActionEvent e) {

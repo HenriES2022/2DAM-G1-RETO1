@@ -5,12 +5,21 @@
  */
 package clientProject.logic;
 
+import model.Message;
+
 /**
  *
  * @author Joritz
  */
 public class ClientSocketFactory {
-    public void getImplementation(){
-        ClientSocketImplementation implement = new ClientSocketImplementation();
+
+    public static ClientSocket getSocket() {
+        return new ClientSocketImplementation();
+    }
+
+    public ClientSocket getImplementation() {
+        ClientSocketImplementation csi = new ClientSocketImplementation();
+        csi.getImplementation();
+        return csi;
     }
 }
