@@ -5,8 +5,6 @@
  */
 package clientProject.logic;
 
-import model.Message;
-
 /**
  *
  * @author Joritz
