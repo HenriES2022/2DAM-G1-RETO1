@@ -6,13 +6,8 @@
 package serverProject;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Message;
 import serverProject.logic.WorkingThread;
 
 /**
@@ -30,17 +25,9 @@ public class Main {
                 Socket skCliente = skServidor.accept();
                 WorkingThread thread = new WorkingThread(skCliente);
                 thread.start();
-                ObjectInputStream ois = new ObjectInputStream(skCliente.getInputStream());
-                Message message = (Message) ois.readObject();
-                System.out.println(message);
-                ObjectOutputStream oos = new ObjectOutputStream(skCliente.getOutputStream());
-                oos.writeObject(message);
-                skCliente.close();
             }
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -37,7 +37,8 @@ public class WorkingThread extends Thread {
 
     @Override
     public void run() {
-        try ( ObjectOutputStream oos = new ObjectOutputStream(sc.getOutputStream());  ObjectInputStream ois = new ObjectInputStream(sc.getInputStream());) {
+        try ( ObjectOutputStream oos = new ObjectOutputStream(sc.getOutputStream());  
+                ObjectInputStream ois = new ObjectInputStream(sc.getInputStream());) {
             try {
                 threadCount++;
                 // Retrieve Msg from the client
