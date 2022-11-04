@@ -26,6 +26,8 @@ import java.math.BigInteger;
 import java.security.*;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
+import serverProject.model.database.DB;
+import serverProject.model.database.DBFactory;
 
 /**
  * The naming in this test is test + "letter" + what it does, I added a letter
@@ -42,6 +44,7 @@ public class DAOImplementationMysqlTest {
     private static DAOImplementationMysql dao;
     private static String username;
     private static String passwd;
+    private static DB poolImpl;
     private static final String URL = ResourceBundle.getBundle("serverProject.config").getString("url");
     private static final String USER = ResourceBundle.getBundle("serverProject.config").getString("user");
     private static final String PASS = ResourceBundle.getBundle("serverProject.config").getString("pass");
@@ -52,30 +55,13 @@ public class DAOImplementationMysqlTest {
      */
     @BeforeClass
     public static void beforeClass() {
+        poolImpl = DBFactory.getDB();
         username = "user1";
         passwd = "password1234";
-        try {
-            con = DriverManager.getConnection(URL, USER, PASS);
-            dao = new DAOImplementationMysql(con);
-        } catch (SQLException e) {
-            LOG.severe(e.getMessage());
-        }
+        dao = new DAOImplementationMysql();
 
     }
 
-    /**
-     * AfterClass closes the connection to the database
-     */
-    @AfterClass
-    public static void afterClass() {
-        if (con != null) {
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(DAOImplementationMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
 
     /**
      * Test of signIn method, of class DAOImplementationMysql. Testing a normal
