@@ -6,6 +6,11 @@
 package serverProject.model.database;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,24 +23,32 @@ import static org.junit.Assert.*;
  * @author iorit
  */
 public class DBImplPoolMysqlTest {
-    
+
+    private static DB poolImpl = null;
+    private static Connection conex;
+    private static final String SELECT_TEST_CONNECTION = "SELECT * FROM user";
+
     public DBImplPoolMysqlTest() {
+        assertNotNull("The implementation of the pool must not be null", poolImpl);
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
+        poolImpl = DBFactory.getDB();
     }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
+
     @Before
     public void setUp() {
+        conex = poolImpl.getConnection();
     }
-    
+
     @After
     public void tearDown() {
+        try {
+            conex.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBImplPoolMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -43,12 +56,22 @@ public class DBImplPoolMysqlTest {
      */
     @Test
     public void testSaveConnection() {
-        System.out.println("saveConnection");
-        DBImplPoolMysql instance = new DBImplPoolMysql();
-        Boolean expResult = null;
-        Boolean result = instance.saveConnection();
-        assertEquals(expResult, result);
-        fail("The test case is a prototype.");
+        try {
+            assertEquals("The return must be true", true, poolImpl.saveConnection());
+            PreparedStatement stmt = conex.prepareStatement(SELECT_TEST_CONNECTION);
+            ResultSet rs = stmt.executeQuery();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DBImplPoolMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                
+                assertTrue("The connection must be closed", conex.isClosed());
+            } catch (SQLException ex) {
+                Logger.getLogger(DBImplPoolMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
     }
 
     /**
@@ -56,12 +79,20 @@ public class DBImplPoolMysqlTest {
      */
     @Test
     public void testGetConnection() {
-        System.out.println("getConnection");
-        DBImplPoolMysql instance = new DBImplPoolMysql();
-        Connection expResult = null;
-        Connection result = instance.getConnection();
-        assertEquals(expResult, result);
-        fail("The test case is a prototype.");
+        try {
+            ResultSet rs = null;
+            PreparedStatement stmt = null;
+
+            assertNotNull("The connection must not be null", conex);
+            assertTrue("The connection hast to be opened", !conex.isClosed());
+
+            stmt = conex.prepareStatement(SELECT_TEST_CONNECTION);
+            rs = stmt.executeQuery();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DBImplPoolMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail("The connection is not correctly obtained");
+        }
     }
 
     /**
@@ -69,10 +100,7 @@ public class DBImplPoolMysqlTest {
      */
     @Test
     public void testClose() throws Exception {
-        System.out.println("close");
-        DBImplPoolMysql instance = new DBImplPoolMysql();
-        instance.close();
-        fail("The test case is a prototype.");
+
     }
-    
+
 }

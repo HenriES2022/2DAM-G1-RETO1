@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.Stack;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -23,16 +24,14 @@ public class DBImplPoolMysql implements DB, AutoCloseable {
     private static final String USER = ResourceBundle.getBundle("serverProject.config").getString("user");
     private static final String PASSWORD = ResourceBundle.getBundle("serverProject.config").getString("pass");
     private Connection conex;
-
     @Override
     public synchronized Boolean saveConnection() {
-        pool.push(conex);
-        return pool.remove(conex);
+        return pool.add(conex);
     }
 
     @Override
     public synchronized Connection getConnection() {
-        try {
+        try {    
             if (pool.isEmpty()) {
                 return DriverManager.getConnection(URL, USER, PASSWORD);
             }
