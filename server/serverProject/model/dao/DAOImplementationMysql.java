@@ -83,11 +83,15 @@ public class DAOImplementationMysql implements DAO {
      * Login Username and Password.
      * <br>
      * <ol> Sequence of the statements
-     *      <li>{@link #SIGN_IN} "Login" statement, retrieves the data of the logged user</li>
-     *      <li>{@link #SIGN_IN_HISTORY_ADD} inserts a new row with the TimeStamp</li>
-     *      <li>{@link #SIGN_IN_HISTORY_CHECK} checks if the user has already logged in 10 times</li>
-     *      <li>{@link #SIGN_IN_HISTORY_DEL} deletes the oldest history login</li>
-     *      <li>{@link #SIGN_IN_HISTORY} retrieves the list of times that the user has logged in</li>
+     * <li>{@link #SIGN_IN} "Login" statement, retrieves the data of the logged
+     * user</li>
+     * <li>{@link #SIGN_IN_HISTORY_ADD} inserts a new row with the
+     * TimeStamp</li>
+     * <li>{@link #SIGN_IN_HISTORY_CHECK} checks if the user has already logged
+     * in 10 times</li>
+     * <li>{@link #SIGN_IN_HISTORY_DEL} deletes the oldest history login</li>
+     * <li>{@link #SIGN_IN_HISTORY} retrieves the list of times that the user
+     * has logged in</li>
      * </ol>
      *
      * @param user
@@ -97,12 +101,15 @@ public class DAOImplementationMysql implements DAO {
      */
     @Override
     public Message signIn(User user) throws IncorrectLoginException, ServerErrorException {
+        if (con == null) {
+            con = dbImpl.getConnection();
+        }
+
         // Try-catch with resources
-        try ( //Connection con = dbImpl.getConnection();  
-                 PreparedStatement stat = con.prepareStatement(SIGN_IN);  
-                PreparedStatement statAdd = con.prepareStatement(SIGN_IN_HISTORY_ADD);  
-                PreparedStatement statHistoryCheck = con.prepareStatement(SIGN_IN_HISTORY_CHECK);  
-                PreparedStatement statDel = con.prepareStatement(SIGN_IN_HISTORY_DEL);  
+        try (PreparedStatement stat = con.prepareStatement(SIGN_IN);
+                PreparedStatement statAdd = con.prepareStatement(SIGN_IN_HISTORY_ADD);
+                PreparedStatement statHistoryCheck = con.prepareStatement(SIGN_IN_HISTORY_CHECK);
+                PreparedStatement statDel = con.prepareStatement(SIGN_IN_HISTORY_DEL);
                 PreparedStatement statHistory = con.prepareStatement(SIGN_IN_HISTORY)) {
 
             // Create the msg object
@@ -158,29 +165,38 @@ public class DAOImplementationMysql implements DAO {
                 msg.setUserData(user);
                 msg.setOperation(Operation.OK);
                 LOG.info("Data from user retrieved correctly");
-                return msg;
+
             } else { // User and/or pass is NOT correct
                 throw new exceptions.IncorrectLoginException("Incorrect username and/or password");
             }
         } catch (SQLException e) {
             throw new ServerErrorException("Error while trying to creating/executing the prepare statement.");
-        }
+        } finally {
+            dbImpl.saveConnection();
+            return msg;
 
+        }
     }
 
     /**
-     * This method will register the user to the database, checking first if the login username already exists
-     * 
+     * This method will register the user to the database, checking first if the
+     * login username already exists
+     *
      * @param user
      * @return Message
-     * @throw UserAlreadyExistsException if the username is already in the database
+     * @throw UserAlreadyExistsException if the username is already in the
+     * database
      * @throw ServerErrorException if the connection to the database is closed
      */
     @Override
     public Message signUp(User user) throws UserAlreadyExistsException, ServerErrorException {
+        if (con == null) {
+            con = dbImpl.getConnection();
+        }
+
         // Try-catch with resources
-        try ( //Connection con = dbImpl.getConnection();  
-                 PreparedStatement statSignUp = con.prepareStatement(SIGN_UP);  PreparedStatement statCheckUser = con.prepareStatement(SIGN_UP_USER_CHECK)) {
+        try (PreparedStatement statSignUp = con.prepareStatement(SIGN_UP); PreparedStatement statCheckUser = con.prepareStatement(SIGN_UP_USER_CHECK)) {
+
             // Create msg object
             msg = new Message();
 
@@ -203,10 +219,13 @@ public class DAOImplementationMysql implements DAO {
 
             msg.setOperation(Operation.OK);
             LOG.info("'OK': User created correctly");
-            return msg;
 
         } catch (SQLException e) {
             throw new ServerErrorException("Error while trying to creating/executing the prepare statement");
+        } finally {
+            dbImpl.saveConnection();
+            return msg;
+
         }
 
     }

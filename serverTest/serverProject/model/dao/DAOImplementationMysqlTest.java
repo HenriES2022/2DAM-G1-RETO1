@@ -25,6 +25,10 @@ import java.security.*;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.FixMethodOrder;
+
+import serverProject.model.database.DB;
+import serverProject.model.database.DBFactory;
+import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 /**
@@ -42,27 +46,28 @@ public class DAOImplementationMysqlTest {
     private static DAOImplementationMysql dao;
     private static String username;
     private static String passwd;
+    private static DB poolImpl;
     private static final String URL = ResourceBundle.getBundle("serverProject.config").getString("url");
     private static final String USER = ResourceBundle.getBundle("serverProject.config").getString("user");
     private static final String PASS = ResourceBundle.getBundle("serverProject.config").getString("pass");
     private static final Logger LOG = Logger.getLogger("serverProject.model.dao.DAOImplementationMysqlTest");
-    
-    private static final String DATA_TEST = "insert into user(login, email, fullname, user_password) values('user1', 'user1@example.com', 'user pepe', MD5('password1234'))";
+
+    private static final String DATA_TEST = "insert into user(login, email, full_name, user_password) values('user1', 'user1@example.com', 'User pepe', MD5('password1234'))";
 
     /**
      * BeforeClass opens the connection to the database
      */
     @BeforeClass
     public static void beforeClass() {
+        poolImpl = DBFactory.getDB();
         username = "user1";
         passwd = "password1234";
         try {
-            con = DriverManager.getConnection(URL, USER, PASS);
-            dao = new DAOImplementationMysql(con);
-            
+            con = poolImpl.getConnection();
+            dao = new DAOImplementationMysql();
+
             PreparedStatement stat = con.prepareStatement(DATA_TEST);
             stat.executeUpdate();
-            
         } catch (SQLException e) {
             LOG.severe(e.getMessage());
         }
@@ -76,9 +81,10 @@ public class DAOImplementationMysqlTest {
     public static void afterClass() {
         if (con != null) {
             try {
+
                 PreparedStatement stat = con.prepareCall("DELETE FROM USER WHERE login = 'user1'");
                 stat.executeUpdate();
-                
+
                 con.close();
             } catch (SQLException ex) {
                 Logger.getLogger(DAOImplementationMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -92,6 +98,7 @@ public class DAOImplementationMysqlTest {
      *
      */
     @Test
+
     public void testASignInOK() {
         try {
             User userLogin = new User();
@@ -144,12 +151,8 @@ public class DAOImplementationMysqlTest {
         } catch (IncorrectLoginException | SQLException ex) {
             Logger.getLogger(DAOImplementationMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            try {
-                con = DriverManager.getConnection(URL, USER, PASS);
-                dao = new DAOImplementationMysql(con);
-            } catch (SQLException e) {
-                LOG.severe(e.getMessage());
-            }
+            con = poolImpl.getConnection();
+            dao = new DAOImplementationMysql(con);
         }
 
     }
@@ -194,7 +197,7 @@ public class DAOImplementationMysqlTest {
         } catch (ServerErrorException e) {
             LOG.severe(e.getMessage());
         } finally {
-            try ( PreparedStatement deleteUser = con.prepareStatement("delete from user where login = ?")) {
+            try (PreparedStatement deleteUser = con.prepareStatement("delete from user where login = ?")) {
                 deleteUser.setString(1, login);
                 deleteUser.executeUpdate();
             } catch (Exception e) {

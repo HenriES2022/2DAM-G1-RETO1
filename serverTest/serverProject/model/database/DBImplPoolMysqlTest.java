@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,10 +22,11 @@ import org.junit.runners.MethodSorters;
 /**
  *
  * @author iorit
+ * This is the test class for the pool implementation
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DBImplPoolMysqlTest {
-
+    
     private static DB poolImpl = null;
     private static Connection conex;
     private static final String SELECT_TEST_CONNECTION = "SELECT * FROM user";
@@ -52,7 +52,7 @@ public class DBImplPoolMysqlTest {
     }
 
     /**
-     * Test of saveConnection method, of class DBImplPoolMysql.
+     * Test of saveConnection method, testing if the connection is correctly saved and if we can take it again to use it.
      */
     @Test
     public void testSaveConnection() {
@@ -77,7 +77,7 @@ public class DBImplPoolMysqlTest {
     }
 
     /**
-     * Test of getConnection method, of class DBImplPoolMysql.
+     * Test of getConnection method, testing that when it is requested they take a connection from the pool implementation.
      */
     @Test
     public void testGetConnection() {
