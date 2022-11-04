@@ -5,16 +5,19 @@
  */
 package serverProject;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Message;
 import serverProject.logic.WorkingThread;
 
 /**
  *
- * @author 2dam
+ * @author Joritz
  */
 public class Main {
 
@@ -23,17 +26,21 @@ public class Main {
     public Main() {
         try {
             ServerSocket skServidor = new ServerSocket(PUERTO);
-            for (int i = 0; i < -1; i++) {
+            while (true) {
                 Socket skCliente = skServidor.accept();
-                OutputStream aux = skCliente.getOutputStream();
-                DataOutputStream flujo = new DataOutputStream(aux);
                 WorkingThread thread = new WorkingThread(skCliente);
-                thread.run();
-                flujo.writeUTF("Silencio Hippie");
+                thread.start();
+                ObjectInputStream ois = new ObjectInputStream(skCliente.getInputStream());
+                Message message = (Message) ois.readObject();
+                System.out.println(message);
+                ObjectOutputStream oos = new ObjectOutputStream(skCliente.getOutputStream());
+                oos.writeObject(message);
                 skCliente.close();
             }
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

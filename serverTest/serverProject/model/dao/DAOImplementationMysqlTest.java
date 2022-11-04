@@ -18,11 +18,12 @@ import model.Message;
 import model.User;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.Test;
 import exceptions.ServerErrorException;
 import java.math.BigInteger;
 import java.security.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.FixMethodOrder;
 
 import serverProject.model.database.DB;
