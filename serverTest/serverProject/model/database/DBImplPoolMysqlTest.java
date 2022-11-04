@@ -17,11 +17,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 
 /**
  *
  * @author iorit
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DBImplPoolMysqlTest {
 
     private static DB poolImpl = null;
@@ -40,15 +43,12 @@ public class DBImplPoolMysqlTest {
     @Before
     public void setUp() {
         conex = poolImpl.getConnection();
+
     }
 
     @After
     public void tearDown() {
-        try {
-            conex.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(DBImplPoolMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        poolImpl.saveConnection();
     }
 
     /**
@@ -56,20 +56,22 @@ public class DBImplPoolMysqlTest {
      */
     @Test
     public void testSaveConnection() {
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
         try {
             assertEquals("The return must be true", true, poolImpl.saveConnection());
-            PreparedStatement stmt = conex.prepareStatement(SELECT_TEST_CONNECTION);
-            ResultSet rs = stmt.executeQuery();
-
+            conex = poolImpl.getConnection();
+            assertNotNull("The connection can't be null", conex);
+            assertFalse("The connection must be oppened", conex.isClosed());
+            
+            stmt = conex.prepareStatement(SELECT_TEST_CONNECTION);
+            rs = stmt.executeQuery();
+            rs.close();
+            stmt.close();
+            
+            
         } catch (SQLException ex) {
             Logger.getLogger(DBImplPoolMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                
-                assertTrue("The connection must be closed", conex.isClosed());
-            } catch (SQLException ex) {
-                Logger.getLogger(DBImplPoolMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
 
     }
@@ -88,19 +90,12 @@ public class DBImplPoolMysqlTest {
 
             stmt = conex.prepareStatement(SELECT_TEST_CONNECTION);
             rs = stmt.executeQuery();
-
+            rs.close();
+            stmt.close();
         } catch (SQLException ex) {
             Logger.getLogger(DBImplPoolMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
             fail("The connection is not correctly obtained");
         }
-    }
-
-    /**
-     * Test of close method, of class DBImplPoolMysql.
-     */
-    @Test
-    public void testClose() throws Exception {
-
     }
 
 }

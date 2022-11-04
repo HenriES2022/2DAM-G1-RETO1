@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author yeguo
  */
-public class DBImplPoolMysql implements DB, AutoCloseable {
+public class DBImplPoolMysql implements DB {
 
     private static Stack pool = new Stack();
     private static final Logger LOG = Logger.getLogger("serverProject.model.database.DBImplPoolMysql");
@@ -33,7 +33,8 @@ public class DBImplPoolMysql implements DB, AutoCloseable {
     public synchronized Connection getConnection() {
         try {    
             if (pool.isEmpty()) {
-                return DriverManager.getConnection(URL, USER, PASSWORD);
+                conex = DriverManager.getConnection(URL, USER, PASSWORD);
+                return conex;
             }
 
             conex = (Connection) pool.pop();
@@ -43,9 +44,5 @@ public class DBImplPoolMysql implements DB, AutoCloseable {
         return conex;
     }
 
-    @Override
-    public void close() throws Exception {
-        this.saveConnection();
-    }
 
 }
