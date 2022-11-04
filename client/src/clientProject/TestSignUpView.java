@@ -36,7 +36,7 @@ public class TestSignUpView extends Application {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("view/signUp/SignUpView.fxml"));
                 Parent root = (Parent) loader.load();
                 SignUpViewController controller = ((SignUpViewController) loader.getController());
-                controller.initStage(root);
+                //controller.initStage(root);
                 
             } catch (IOException ex) {
                 Logger.getLogger(TestLoggedView.class.getName()).log(Level.SEVERE, null, ex);

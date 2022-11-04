@@ -14,6 +14,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -54,7 +55,7 @@ public class SignInViewController {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle("Iniciar Sesion");
-        
+
         LOG.info("Validating the username field");
         txtUser.textProperty().addListener((Observable) -> {
             try {
@@ -111,7 +112,16 @@ public class SignInViewController {
         });
 
         btnSignIn.setOnAction(this::signIn);
-        btnSignUp.setOnAction(this::signUp);
+        btnSignUp.setOnAction((Event) -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../signUp/SignUpView.fxml"));
+                Parent rootSignUp = (Parent) loader.load();
+                SignUpViewController signUp = ((SignUpViewController) loader.getController());
+                signUp.initStage(rootSignUp, stage);
+            } catch (Exception ex) {
+                LOG.info("No se puede abrir la ventana " + ex.getLocalizedMessage());
+            }
+        });
         stage.show();
     }
 
@@ -126,18 +136,6 @@ public class SignInViewController {
         message.setUserData(user);
         message.setOperation(Operation.SING_IN);
         
-        
-    }
-
-    private void signUp(ActionEvent e) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../signUp/SignUpView.fxml"));
-            Parent rootSignUp = (Parent) loader.load();
-            SignUpViewController signUp = ((SignUpViewController) loader.getController());
-            signUp.initStage(rootSignUp);
-        } catch (Exception ex) {
-            LOG.info("No se puede abrir la ventana " + ex.getLocalizedMessage());
-        }
     }
 
     private Boolean passwordValidator(String password) throws Exception {

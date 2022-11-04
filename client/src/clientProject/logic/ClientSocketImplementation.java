@@ -28,10 +28,11 @@ public class ClientSocketImplementation implements ClientSocket {
     public Message connectToServer(Message message) throws ServerErrorException, ServerFullException {
         try {
             Socket socket = new Socket(HOST, PORT);
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-            message = (Message) ois.readObject();
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             oos.writeObject(message);
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            message = (Message) ois.readObject();
+            System.out.println(message);
             socket.close();
         } catch (IOException ex) {
             Logger.getLogger(ClientSocketImplementation.class.getName()).log(Level.SEVERE, null, ex);
@@ -39,9 +40,5 @@ public class ClientSocketImplementation implements ClientSocket {
             Logger.getLogger(ClientSocketImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return message;
-    }
-    
-    public void getImplementation(){
-        
     }
 }

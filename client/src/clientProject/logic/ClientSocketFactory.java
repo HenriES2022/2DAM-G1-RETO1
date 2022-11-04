@@ -10,14 +10,8 @@ package clientProject.logic;
  * @author Joritz
  */
 public class ClientSocketFactory {
-
-    public static ClientSocket getSocket() {
-        return new ClientSocketImplementation();
-    }
-
+    
     public ClientSocket getImplementation() {
-        ClientSocketImplementation csi = new ClientSocketImplementation();
-        csi.getImplementation();
-        return csi;
+        return new ClientSocketImplementation();
     }
 }

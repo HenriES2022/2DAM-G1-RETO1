@@ -82,10 +82,11 @@ public class SignUpViewController {
      *
      * @param root The scene that is going to be loaded in the stage
      */
-    public void initStage(Parent root) {
+    public void initStage(Parent root, Stage primaryStage) {
         LOG.info("Starting the window and setting the components on the screen");
         myScene = new Scene(root);
         myStage = new Stage();
+        primaryStage.hide();
 
         myStage.setOnShowing((event) -> {
             myStage.setTitle("Registro");
@@ -234,6 +235,7 @@ public class SignUpViewController {
                 (ActionEvent) -> {
                     LOG.info("Closing the window");
                     myStage.close();
+                    primaryStage.show();
                 }
         );
 

@@ -5,6 +5,7 @@
  */
 package clientProject;
 
+import clientProject.logic.ClientSocketFactory;
 import clientProject.view.signIn.SignInViewController;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -26,6 +27,8 @@ public class Main extends Application {
     public static void main(String[] args) {
         // TODO code application logic here
         launch(args);
+        ClientSocketFactory csf = new ClientSocketFactory();
+        csf.getImplementation();
     }
 
     @Override
