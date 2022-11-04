@@ -24,15 +24,17 @@ import java.math.BigInteger;
 import java.security.*;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 
 /**
+ * The naming in this test is test + "letter" + what it does, I added a letter
+ * so the {@code @FixMethodOrder} annotation with
+ * {@link MethodSorters}.Name_ASCENDING works as intended
  *
  * @author yeguo
  */
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DAOImplementationMysqlTest {
 
     private static Connection con;
@@ -44,6 +46,8 @@ public class DAOImplementationMysqlTest {
     private static final String USER = ResourceBundle.getBundle("serverProject.config").getString("user");
     private static final String PASS = ResourceBundle.getBundle("serverProject.config").getString("pass");
     private static final Logger LOG = Logger.getLogger("serverProject.model.dao.DAOImplementationMysqlTest");
+    
+    private static final String DATA_TEST = "insert into user(login, email, fullname, user_password) values('user1', 'user1@example.com', 'user pepe', MD5('password1234'))";
 
     /**
      * BeforeClass opens the connection to the database
@@ -55,6 +59,10 @@ public class DAOImplementationMysqlTest {
         try {
             con = DriverManager.getConnection(URL, USER, PASS);
             dao = new DAOImplementationMysql(con);
+            
+            PreparedStatement stat = con.prepareStatement(DATA_TEST);
+            stat.executeUpdate();
+            
         } catch (SQLException e) {
             LOG.severe(e.getMessage());
         }
@@ -68,6 +76,9 @@ public class DAOImplementationMysqlTest {
     public static void afterClass() {
         if (con != null) {
             try {
+                PreparedStatement stat = con.prepareCall("DELETE FROM USER WHERE login = 'user1'");
+                stat.executeUpdate();
+                
                 con.close();
             } catch (SQLException ex) {
                 Logger.getLogger(DAOImplementationMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -81,8 +92,7 @@ public class DAOImplementationMysqlTest {
      *
      */
     @Test
-    @Order(1)
-    public void testSignInOK() {
+    public void testASignInOK() {
         try {
             User userLogin = new User();
             userLogin.setLogin(username);
@@ -109,8 +119,7 @@ public class DAOImplementationMysqlTest {
      * @throws exceptions.IncorrectLoginException
      */
     @Test(expected = IncorrectLoginException.class)
-    @Order(2)
-    public void testSignInIncorrectUserPass() throws IncorrectLoginException {
+    public void testBSignInIncorrectUserPass() throws IncorrectLoginException {
         try {
             User userTest = new User();
             userTest.setLogin("awa");
@@ -128,8 +137,7 @@ public class DAOImplementationMysqlTest {
      * @throws exceptions.ServerErrorException
      */
     @Test(expected = ServerErrorException.class)
-    @Order(3)
-    public void testSignInServerError() throws ServerErrorException {
+    public void testCSignInServerError() throws ServerErrorException {
         try {
             con.close();
             Message signInDAO = dao.signIn(null);
@@ -151,8 +159,7 @@ public class DAOImplementationMysqlTest {
      *
      */
     @Test
-    @Order(4)
-    public void testSignUp() {
+    public void testDSignUp() {
         String login = "user2";
         String email = "hola@example.com";
         String fullname = "patimicola";
@@ -177,8 +184,7 @@ public class DAOImplementationMysqlTest {
      * @throws UserAlreadyExistsException if user exists
      */
     @Test(expected = UserAlreadyExistsException.class)
-    @Order(5)
-    public void testSignUpExists() throws UserAlreadyExistsException {
+    public void testESignUpExists() throws UserAlreadyExistsException {
         String login = "user2";
         try {
             User user = new User();
@@ -204,8 +210,7 @@ public class DAOImplementationMysqlTest {
      * @throws ServerErrorException if server is closed
      */
     @Test(expected = ServerErrorException.class)
-    @Order(6)
-    public void testSignUpServerError() throws ServerErrorException {
+    public void testFSignUpServerError() throws ServerErrorException {
         try {
             con.close();
             Message signInDAO = dao.signUp(null);
@@ -224,7 +229,7 @@ public class DAOImplementationMysqlTest {
     /**
      * This method is only used to convert the password to a MD5 hash, to
      * compare with the password retrieved from the sign in
-     * 
+     *
      * @param input
      */
     private static String getMd5(String input) {
