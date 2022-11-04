@@ -5,8 +5,13 @@
  */
 package clientProject.view.signIn;
 
+import clientProject.logic.ClientSocket;
 import clientProject.view.signUp.SignUpViewController;
 import enumerations.Operation;
+import exceptions.IncorrectLoginException;
+import exceptions.ServerErrorException;
+import exceptions.ServerFullException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +19,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -39,6 +43,7 @@ public class SignInViewController {
     private Matcher matcher = null;
     private Boolean correctUserName = false;
     private Boolean correctPassword = false;
+    private ClientSocket clientSocket;
 
     @FXML
     private TextField txtUser;
@@ -67,7 +72,6 @@ public class SignInViewController {
                 } else if (txtUser.getText().length() == 0) {
                     throw new Exception("El campo no puede estar vacio");
                 }
-
                 correctUserName = true;
             } catch (Exception ex) {
                 btnSignIn.setDisable(true);
@@ -135,7 +139,26 @@ public class SignInViewController {
         Message message = new Message();
         message.setUserData(user);
         message.setOperation(Operation.SING_IN);
-        
+
+        try {
+            message = clientSocket.connectToServer(message);
+            if (message.getOperation().equals(Operation.LOGIN_ERROR)) {
+                throw new IncorrectLoginException("Login Incorrecto, compruebe el usuario y/o la contraseña");
+            } else if (message.getOperation().equals(Operation.OK)) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Usuario loggeado correctamente", ButtonType.OK);
+                alert.showAndWait();
+            }
+        } catch (ServerErrorException ex) {
+            LOG.severe(ex.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error al conectarse con el servidor, intentelo de nuevo mas tarde", ButtonType.OK);
+            alert.showAndWait();
+        } catch (ServerFullException ex) {
+            Logger.getLogger(SignInViewController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IncorrectLoginException ex) {
+            LOG.warning(ex.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Login Incorrecto, compruebe el usuario y/o la contraseña", ButtonType.OK);
+            alert.showAndWait();
+        }
     }
 
     private Boolean passwordValidator(String password) throws Exception {

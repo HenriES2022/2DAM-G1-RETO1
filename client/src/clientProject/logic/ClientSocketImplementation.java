@@ -5,8 +5,8 @@
  */
 package clientProject.logic;
 
-import exceptions.ServerErrorException;
-import exceptions.ServerFullException;
+import enumerations.Operation;
+import exceptions.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -26,19 +26,38 @@ public class ClientSocketImplementation implements ClientSocket {
 
     @Override
     public Message connectToServer(Message message) throws ServerErrorException, ServerFullException {
+        Socket socket = null;
         try {
-            Socket socket = new Socket(HOST, PORT);
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            oos.writeObject(message);
+            // Se crea la conexión al servidor
+            socket = new Socket(HOST, PORT);
+
+            // Se abren los streams de E/S
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-            message = (Message) ois.readObject();
-            System.out.println(message);
-            socket.close();
-        } catch (IOException ex) {
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+
+            // Envia el mensaje al servidor
+            oos.writeObject(message);
+
+            // Recibe la respuesta del servidor
+            Message respuesta = (Message) ois.readObject();
+
+            if (respuesta.getOperation().equals(Operation.OK)) {
+                return respuesta;
+            } else if (respuesta.getOperation().equals(Operation.SERVER_FULL)) {
+                throw new ServerFullException();
+            }
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(ClientSocketImplementation.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ClientSocketImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (socket != null) {
+                    socket.close();
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(ClientSocketImplementation.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
-        return message;
+        return null;
     }
 }
