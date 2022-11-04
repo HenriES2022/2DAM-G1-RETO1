@@ -62,7 +62,7 @@ public class DAOImplementationMysql implements DAO {
     private final static String SIGN_IN_HISTORY_DEL
             = "DELETE FROM SIGNIN WHERE USER_ID = ? ORDER BY LAST_SIGIN ASC LIMIT 1";
 
-    // Statement for checking if user has more than 10 logins
+    // Statement checks if user has more than 10 logins
     private final static String SIGN_IN_HISTORY_CHECK
             = "SELECT IF(count(LAST_SIGIN)>= 10, true, false) FROM signin WHERE USER_ID = ?";
 
@@ -79,17 +79,31 @@ public class DAOImplementationMysql implements DAO {
     private Message msg;
 
     /**
+     * This method is for the SignIn, passes through parameter a user with the
+     * Login Username and Password.
+     * <br>
+     * <ol> Sequence of the statements
+     *      <li>{@link #SIGN_IN} "Login" statement, retrieves the data of the logged user</li>
+     *      <li>{@link #SIGN_IN_HISTORY_ADD} inserts a new row with the TimeStamp</li>
+     *      <li>{@link #SIGN_IN_HISTORY_CHECK} checks if the user has already logged in 10 times</li>
+     *      <li>{@link #SIGN_IN_HISTORY_DEL} deletes the oldest history login</li>
+     *      <li>{@link #SIGN_IN_HISTORY} retrieves the list of times that the user has logged in</li>
+     * </ol>
      *
      * @param user
-     * @return
-     * @throws IncorrectLoginException
-     * @throws ServerErrorException
+     * @return Message
+     * @throws IncorrectLoginException if user and/or password is incorrect
+     * @throws ServerErrorException if the connection to the database is closed
      */
     @Override
     public Message signIn(User user) throws IncorrectLoginException, ServerErrorException {
         // Try-catch with resources
         try ( //Connection con = dbImpl.getConnection();  
-                 PreparedStatement stat = con.prepareStatement(SIGN_IN);  PreparedStatement statHistory = con.prepareStatement(SIGN_IN_HISTORY);  PreparedStatement statHistoryCheck = con.prepareStatement(SIGN_IN_HISTORY_CHECK);  PreparedStatement statDel = con.prepareStatement(SIGN_IN_HISTORY_DEL);  PreparedStatement statAdd = con.prepareStatement(SIGN_IN_HISTORY_ADD)) {
+                 PreparedStatement stat = con.prepareStatement(SIGN_IN);  
+                PreparedStatement statAdd = con.prepareStatement(SIGN_IN_HISTORY_ADD);  
+                PreparedStatement statHistoryCheck = con.prepareStatement(SIGN_IN_HISTORY_CHECK);  
+                PreparedStatement statDel = con.prepareStatement(SIGN_IN_HISTORY_DEL);  
+                PreparedStatement statHistory = con.prepareStatement(SIGN_IN_HISTORY)) {
 
             // Create the msg object
             msg = new Message();
@@ -103,7 +117,7 @@ public class DAOImplementationMysql implements DAO {
 
             // True if user and pass is correct
             if (rs.next()) {
-                LOG.info("User logged successfully, retrieving data...");
+                LOG.info("User logged in successfully, retrieving data...");
 
                 // Setting the user data
                 Integer id = rs.getInt(1);
@@ -154,6 +168,14 @@ public class DAOImplementationMysql implements DAO {
 
     }
 
+    /**
+     * This method will register the user to the database, checking first if the login username already exists
+     * 
+     * @param user
+     * @return Message
+     * @throw UserAlreadyExistsException if the username is already in the database
+     * @throw ServerErrorException if the connection to the database is closed
+     */
     @Override
     public Message signUp(User user) throws UserAlreadyExistsException, ServerErrorException {
         // Try-catch with resources

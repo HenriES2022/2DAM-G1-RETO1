@@ -24,13 +24,17 @@ import java.math.BigInteger;
 import java.security.*;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 
 /**
  *
  * @author yeguo
  */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DAOImplementationMysqlTest {
-    
+
     private static Connection con;
     private Message msg;
     private static DAOImplementationMysql dao;
@@ -54,7 +58,7 @@ public class DAOImplementationMysqlTest {
         } catch (SQLException e) {
             LOG.severe(e.getMessage());
         }
-        
+
     }
 
     /**
@@ -77,19 +81,20 @@ public class DAOImplementationMysqlTest {
      *
      */
     @Test
+    @Order(1)
     public void testSignInOK() {
         try {
             User userLogin = new User();
             userLogin.setLogin(username);
             userLogin.setPassword(passwd);
             msg = dao.signIn(userLogin);
-            
+
             User msgUser = msg.getUserData();
             if (!msgUser.getLogin().equals(username) && !msgUser.getPassword().equals(getMd5(passwd))) {
                 fail("Statement didn't retrieve the correct data");
             }
             assertTrue(Operation.OK.equals(msg.getOperation()));
-            
+
         } catch (IncorrectLoginException | ServerErrorException ex) {
             LOG.severe(ex.getMessage());
             fail();
@@ -97,17 +102,20 @@ public class DAOImplementationMysqlTest {
     }
 
     /**
-     * Test of signIn method, of class DAOImplementationMysql.
+     * Test of signIn method, with incorrect username and password, testing both
+     * because with any incorrect parameter it will throw the
+     * {@code IncorrecLoginException}
      *
      * @throws exceptions.IncorrectLoginException
      */
     @Test(expected = IncorrectLoginException.class)
+    @Order(2)
     public void testSignInIncorrectUserPass() throws IncorrectLoginException {
         try {
             User userTest = new User();
             userTest.setLogin("awa");
             userTest.setPassword("uwu");
-            
+
             Message signInDAO = dao.signIn(userTest);
         } catch (ServerErrorException ex) {
             LOG.severe(ex.getMessage());
@@ -115,11 +123,12 @@ public class DAOImplementationMysqlTest {
     }
 
     /**
-     * Test of signIn method, of class DAOImplementationMysql.
+     * Test of signIn method, with the connection to the database closed.
      *
      * @throws exceptions.ServerErrorException
      */
     @Test(expected = ServerErrorException.class)
+    @Order(3)
     public void testSignInServerError() throws ServerErrorException {
         try {
             con.close();
@@ -134,14 +143,15 @@ public class DAOImplementationMysqlTest {
                 LOG.severe(e.getMessage());
             }
         }
-        
+
     }
 
     /**
-     * Test of signUp method, of class DAOImplementationMysql.
+     * Test of signUp method with correct data.
      *
      */
     @Test
+    @Order(4)
     public void testSignUp() {
         String login = "user2";
         String email = "hola@example.com";
@@ -154,21 +164,27 @@ public class DAOImplementationMysqlTest {
             user.setFullName(fullname);
             user.setPassword(password);
             msg = dao.signUp(user);
-            
+
             assertTrue(Operation.OK.equals(msg.getOperation()));
         } catch (ServerErrorException | UserAlreadyExistsException e) {
             LOG.severe(e.getMessage());
         }
     }
-    
+
+    /**
+     * Test of signUp method with a user that already exists
+     *
+     * @throws UserAlreadyExistsException if user exists
+     */
     @Test(expected = UserAlreadyExistsException.class)
+    @Order(5)
     public void testSignUpExists() throws UserAlreadyExistsException {
         String login = "user2";
         try {
             User user = new User();
             user.setLogin(login);
             msg = dao.signUp(user);
-            
+
         } catch (ServerErrorException e) {
             LOG.severe(e.getMessage());
         } finally {
@@ -178,11 +194,17 @@ public class DAOImplementationMysqlTest {
             } catch (Exception e) {
                 LOG.severe(e.getMessage());
             }
-            
+
         }
     }
-    
+
+    /**
+     * Test of signUp method with the connection of the database closed.
+     *
+     * @throws ServerErrorException if server is closed
+     */
     @Test(expected = ServerErrorException.class)
+    @Order(6)
     public void testSignUpServerError() throws ServerErrorException {
         try {
             con.close();
@@ -198,7 +220,13 @@ public class DAOImplementationMysqlTest {
             }
         }
     }
-    
+
+    /**
+     * This method is only used to convert the password to a MD5 hash, to
+     * compare with the password retrieved from the sign in
+     * 
+     * @param input
+     */
     private static String getMd5(String input) {
         try {
 
@@ -223,5 +251,5 @@ public class DAOImplementationMysqlTest {
             throw new RuntimeException(e);
         }
     }
-    
+
 }
