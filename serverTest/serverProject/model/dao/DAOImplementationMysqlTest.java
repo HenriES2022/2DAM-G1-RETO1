@@ -46,6 +46,8 @@ public class DAOImplementationMysqlTest {
     private static final String USER = ResourceBundle.getBundle("serverProject.config").getString("user");
     private static final String PASS = ResourceBundle.getBundle("serverProject.config").getString("pass");
     private static final Logger LOG = Logger.getLogger("serverProject.model.dao.DAOImplementationMysqlTest");
+    
+    private static final String DATA_TEST = "insert into user(login, email, fullname, user_password) values('user1', 'user1@example.com', 'user pepe', MD5('password1234'))";
 
     /**
      * BeforeClass opens the connection to the database
@@ -57,6 +59,10 @@ public class DAOImplementationMysqlTest {
         try {
             con = DriverManager.getConnection(URL, USER, PASS);
             dao = new DAOImplementationMysql(con);
+            
+            PreparedStatement stat = con.prepareStatement(DATA_TEST);
+            stat.executeUpdate();
+            
         } catch (SQLException e) {
             LOG.severe(e.getMessage());
         }
@@ -70,6 +76,9 @@ public class DAOImplementationMysqlTest {
     public static void afterClass() {
         if (con != null) {
             try {
+                PreparedStatement stat = con.prepareCall("DELETE FROM USER WHERE login = 'user1'");
+                stat.executeUpdate();
+                
                 con.close();
             } catch (SQLException ex) {
                 Logger.getLogger(DAOImplementationMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
