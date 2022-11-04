@@ -101,8 +101,9 @@ public class DAOImplementationMysql implements DAO {
      */
     @Override
     public Message signIn(User user) throws IncorrectLoginException, ServerErrorException {
-
-        con = dbImpl.getConnection();
+        if (con == null) {
+            con = dbImpl.getConnection();
+        }
 
         // Try-catch with resources
         try (PreparedStatement stat = con.prepareStatement(SIGN_IN);
@@ -189,9 +190,12 @@ public class DAOImplementationMysql implements DAO {
      */
     @Override
     public Message signUp(User user) throws UserAlreadyExistsException, ServerErrorException {
+        if (con == null) {
+            con = dbImpl.getConnection();
+        }
+
         // Try-catch with resources
         try (PreparedStatement statSignUp = con.prepareStatement(SIGN_UP); PreparedStatement statCheckUser = con.prepareStatement(SIGN_UP_USER_CHECK)) {
-            con = dbImpl.getConnection();
 
             // Create msg object
             msg = new Message();
