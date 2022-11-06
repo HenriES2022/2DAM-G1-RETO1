@@ -224,12 +224,8 @@ public class DAOImplementationMysqlTest {
         } catch (SQLException | UserAlreadyExistsException ex) {
             Logger.getLogger(DAOImplementationMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            try {
-                con = DriverManager.getConnection(URL, USER, PASS);
-                dao = new DAOImplementationMysql(con);
-            } catch (SQLException e) {
-                LOG.severe(e.getMessage());
-            }
+            con = poolImpl.getConnection();
+            dao = new DAOImplementationMysql(con);
         }
     }
 
