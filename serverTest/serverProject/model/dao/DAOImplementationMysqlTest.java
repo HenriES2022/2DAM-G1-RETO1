@@ -18,13 +18,13 @@ import model.Message;
 import model.User;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Test;
 import exceptions.ServerErrorException;
 import java.math.BigInteger;
 import java.security.*;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 
 import serverProject.model.database.DB;
 import serverProject.model.database.DBFactory;
@@ -126,6 +126,7 @@ public class DAOImplementationMysqlTest {
      * @throws exceptions.IncorrectLoginException
      */
     @Test(expected = IncorrectLoginException.class)
+
     public void testBSignInIncorrectUserPass() throws IncorrectLoginException {
         try {
             User userTest = new User();
@@ -144,11 +145,14 @@ public class DAOImplementationMysqlTest {
      * @throws exceptions.ServerErrorException
      */
     @Test(expected = ServerErrorException.class)
+
     public void testCSignInServerError() throws ServerErrorException {
         try {
             con.close();
             Message signInDAO = dao.signIn(null);
-        } catch (IncorrectLoginException | SQLException ex) {
+        } catch (IncorrectLoginException ex) {
+            Logger.getLogger(DAOImplementationMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
             Logger.getLogger(DAOImplementationMysqlTest.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             con = poolImpl.getConnection();
