@@ -10,85 +10,112 @@
 <?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="539.0" prefWidth="764.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientProject.view.signUp.SignUpViewController">
-   <children>
-      <TextField fx:id="txtFullName" layoutX="437.0" layoutY="79.0" prefHeight="30.0" prefWidth="228.0" promptText="Introduce el nombre completo">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </TextField>
+    <children>
+        <Label layoutX="441.0" layoutY="14.0" text="Registro">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+        
+        <Label layoutX="430.0" layoutY="60.0" text="Nombres y Apellidos">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <TextField fx:id="txtFullName" layoutX="430.0" layoutY="80.0" prefHeight="30.0" prefWidth="290.0" promptText="Introduce el nombre completo">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </TextField>
+        <Label fx:id="txtFullNameError" layoutX="430.0" layoutY="110.0" textFill="RED" visible="false" >            
+            <font>
+                <Font size="11.0" />
+            </font>
+        </Label>
+
+        <Label layoutX="430.0" layoutY="140.0" text="Email:">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <TextField fx:id="txtEmail" layoutX="430.0" layoutY="160.0" prefHeight="30.0" prefWidth="286.0" promptText="Introduce el email">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </TextField>
+        <Label fx:id="txtEmailError" layoutX="430.0" layoutY="190.0" textFill="RED" visible="false" >            
+            <font>
+                <Font size="11.0" />
+            </font>
+        </Label>
+
       
-      <TextField fx:id="txtEmail" layoutX="437.0" layoutY="158.0" prefHeight="30.0" prefWidth="228.0" promptText="Introduce el email">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </TextField>
+        <Label layoutX="430.0" layoutY="220.0" text="Usuario:">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <TextField fx:id="txtUsername" layoutX="430.0" layoutY="240.0" prefHeight="30.0" prefWidth="286.0" promptText="Introduce el nombre de usuario">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </TextField>
+        <Label fx:id="txtUsernameError" layoutX="430.0" layoutY="270.0" textFill="RED" visible="false" >            
+            <font>
+                <Font size="11.0" />
+            </font>
+        </Label>
+
       
-      <TextField fx:id="txtUsername" layoutX="438.0" layoutY="236.0" prefHeight="30.0" prefWidth="228.0" promptText="Introduce el nombre de usuario">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </TextField>
+        <Label layoutX="430.0" layoutY="300.0" text="Contraseña:">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <PasswordField fx:id="txtPassword" layoutX="430.0" layoutY="330.0" prefHeight="30.0" prefWidth="286.0" promptText="Intorduce la contraseña">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </PasswordField>
+        <Label fx:id="txtPasswordError" layoutX="430.0" layoutY="360.0" textFill="RED" visible="false" >
+            <font>
+                <Font size="11.0" />
+            </font>
+        </Label>
+
+        <Label layoutX="430.0" layoutY="390.0" text="Confirmar contraseña:">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <PasswordField fx:id="txtConfirmPassword" layoutX="430.0" layoutY="420.0" prefHeight="30.0" prefWidth="286.0" promptText="Intorduce la contraseña">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </PasswordField>
+        <Label fx:id="txtPasswordConfirmError" layoutX="430.0" layoutY="450.0" textFill="RED" visible="false" >
+            <font>
+                <Font size="11.0" />
+            </font>
+        </Label>
+
+        <Button fx:id="btnSignUp" layoutX="430.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Registrarse">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button fx:id="btnBack" layoutX="634.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Volver">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <ImageView fitHeight="546.0" fitWidth="410.0" layoutY="-4.0" pickOnBounds="true">
+            <image>
+                <Image url="@SignUpImage.png" />
+            </image>
+        </ImageView>
+
       
-      <Label layoutX="438.0" layoutY="59.0" text="Nombre Completo:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="438.0" layoutY="291.0" text="Contraseña:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="435.0" layoutY="216.0" text="Usuario:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="434.0" layoutY="138.0" text="Email:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <PasswordField fx:id="txtPassword" layoutX="437.0" layoutY="311.0" prefHeight="30.0" prefWidth="228.0" promptText="Intorduce la contraseña">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </PasswordField>
-      <PasswordField fx:id="txtConfirmPassword" layoutX="438.0" layoutY="411.0" prefHeight="30.0" prefWidth="228.0" promptText="Intorduce la contraseña">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </PasswordField>
-      <Button fx:id="btnSignUp" layoutX="427.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Registrarse">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="btnBack" layoutX="576.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Volver">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <ImageView fitHeight="546.0" fitWidth="410.0" layoutY="-4.0" pickOnBounds="true">
-         <image>
-            <Image url="@SignUpImage.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="453.0" layoutY="14.0" text="Registro">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-      <Label fx:id="txtFullNameError" layoutX="440.0" layoutY="109.0" text="Label" textFill="RED" visible="false" />
-      <Label fx:id="txtEmailError" layoutX="439.0" layoutY="188.0" text="Label" textFill="RED" visible="false" />
-      <Label fx:id="txtUsernameError" layoutX="439.0" layoutY="269.0" text="Label" textFill="RED" visible="false" />
-      <Label fx:id="txtPasswordError" layoutX="447.0" layoutY="341.0" text="Label" textFill="RED" visible="false" />
-      
-      <Label fx:id="txtPasswordConfirmError" layoutX="447.0" layoutY="447.0" text="Label" textFill="RED" visible="false" />
-      <Label layoutX="440.0" layoutY="384.0" text="Confirmar contraseña:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-   </children>
+
+    </children>
 </Pane>

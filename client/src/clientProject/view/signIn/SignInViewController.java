@@ -11,6 +11,7 @@ import enumerations.Operation;
 import exceptions.IncorrectLoginException;
 import exceptions.ServerErrorException;
 import exceptions.ServerFullException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -61,16 +62,19 @@ public class SignInViewController {
         stage.setScene(scene);
         stage.setTitle("Iniciar Sesion");
 
-        LOG.info("Validating the username field");
+        LOG.info("Setting validator for the username field");
         txtUser.textProperty().addListener((Observable) -> {
             try {
-                String usernamePattern = "^(?=.*[a-z])(?=.*[A-Z]).{0,50}$";
-                pattern.compile(usernamePattern);
+                String usernamePattern = "^(?=.*[a-z])(?=.*[A-Z])$";
+                Pattern.compile(usernamePattern);
                 matcher = pattern.matcher(txtUser.getText());
                 if (txtUser.getText().length() > 50) {
+                    txtUser.setText(txtUser.getText().substring(0, 50));
                     throw new Exception("El nombre de usuario no puede tener mas de 50 caracteres");
                 } else if (txtUser.getText().length() == 0) {
                     throw new Exception("El campo no puede estar vacio");
+                } else if (!matcher.matches()) {
+                    throw new Exception("El nombre de usuario no puede tener carácteres especiales");
                 }
                 correctUserName = true;
             } catch (Exception ex) {
@@ -81,7 +85,7 @@ public class SignInViewController {
             }
         });
 
-        LOG.info("Validating the password field");
+        LOG.info("Setting validaro the password field");
         txtPassword.textProperty().addListener((Observable) -> {
             try {
                 correctPassword = passwordValidator(txtPassword.getText());
@@ -122,7 +126,7 @@ public class SignInViewController {
                 Parent rootSignUp = (Parent) loader.load();
                 SignUpViewController signUp = ((SignUpViewController) loader.getController());
                 signUp.initStage(rootSignUp, stage);
-            } catch (Exception ex) {
+            } catch (IOException ex) {
                 LOG.info("No se puede abrir la ventana " + ex.getLocalizedMessage());
             }
         });

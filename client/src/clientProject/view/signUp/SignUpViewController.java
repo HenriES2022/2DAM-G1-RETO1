@@ -78,9 +78,10 @@ public class SignUpViewController {
     private static final Logger LOG = Logger.getLogger("clientProject.view.signUp.SignUpViewController.class");
 
     /**
-     * This method startes the Sign Up window
+     * This method starts the Sign Up window
      *
      * @param root The scene that is going to be loaded in the stage
+     * @param primaryStage
      */
     public void initStage(Parent root, Stage primaryStage) {
         LOG.info("Starting the window and setting the components on the screen");
@@ -98,34 +99,37 @@ public class SignUpViewController {
             btnBack.setDisable(false);
             txtFullName.requestFocus();
 
-            txtEmailError.setText("");
-            txtFullNameError.setText("");
-            txtPasswordError.setText("");
-            txtUsernameError.setText("");
-            txtPasswordConfirmError.setText("");
+            txtEmailError.setVisible(false);
+            txtFullNameError.setVisible(false);
+            txtPasswordError.setVisible(false);
+            txtUsernameError.setVisible(false);
+            txtPasswordConfirmError.setVisible(false);
         });
 
-        LOG.info("Validating the full name field");
+        LOG.info("Setting validator for the full name field");
         txtFullName.textProperty().addListener((Observable) -> {
             try {
+                txtFullNameError.setVisible(false);
+
                 String fullNamePattern
-                        = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[\\u0020]).{0,100}$";
+                        = "^([A-Z][a-z]*((\\s)))+[A-Z][a-z]*$";
                 String fullName = txtFullName.getText();
 
                 pattern = Pattern.compile(fullNamePattern);
                 matcher = pattern.matcher(fullName);
-                if (txtFullName.getText().length() == 0) {
-                    throw new Exception("El nombre no puede estar vacio");
-                }
-                if (!matcher.matches()) {
-                    throw new Exception("El nombre tiene que tener el formato de Nombre, un espacio y apellido, comenzando con mayusculas \n y con menos de 100 caracteres");
+
+                if (fullName.length() == 0 || fullName.length() < 5) {
+                    throw new Exception("Este campo debe de tener mínimo 5 carácteres");
+                } else if (fullName.length() > 100) {
+                    txtFullName.setText(txtFullName.getText().substring(0, 100));
+                    throw new Exception("Este campo no puede contener más de 100 carácteres");
+                } else if (!matcher.matches()) {
+                    throw new Exception("El nombre y apellido deben de estar separados con un espacio,"
+                            + "\ncontener solo carácteres desde A-Z, y la primera letra en mayúscula ");
                 }
                 correctFullName = true;
-                txtFullNameError.setVisible(false);
+                btnSignUp.setDisable(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation);
 
-                if (correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation) {
-                    btnSignUp.setDisable(false);
-                }
             } catch (Exception e) {
                 LOG.warning(e.getMessage());
                 btnSignUp.setDisable(true);
@@ -134,60 +138,67 @@ public class SignUpViewController {
                 correctFullName = false;
             }
         });
-        LOG.info("Validationg the email field");
+
+        LOG.info("Setting validator for the email field");
         txtEmail.textProperty().addListener((Observable) -> {
             try {
                 txtEmailError.setVisible(false);
+
                 //Validating that the text field is not empty
                 if (txtEmail.getText().length() == 0) {
                     throw new Exception("El campo no puede estar vacio");
+                } else if (txtEmail.getText().length() > 100) {
+                    txtFullName.setText(txtFullName.getText().substring(0, 100));
+                    throw new Exception("El campo no puede tener más de 100 carácteres");
                 }
                 correctEmail = emailValidator(txtEmail.getText());
                 //if the email is not correct, show an error message
                 if (!correctEmail) {
-                    throw new Exception("El email no es correcto");
+                    throw new Exception("El email no es correcto\nEj: usuario@ejemplo.com");
                 }
+                btnSignUp.setDisable(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation);
+
             } catch (Exception e) {
+                LOG.warning(e.getMessage());
+                btnSignUp.setDisable(true);
                 txtEmailError.setVisible(true);
                 txtEmailError.setText(e.getMessage());
-                btnSignUp.setDisable(true);
             }
 
-            if (correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation) {
-                btnSignUp.setDisable(false);
-            }
         }
         );
 
-        LOG.info("Validating the username field");
+        LOG.info("Setting validator for the username field");
         txtUsername.textProperty().addListener((Observable) -> {
             try {
                 txtUsernameError.setVisible(false);
-                String usernamePattern = "^(?=.*[a-z])(?=.*[A-Z]).{0,50}$";
-                pattern.compile(usernamePattern);
-                matcher = pattern.matcher(txtUsername.getText()); //Validating if the text field has not more tha 50 characters
-                if (txtUsername.getText().length() > 50) {
-                    throw new Exception("El nombre de usuario no puede tener mas de 50 caracteres");
+                String usernamePattern = "^(?=.*[a-z])(?=.*[A-Z])$";
 
-                } else if (txtUsername.getText().length() == 0) {
+                pattern = Pattern.compile(usernamePattern);
+                matcher = pattern.matcher(txtUsername.getText());
+
+                if (txtUsername.getText().length() == 0) {
                     throw new Exception("El campo no puede estar vacio");
+                } else if (txtUsername.getText().length() > 50) {
+                    txtUsername.setText(txtUsername.getText().substring(0, 50));
+                    throw new Exception("El nombre de usuario no puede tener mas de 50 caracteres");
+                } else if (!matcher.matches()) {
+                    throw new Exception("El nombre de usuario no puede tener carácteres especiales");
                 }
-
                 correctUserName = true;
+                btnSignUp.setDisable(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation);
 
             } catch (Exception e) {
+                LOG.warning(e.getMessage());
                 btnSignUp.setDisable(true);
                 txtUsernameError.setVisible(true);
                 txtUsernameError.setText(e.getMessage());
                 correctUserName = false;
             }
-            if (correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation) {
-                btnSignUp.setDisable(false);
-            }
         }
         );
 
-        LOG.info("Validating the password field");
+        LOG.info("Setting validator for the password field");
         txtPassword.textProperty().addListener((Observable) -> {
             try {
                 txtPasswordError.setVisible(false);
@@ -199,13 +210,11 @@ public class SignUpViewController {
                 correctPassword = false;
             }
 
-            if (correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation) {
-                btnSignUp.setDisable(false);
-            }
+            btnSignUp.setDisable(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation);
         }
         );
 
-        LOG.info("Validating that the password and the password confirmation is the same");
+        LOG.info("Setting validator to check both the password and the confirmation is the same");
         txtConfirmPassword.textProperty().addListener((Observable) -> {
             try {
                 txtPasswordConfirmError.setVisible(false);
@@ -216,8 +225,9 @@ public class SignUpViewController {
                 if (txtConfirmPassword.getText().length() == 0) {
                     throw new Exception("El campo no puede estar vacio");
                 }
-
                 correctPasswordConfirmation = true;
+                btnSignUp.setDisable(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation);
+
             } catch (Exception e) {
                 txtPasswordConfirmError.setVisible(true);
                 txtPasswordConfirmError.setText(e.getMessage());
@@ -225,9 +235,6 @@ public class SignUpViewController {
                 btnSignUp.setDisable(true);
             }
 
-            if (correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation) {
-                btnSignUp.setDisable(false);
-            }
         }
         );
 
@@ -239,8 +246,7 @@ public class SignUpViewController {
                 }
         );
 
-        btnSignUp.setOnAction(
-                this::signUp);
+        btnSignUp.setOnAction(this::signUp);
 
         //Atiende al evento de cerrar la ventana
         myStage.setOnCloseRequest(
@@ -262,11 +268,11 @@ public class SignUpViewController {
     }
 
     /**
-     * This method validates that the introduced email is sintacticaly correct
+     * This method validates that the introduced email is syntactically correct
      *
      * @param email The email we are going to check
-     * @return Returns True if the email matches the pattern we use to check the
-     * email, False if dosen't match
+     * @return Returns True if the email matches with the pattern, False if
+     * doesn't match
      */
     private Boolean emailValidator(String email) {
         if (email.length() <= 100) {
@@ -283,7 +289,8 @@ public class SignUpViewController {
      *
      * @param password The password we are going to validate
      * @return Returns True if the password is correct, False if is not.
-     *@throws Exception if the password length is less than 8 characters or if the password is not correct
+     * @throws Exception if the password length is less than 8 characters or if
+     * the password is not correct
      */
     private Boolean passwordValidator(String password) throws Exception {
         String PASSWORD_PATTERN
@@ -299,17 +306,18 @@ public class SignUpViewController {
                 return true;
             }
         }
-        throw new Exception("La contraseña no es valida, debe tener al menos una mayuscula, \n una minuscula, un numero y un caracter especial");
+        throw new Exception("La contraseña no es válida, debe tener al menos una mayúscula, \n una minúscula, un número y un carácter especial");
     }
 
     /**
      * This method sends de user to the server to register it
+     *
      * @param event the event that method is going to be launched by
      */
     private void signUp(ActionEvent event) {
         LOG.info("Starting the sign up and setting up all equired objects");
-        Message message = null;
-        User user = null;
+        Message message;
+        User user;
 
         LOG.info("Setting up the required variables");
         clientSocket = myFactory.getImplementation();
@@ -326,14 +334,16 @@ public class SignUpViewController {
         try {
             message = clientSocket.connectToServer(message);
 
-            if (message.getOperation().equals(Operation.USER_EXISTS)) {
-                throw new UserAlreadyExistsException("El usuario ya existe, pruebe con otro");
-            } else if (message.getOperation().equals(Operation.OK)) {
-                alert = new Alert(Alert.AlertType.INFORMATION, "El usuario ha sido registrado correctamente", ButtonType.OK);
-                alert.showAndWait();
-                LOG.info("The sign up has be done correctly. Exiting method...");
-            } else if (message.getOperation().equals(Operation.SERVER_FULL)) {
-                throw new ServerFullException("El servdor esta lleno, intentelo mas tarde");
+            switch (message.getOperation()) {
+                case USER_EXISTS:
+                    throw new UserAlreadyExistsException("El usuario ya existe, pruebe con otro");
+                case OK:
+                    alert = new Alert(Alert.AlertType.INFORMATION, "El usuario ha sido registrado correctamente", ButtonType.OK);
+                    alert.showAndWait();
+                    LOG.info("The sign up has be done correctly. Exiting method...");
+                    break;
+                case SERVER_FULL:
+                    throw new ServerFullException("El servdor esta lleno, intentelo mas tarde");
             }
         } catch (ServerErrorException e) {
             LOG.severe(e.getMessage());
@@ -341,9 +351,9 @@ public class SignUpViewController {
             alert.showAndWait();
         } catch (UserAlreadyExistsException ex) {
             LOG.warning(ex.getMessage());
-            alert  = new Alert(Alert.AlertType.ERROR, "El usuario ya existe, pruebe con otro", ButtonType.OK);
+            alert = new Alert(Alert.AlertType.ERROR, "El usuario ya existe, pruebe con otro", ButtonType.OK);
             alert.showAndWait();
-            
+
         } catch (ServerFullException ex) {
             LOG.severe(ex.getMessage());
             alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
