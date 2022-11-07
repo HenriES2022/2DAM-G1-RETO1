@@ -44,7 +44,9 @@ public class ClientSocketImplementation implements ClientSocket {
             if (respuesta.getOperation().equals(Operation.OK)) {
                 return respuesta;
             } else if (respuesta.getOperation().equals(Operation.SERVER_FULL)) {
-                throw new ServerFullException();
+                throw new ServerFullException("El servdor esta lleno, intentelo mas tarde");
+            } else if (respuesta.getOperation().equals(Operation.SERVER_ERROR)) {
+                throw new ServerErrorException("Error al conectarse con el servidor, intentelo de nuevo mas tarde");
             }
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(ClientSocketImplementation.class.getName()).log(Level.SEVERE, null, ex);
