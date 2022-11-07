@@ -70,7 +70,6 @@ public class SignUpViewController {
     private Boolean correctFullName = false;
     private Boolean correctUserName = false;
     private Boolean correctPasswordConfirmation = false;
-    private ClientSocketFactory myFactory;
     private ClientSocket clientSocket;
     private static Alert alert = null;
     private Pattern pattern = null;
@@ -320,7 +319,7 @@ public class SignUpViewController {
         User user;
 
         LOG.info("Setting up the required variables");
-        clientSocket = myFactory.getImplementation();
+        clientSocket = ClientSocketFactory.getImplementation();
         user = new User();
         user.setFullName(txtFullName.getText());
         user.setEmail(txtEmail.getText());

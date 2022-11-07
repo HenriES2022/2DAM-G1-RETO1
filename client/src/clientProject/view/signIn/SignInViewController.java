@@ -6,6 +6,7 @@
 package clientProject.view.signIn;
 
 import clientProject.logic.ClientSocket;
+import clientProject.logic.ClientSocketFactory;
 import clientProject.view.signUp.SignUpViewController;
 import enumerations.Operation;
 import exceptions.IncorrectLoginException;
@@ -135,6 +136,7 @@ public class SignInViewController {
 
     private void signIn(ActionEvent e) {
         LOG.info("Starting the sign in and looking for all equired objects");
+        clientSocket = ClientSocketFactory.getImplementation();
         User user = new User();
 
         user.setFullName(txtUser.getText());
@@ -146,11 +148,14 @@ public class SignInViewController {
 
         try {
             message = clientSocket.connectToServer(message);
-            if (message.getOperation().equals(Operation.LOGIN_ERROR)) {
-                throw new IncorrectLoginException("Login Incorrecto, compruebe el usuario y/o la contraseña");
-            } else if (message.getOperation().equals(Operation.OK)) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Usuario loggeado correctamente", ButtonType.OK);
-                alert.showAndWait();
+            switch (message.getOperation()) {
+                case LOGIN_ERROR:
+                    throw new IncorrectLoginException("Login Incorrecto, compruebe el usuario y/o la contraseña");
+                case OK:
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "Usuario loggeado correctamente", ButtonType.OK);
+                    alert.showAndWait();
+                case SERVER_FULL:
+                    throw new ServerFullException("El servdor esta lleno, intentelo mas tarde");
             }
         } catch (ServerErrorException ex) {
             LOG.severe(ex.getMessage());
