@@ -8,7 +8,6 @@ import enumerations.Operation;
 import exceptions.IncorrectLoginException;
 import exceptions.UserAlreadyExistsException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -24,7 +23,6 @@ import java.security.*;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 
 import serverProject.model.database.DB;
 import serverProject.model.database.DBFactory;

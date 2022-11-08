@@ -13,7 +13,6 @@ import model.Message;
 import serverProject.model.dao.*;
 import exceptions.*;
 import enumerations.Operation;
-import java.util.logging.Level;
 
 /**
  *
