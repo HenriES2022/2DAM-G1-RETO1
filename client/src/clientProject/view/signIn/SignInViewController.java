@@ -6,6 +6,8 @@
 package clientProject.view.signIn;
 
 import clientProject.logic.ClientSocket;
+import clientProject.logic.ClientSocketFactory;
+import clientProject.view.logged.LoggedViewController;
 import clientProject.view.signUp.SignUpViewController;
 import enumerations.Operation;
 import exceptions.IncorrectLoginException;
@@ -25,8 +27,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import model.Message;
@@ -42,9 +46,13 @@ public class SignInViewController {
     private static final Logger LOG = Logger.getLogger("vista.SignIn.SignInViewController");
     private Pattern pattern = null;
     private Matcher matcher = null;
-    private Boolean correctUserName = false;
-    private Boolean correctPassword = false;
-    private ClientSocket clientSocket;
+    private Boolean usernameFilled = false;
+    private Boolean passwordFilled = false;
+    private final ClientSocket clientSocket = ClientSocketFactory.getImplementation();
+    private final Tooltip userTooltip = new Tooltip();
+    private final Tooltip passTooltip = new Tooltip();
+    private final Double offset = 35d;
+    private Stage primaryStage;
 
     @FXML
     private TextField txtUser;
@@ -54,6 +62,8 @@ public class SignInViewController {
     private Button btnSignIn;
     @FXML
     private Button btnSignUp;
+    @FXML
+    private Label txtLogInError;
 
     public void initStage(Parent root) {
         LOG.info("Initiating Sign In View stage");
@@ -61,41 +71,65 @@ public class SignInViewController {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle("Iniciar Sesion");
+        this.primaryStage = stage;
 
         LOG.info("Setting validator for the username field");
         txtUser.textProperty().addListener((Observable) -> {
             try {
-                String usernamePattern = "^(?=.*[a-z])(?=.*[A-Z])$";
-                Pattern.compile(usernamePattern);
-                matcher = pattern.matcher(txtUser.getText());
-                if (txtUser.getText().length() > 50) {
+                String error;
+                if (txtUser.getText().length() == 0) {
+                    userTooltip.hide();
+                } else if (txtUser.getText().length() < 5) {
+                    error = "El nombre de usuario debe tener mínimo 5 carácteres ";
+                    showTooltip(stage, txtUser, error, userTooltip);
+                    throw new Exception(error);
+                } else if (txtUser.getText().length() > 50) {
                     txtUser.setText(txtUser.getText().substring(0, 50));
-                    throw new Exception("El nombre de usuario no puede tener mas de 50 caracteres");
-                } else if (txtUser.getText().length() == 0) {
-                    throw new Exception("El campo no puede estar vacio");
-                } else if (!matcher.matches()) {
-                    throw new Exception("El nombre de usuario no puede tener carácteres especiales");
+                    error = "El nombre de usuario no puede tener más de 50 carácteres";
+                    showTooltip(stage, txtUser, error, userTooltip);
+                    throw new Exception(error);
                 }
-                correctUserName = true;
+                userTooltip.hide();
+                usernameFilled = true;
+
+                btnSignIn.setDisable(!(passwordFilled && usernameFilled));
+
             } catch (Exception ex) {
+                //LOG.info(ex.getMessage());
                 btnSignIn.setDisable(true);
+                usernameFilled = false;
             }
-            if (correctUserName && correctPassword) {
-                btnSignIn.setDisable(false);
-            }
+
         });
 
-        LOG.info("Setting validaro the password field");
+        LOG.info("Setting validator for the password field");
         txtPassword.textProperty().addListener((Observable) -> {
             try {
-                correctPassword = passwordValidator(txtPassword.getText());
+                String error;
+
+                if (txtPassword.getText().length() == 0) {
+                    passTooltip.hide();
+                } else if (txtPassword.getText().length() < 8) {
+                    error = "La contraseña debe tener mínimo 8 carácteres";
+                    showTooltip(stage, txtPassword, error, passTooltip);
+                    throw new Exception(error);
+                } else if (txtPassword.getText().length() > 100) {
+                    txtPassword.setText(txtPassword.getText().substring(0, 100));
+                    error = "La contraseña no puede tener más de 100 carácteres";
+                    showTooltip(stage, txtPassword, error, passTooltip);
+                    throw new Exception(error);
+                }
+                passTooltip.hide();
+                passwordFilled = true;
+
+                btnSignIn.setDisable(!(usernameFilled && passwordFilled));
+
             } catch (Exception e) {
+                //LOG.info(e.getMessage());
                 btnSignIn.setDisable(true);
-                correctPassword = false;
+                passwordFilled = false;
             }
-            if (correctUserName && correctPassword) {
-                btnSignIn.setDisable(false);
-            }
+
         });
 
         stage.setOnCloseRequest((WindowEvent WindowEvent) -> {
@@ -115,8 +149,12 @@ public class SignInViewController {
             txtUser.setDisable(false);
             txtPassword.setDisable(false);
             btnSignIn.setDisable(true);
+            btnSignIn.setDefaultButton(true);
             btnSignUp.setDisable(false);
+            txtLogInError.setVisible(false);
+            txtLogInError.setText("LogIn incorrecto, usuario y/o contraseña incorrecto");
             stage.setResizable(false);
+            
         });
 
         btnSignIn.setOnAction(this::signIn);
@@ -133,52 +171,80 @@ public class SignInViewController {
         stage.show();
     }
 
+    /**
+     *
+     *
+     */
     private void signIn(ActionEvent e) {
-        LOG.info("Starting the sign in and looking for all equired objects");
-        User user = new User();
-
-        user.setFullName(txtUser.getText());
-        user.setPassword(txtPassword.getText());
-
-        Message message = new Message();
-        message.setUserData(user);
-        message.setOperation(Operation.SING_IN);
-
         try {
+            LOG.info("Starting the sign in and getting data from required fields");
+            User user = new User();
+
+            user.setLogin(txtUser.getText());
+            user.setPassword(txtPassword.getText());
+
+            Message message = new Message();
+            message.setUserData(user);
+            message.setOperation(Operation.SING_IN);
+
+            String error = "Login incorrecto, compruebe el usuario y/o la contraseña";
+
+            String usernamePattern = "^[a-zA-Z0-9]+$";
+            pattern = Pattern.compile(usernamePattern);
+            matcher = pattern.matcher(txtUser.getText());
+
+            if (!matcher.matches()) {
+                LOG.info(error);
+                throw new IncorrectLoginException(error);
+            }
+
+            String PASSWORD_PATTERN
+                    = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!¡@#$%&¿?]).{8,100}$";
+            pattern = Pattern.compile(PASSWORD_PATTERN);
+            matcher = pattern.matcher(txtPassword.getText());
+
+            if (!matcher.matches()) {
+                LOG.info("La contraseña no es válida, debe tener al menos una mayuscula, una minuscula, un número y un caracter especial");
+                throw new IncorrectLoginException(error);
+            }
+
             message = clientSocket.connectToServer(message);
+
             if (message.getOperation().equals(Operation.LOGIN_ERROR)) {
                 throw new IncorrectLoginException("Login Incorrecto, compruebe el usuario y/o la contraseña");
             } else if (message.getOperation().equals(Operation.OK)) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Usuario loggeado correctamente", ButtonType.OK);
-                alert.showAndWait();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../logged/LoggedView.fxml"));
+                Parent root = (Parent) loader.load();
+                LoggedViewController controller = ((LoggedViewController) loader.getController());
+                controller.initStage(root, message.getUserData(), primaryStage);
+                txtUser.setText("");
+                txtPassword.setText("");
             }
-        } catch (ServerErrorException ex) {
+        } catch (ServerErrorException | ServerFullException ex) {
             LOG.severe(ex.getMessage());
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Error al conectarse con el servidor, intentelo de nuevo mas tarde", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
             alert.showAndWait();
-        } catch (ServerFullException ex) {
-            Logger.getLogger(SignInViewController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IncorrectLoginException ex) {
             LOG.warning(ex.getMessage());
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Login Incorrecto, compruebe el usuario y/o la contraseña", ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
+            alert.showAndWait();
+        } catch (IOException ex) {
+            LOG.severe(ex.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Ha ocurrido un error al iniciar la ventana de inicio de sesión", ButtonType.OK);
             alert.showAndWait();
         }
     }
 
-    private Boolean passwordValidator(String password) throws Exception {
-        String PASSWORD_PATTERN
-                = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!¡@#$%&¿?]).{8,100}$";
+    private void showTooltip(Stage stage, TextField txtFfield, String text, Tooltip tp) {
 
-        if (password.length() < 8) {
-            throw new Exception("La contraseña debe de tener al mentos 8 caracteres");
-        } else {
-            pattern = Pattern.compile(PASSWORD_PATTERN);
-            matcher = pattern.matcher(password);
+        tp.setText(text);
 
-            if (matcher.matches()) {
-                return true;
-            }
-        }
-        throw new Exception("La contraseña no es valida, debe tener al menos una mayuscula, \n una minuscula, un numero y un caracter especial");
+        txtFfield.setTooltip(tp);
+        tp.setAutoHide(true);
+
+        tp.show(stage,
+                txtFfield.getLayoutX() + txtFfield.getScene().getX() + txtFfield.getScene().getWindow().getX(),
+                txtFfield.getLayoutY() + txtFfield.getScene().getY() + txtFfield.getScene().getWindow().getY() + offset);
     }
+
 }

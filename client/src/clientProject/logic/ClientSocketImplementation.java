@@ -5,6 +5,7 @@
  */
 package clientProject.logic;
 
+import com.sun.org.apache.xml.internal.serializer.utils.MsgKey;
 import enumerations.Operation;
 import exceptions.*;
 import java.io.IOException;
@@ -20,12 +21,15 @@ import model.Message;
  * @author Joritz
  */
 public class ClientSocketImplementation implements ClientSocket {
-
+    
+    private static final Logger LOG = Logger.getLogger("clientProject.logic.ClientSocketImplementation");
+    
     static final String HOST = "localhost";
     static final int PORT = 5000;
-
+    
     @Override
     public Message connectToServer(Message message) throws ServerErrorException, ServerFullException {
+        
         Socket socket = null;
         try {
             // Se crea la conexión al servidor
@@ -34,31 +38,32 @@ public class ClientSocketImplementation implements ClientSocket {
             // Se abren los streams de E/S
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-
+            
             // Envia el mensaje al servidor
             oos.writeObject(message);
 
             // Recibe la respuesta del servidor
             Message respuesta = (Message) ois.readObject();
-
-            if (respuesta.getOperation().equals(Operation.OK)) {
-                return respuesta;
-            } else if (respuesta.getOperation().equals(Operation.SERVER_FULL)) {
-                throw new ServerFullException("El servdor esta lleno, intentelo mas tarde");
-            } else if (respuesta.getOperation().equals(Operation.SERVER_ERROR)) {
-                throw new ServerErrorException("Error al conectarse con el servidor, intentelo de nuevo mas tarde");
+            
+            switch (respuesta.getOperation()) {
+                case OK:
+                    return respuesta;
+                case SERVER_FULL:
+                    throw new ServerFullException("El servdor esta lleno, intentelo mas tarde");
+                case SERVER_ERROR:
+                    throw new ServerErrorException("Error al conectarse con el servidor, intentelo de nuevo mas tarde");
             }
         } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(ClientSocketImplementation.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.severe(ex.getMessage());
         } finally {
             try {
                 if (socket != null) {
                     socket.close();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(ClientSocketImplementation.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.severe(ex.getMessage());
             }
-
+            
         }
         return null;
     }

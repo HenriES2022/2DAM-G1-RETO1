@@ -7,22 +7,27 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="379.0" prefWidth="704.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientProject.view.logged.LoggedViewController">
-   <children>
-      <ImageView fitHeight="379.0" fitWidth="457.0" pickOnBounds="true">
-         <image>
-            <Image url="@LoggedImage.png" />
-         </image>
-      </ImageView>
-      <Label fx:id="txtSaludo" layoutX="514.0" layoutY="97.0" text="Bienvenido">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Button fx:id="btnLogOut" layoutX="497.0" layoutY="246.0" mnemonicParsing="false" text="Cerrar Sesion">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-   </children>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="780.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientProject.view.logged.LoggedViewController">
+    <children>
+        <ImageView fitHeight="540.0" fitWidth="472.0" pickOnBounds="true">
+            <image>
+                <Image url="@LoggedImage.png" />
+            </image>
+        </ImageView>
+        <Label fx:id="txtSaludo" layoutX="586.0" layoutY="102.0" text="Bienvenido">
+            <font>
+                <Font size="28.0" />
+            </font>
+        </Label>
+        <Button fx:id="btnLogOut" layoutX="586.0" layoutY="370.0" mnemonicParsing="false" text="Cerrar Sesion">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Label fx:id="txtUser" layoutX="586.0" layoutY="184.0" >
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+    </children>
 </Pane>

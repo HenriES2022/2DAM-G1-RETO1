@@ -32,6 +32,8 @@ public class LoggedViewController {
     private Label txtSaludo;
     @FXML
     private Button btnLogOut;
+    @FXML
+    private Label txtUser;
 
     /**
      * This method initializes the stage {@code LoggedView}
@@ -39,8 +41,10 @@ public class LoggedViewController {
      * @param root The parent stage for this view
      * @param user Object user who logged in
      */
-    public void initStage(Parent root, User user) {
+    public void initStage(Parent root, User user, Stage primaryStage) {
         LOG.info("Initiating Logged View stage");
+
+        primaryStage.hide();
 
         // Create scene associated with the parent scene
         Scene scene = new Scene(root);
@@ -69,10 +73,12 @@ public class LoggedViewController {
             LOG.info("Setting the status of the items shown on scene");
             btnLogOut.setDisable(false);
             stage.setResizable(false);
-            txtSaludo.setText("Bienvenido " + user.getLogin());
+            txtUser.setText(user.getFullName());
+            btnLogOut.setDefaultButton(true);
         });
         btnLogOut.setOnAction((ActionEvent) -> {
             stage.close();
+            primaryStage.show();
 
         });
         stage.showAndWait();

@@ -13,10 +13,10 @@ import java.util.ResourceBundle;
  */
 public class ClientSocketFactory {
 
-    private static final String CONNECTION_TYPE = ResourceBundle.getBundle("clientProject").getString("connection_type");
+    private static final String CONNECTION_TYPE = ResourceBundle.getBundle("clientProject.configClient").getString("connection_type");
     private static final String CONNECTION = "socket";
 
-    public ClientSocket getImplementation() {
+    public static ClientSocket getImplementation() {
         if (CONNECTION_TYPE.equalsIgnoreCase(CONNECTION)) {
             return new ClientSocketImplementation();
         }

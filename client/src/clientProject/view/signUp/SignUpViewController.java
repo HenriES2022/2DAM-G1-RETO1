@@ -70,8 +70,7 @@ public class SignUpViewController {
     private Boolean correctFullName = false;
     private Boolean correctUserName = false;
     private Boolean correctPasswordConfirmation = false;
-    private ClientSocketFactory myFactory;
-    private ClientSocket clientSocket;
+    private ClientSocket clientSocket = ClientSocketFactory.getImplementation();
     private static Alert alert = null;
     private Pattern pattern = null;
     private Matcher matcher = null;
@@ -96,6 +95,7 @@ public class SignUpViewController {
             myStage.initModality(Modality.WINDOW_MODAL);
 
             btnSignUp.setDisable(true);
+            btnSignUp.setDefaultButton(true);
             btnBack.setDisable(false);
             txtFullName.requestFocus();
 
@@ -128,7 +128,7 @@ public class SignUpViewController {
                             + "\ncontener solo carácteres desde A-Z, y la primera letra en mayúscula ");
                 }
                 correctFullName = true;
-                btnSignUp.setDisable(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation);
+                btnSignUp.setDisable(!(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation));
 
             } catch (Exception e) {
                 LOG.warning(e.getMessage());
@@ -172,18 +172,18 @@ public class SignUpViewController {
         txtUsername.textProperty().addListener((Observable) -> {
             try {
                 txtUsernameError.setVisible(false);
-                String usernamePattern = "^(?=.*[a-z])(?=.*[A-Z])$";
+                String usernamePattern = "^[a-zA-Z0-9]+$";
 
                 pattern = Pattern.compile(usernamePattern);
                 matcher = pattern.matcher(txtUsername.getText());
 
-                if (txtUsername.getText().length() == 0) {
-                    throw new Exception("El campo no puede estar vacio");
+                if (txtUsername.getText().length() < 5) {
+                    throw new Exception("El nombre de usuario debe tener mínimo 5 carácteres");
                 } else if (txtUsername.getText().length() > 50) {
                     txtUsername.setText(txtUsername.getText().substring(0, 50));
                     throw new Exception("El nombre de usuario no puede tener mas de 50 caracteres");
                 } else if (!matcher.matches()) {
-                    throw new Exception("El nombre de usuario no puede tener carácteres especiales");
+                    throw new Exception("El nombre de usuario solo puede tener carácteres alfanuméricos");
                 }
                 correctUserName = true;
                 btnSignUp.setDisable(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation);
@@ -297,7 +297,9 @@ public class SignUpViewController {
                 = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!¡@#$%&¿?]).{8,100}$";
 
         if (password.length() < 8) {
-            throw new Exception("La contraseña debe de tener al mentos 8 caracteres");
+            throw new Exception("La contraseña debe de tener al menos 8 caracteres");
+        } else if (password.length() > 100) {
+            throw new Exception("La contraseña no puede tener más de 100 carácteres");
         } else {
             pattern = Pattern.compile(PASSWORD_PATTERN);
             matcher = pattern.matcher(password);
@@ -320,7 +322,6 @@ public class SignUpViewController {
         User user;
 
         LOG.info("Setting up the required variables");
-        clientSocket = myFactory.getImplementation();
         user = new User();
         user.setFullName(txtFullName.getText());
         user.setEmail(txtEmail.getText());
