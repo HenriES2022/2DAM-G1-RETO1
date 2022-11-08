@@ -13,6 +13,7 @@ import model.Message;
 import serverProject.model.dao.*;
 import exceptions.*;
 import enumerations.Operation;
+import java.util.logging.Level;
 
 /**
  *
@@ -39,11 +40,16 @@ public class WorkingThread extends Thread {
     public void run() {
         try ( ObjectOutputStream oos = new ObjectOutputStream(sc.getOutputStream());  
                 ObjectInputStream ois = new ObjectInputStream(sc.getInputStream());) {
+            LOG.info("Opening I/O streams");
+            //sleep(1000);
             try {
                 threadCount++;
                 // Retrieve Msg from the client
                 Message msg = (Message) ois.readObject();
 
+                System.out.println(msg.getUserData().getLogin());
+                System.out.println(msg.getUserData().getPassword());
+                
                 // Check the operation request
                 if (msg.getOperation().equals(Operation.SING_IN)) {
                     response = DAO.signIn(msg.getUserData());
