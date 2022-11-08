@@ -9,47 +9,52 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="390.0" prefWidth="733.0" xmlns="http://javafx.com/javafx/8.0.281" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientProject.view.signIn.SignInViewController">
-   <children>
-      <TextField fx:id="txtUser" layoutX="453.0" layoutY="125.0" prefHeight="37.0" prefWidth="233.0" promptText="Introduzca el usuario">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </TextField>
-      <PasswordField fx:id="txtPassword" layoutX="453.0" layoutY="195.0" prefHeight="37.0" prefWidth="233.0" promptText="Introduzca la contraseña">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </PasswordField>
-      <Button fx:id="btnSignIn" layoutX="445.0" layoutY="255.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="119.0" text="Iniciar Sesion">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="btnSignUp" layoutX="596.0" layoutY="255.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="90.0" text="Registrarse">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Label layoutX="454.0" layoutY="105.0" text="Usuario:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="454.0" layoutY="175.0" text="Contraseña:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <ImageView fitHeight="390.0" fitWidth="413.0" layoutX="-1.0" pickOnBounds="true">
-         <image>
-            <Image url="@loginView_image.jpg" />
-         </image>
-      </ImageView>
-      <Label layoutX="487.0" layoutY="32.0" prefHeight="46.0" prefWidth="166.0" text="Iniciar Sesion">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
-   </children>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="780.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientProject.view.signIn.SignInViewController">
+    <children>
+        <TextField fx:id="txtUser" layoutX="465.0" layoutY="171.0" prefHeight="37.0" prefWidth="263.0" promptText="Introduzca el usuario">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </TextField>
+        <PasswordField fx:id="txtPassword" layoutX="465.0" layoutY="281.0" prefHeight="37.0" prefWidth="263.0" promptText="Introduzca la contraseña">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </PasswordField>
+        <Label fx:id="txtLogInError" layoutX="465.0" layoutY="320.0" textFill="RED" visible="false" >
+            <font>
+                <Font size="11.0" />
+            </font>
+        </Label>
+        <Button fx:id="btnSignIn" layoutX="465.0" layoutY="384.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="119.0" text="Iniciar Sesion">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Button fx:id="btnSignUp" layoutX="637.0" layoutY="384.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="90.0" text="Registrarse">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Button>
+        <Label layoutX="465.0" layoutY="151.0" text="Usuario:">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <Label layoutX="465.0" layoutY="255.0" text="Contraseña:">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <ImageView fitHeight="540.0" fitWidth="431.0" layoutX="-1.0" pickOnBounds="true">
+            <image>
+                <Image url="@loginView_image.jpg" />
+            </image>
+        </ImageView>
+        <Label layoutX="513.0" layoutY="50.0" prefHeight="46.0" prefWidth="166.0" text="Iniciar Sesion">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+    </children>
 </Pane>
