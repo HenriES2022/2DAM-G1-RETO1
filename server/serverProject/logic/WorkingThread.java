@@ -13,6 +13,7 @@ import model.Message;
 import serverProject.model.dao.*;
 import exceptions.*;
 import enumerations.Operation;
+import java.util.logging.Level;
 
 /**
  *
@@ -31,16 +32,19 @@ public class WorkingThread extends Thread {
         this.sc = sc;
     }
 
-    public int getThreadCount() {
+    public static int getThreadCount() {
         return threadCount;
     }
 
     @Override
     public void run() {
-        try ( ObjectOutputStream oos = new ObjectOutputStream(sc.getOutputStream());  
+        try (ObjectOutputStream oos = new ObjectOutputStream(sc.getOutputStream());
                 ObjectInputStream ois = new ObjectInputStream(sc.getInputStream());) {
             try {
                 threadCount++;
+                if (threadCount > 10) {
+                    throw new ServerFullException();
+                }
                 // Retrieve Msg from the client
                 Message msg = (Message) ois.readObject();
 
@@ -53,7 +57,6 @@ public class WorkingThread extends Thread {
 
                 // Send Message to the client
                 oos.writeObject(response);
-
             } catch (UserAlreadyExistsException ex) {
                 LOG.warning(ex.getMessage());
                 response.setOperation(Operation.USER_EXISTS);
@@ -63,6 +66,9 @@ public class WorkingThread extends Thread {
             } catch (ServerErrorException e) {
                 LOG.severe(e.getMessage());
                 response.setOperation(Operation.SERVER_ERROR);
+            } catch (ServerFullException e) {
+                LOG.warning(e.getMessage());
+                response.setOperation(Operation.SERVER_FULL);
             } finally {
                 oos.writeObject(response);
             }
