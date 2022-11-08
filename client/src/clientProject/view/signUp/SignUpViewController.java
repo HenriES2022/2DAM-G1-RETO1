@@ -6,7 +6,6 @@
 package clientProject.view.signUp;
 
 import clientProject.logic.ClientSocket;
-import clientProject.logic.ClientSocketFactory;
 import enumerations.Operation;
 import exceptions.ServerErrorException;
 import exceptions.ServerFullException;
@@ -70,23 +69,24 @@ public class SignUpViewController {
     private Boolean correctFullName = false;
     private Boolean correctUserName = false;
     private Boolean correctPasswordConfirmation = false;
-    private ClientSocket clientSocket = ClientSocketFactory.getImplementation();
     private static Alert alert = null;
     private Pattern pattern = null;
     private Matcher matcher = null;
     private static final Logger LOG = Logger.getLogger("clientProject.view.signUp.SignUpViewController.class");
-
+    private ClientSocket clientSocket;
+    
     /**
      * This method starts the Sign Up window
      *
      * @param root The scene that is going to be loaded in the stage
      * @param primaryStage
      */
-    public void initStage(Parent root, Stage primaryStage) {
+    public void initStage(Parent root, Stage primaryStage, ClientSocket clientSocket) {
         LOG.info("Starting the window and setting the components on the screen");
         myScene = new Scene(root);
         myStage = new Stage();
         primaryStage.hide();
+        this.clientSocket = clientSocket;
 
         myStage.setOnShowing((event) -> {
             myStage.setTitle("Registro");
