@@ -5,6 +5,8 @@
 package clientProject.view.signUp;
 
 import clientProject.Main;
+import com.sun.javafx.robot.FXRobot;
+import java.nio.file.Files;
 import java.util.concurrent.TimeoutException;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,8 +16,10 @@ import org.junit.Assert;
 import org.testfx.framework.junit.ApplicationTest;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.testfx.api.FxAssert;
 import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.api.FxToolkit;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
@@ -87,11 +91,7 @@ public class SignUpViewControllerTest extends ApplicationTest {
      * test
      */
     private void clearFields() {
-        txtFullName.setText("");
-        txtUsername.setText("");
-        txtEmail.setText("");
-        txtPassword.setText("");
-        txtConfirmPassword.setText("");
+
     }
 
     /**
@@ -117,6 +117,7 @@ public class SignUpViewControllerTest extends ApplicationTest {
         // Buttons
         verifyThat(btnSignUp, isDisabled());
         verifyThat(btnBack, isEnabled());
+
     }
 
     /**
@@ -152,8 +153,8 @@ public class SignUpViewControllerTest extends ApplicationTest {
         //Buttons
         verifyThat(btnSignUp, isEnabled());
         verifyThat(btnBack, isEnabled());
+        //clickOn(btnSignUp);
 
-        this.clearFields();
     }
 
     /**
@@ -162,7 +163,27 @@ public class SignUpViewControllerTest extends ApplicationTest {
      */
     @Test
     public void testC_fullNameNotCorrect() {
+        //Clearing the fields
+        clickOn(txtConfirmPassword);
+        eraseText(txtConfirmPassword.getText().length());
+
+        clickOn(txtPassword);
+        eraseText(txtPassword.getText().length());
+
+        clickOn(txtUsername);
+        eraseText(txtUsername.getText().length());
+        System.out.println("-------------------");
+        System.out.println(txtEmail.getText());
+        System.out.println(txtEmail.getText().length());
+        clickOn(txtEmail);
+        eraseText(txtEmail.getText().length());
+        System.out.println(txtEmail.getText());
+        System.out.println(txtEmail.getText().length());
+
         clickOn(txtFullName);
+        eraseText(txtFullName.getText().length());
+
+        //clickOn(txtFullName);
 
         //Text Fields
         write("Ioritz");
@@ -192,6 +213,5 @@ public class SignUpViewControllerTest extends ApplicationTest {
         verifyThat(btnSignUp, isDisabled());
         verifyThat(btnBack, isEnabled());
 
-        this.clearFields();
     }
 }

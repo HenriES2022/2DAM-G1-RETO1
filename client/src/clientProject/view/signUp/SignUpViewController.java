@@ -156,13 +156,14 @@ public class SignUpViewController {
                 if (!correctEmail) {
                     throw new Exception("El email no es correcto\nEj: usuario@ejemplo.com");
                 }
-                btnSignUp.setDisable(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation);
+                btnSignUp.setDisable(!(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation));
 
             } catch (Exception e) {
                 LOG.warning(e.getMessage());
                 btnSignUp.setDisable(true);
                 txtEmailError.setVisible(true);
                 txtEmailError.setText(e.getMessage());
+                correctEmail = false;
             }
 
         }
@@ -186,7 +187,7 @@ public class SignUpViewController {
                     throw new Exception("El nombre de usuario solo puede tener carácteres alfanuméricos");
                 }
                 correctUserName = true;
-                btnSignUp.setDisable(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation);
+                btnSignUp.setDisable(!(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation));
 
             } catch (Exception e) {
                 LOG.warning(e.getMessage());
@@ -210,7 +211,7 @@ public class SignUpViewController {
                 correctPassword = false;
             }
 
-            btnSignUp.setDisable(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation);
+            btnSignUp.setDisable(!(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation));
         }
         );
 
@@ -226,7 +227,7 @@ public class SignUpViewController {
                     throw new Exception("El campo no puede estar vacio");
                 }
                 correctPasswordConfirmation = true;
-                btnSignUp.setDisable(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation);
+                btnSignUp.setDisable(!(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation));
 
             } catch (Exception e) {
                 txtPasswordConfirmError.setVisible(true);
