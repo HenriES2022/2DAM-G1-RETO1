@@ -14,7 +14,6 @@ import exceptions.IncorrectLoginException;
 import exceptions.ServerErrorException;
 import exceptions.ServerFullException;
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
