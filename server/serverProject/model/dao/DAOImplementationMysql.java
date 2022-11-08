@@ -165,16 +165,17 @@ public class DAOImplementationMysql implements DAO {
                 msg.setUserData(user);
                 msg.setOperation(Operation.OK);
                 LOG.info("Data from user retrieved correctly");
-
-            } else { // User and/or pass is NOT correct
-                throw new exceptions.IncorrectLoginException("Incorrect username and/or password");
+                return msg;
             }
+            // User and/or pass is NOT correct
+            throw new exceptions.IncorrectLoginException("Incorrect username and/or password");
+
         } catch (SQLException e) {
+            throw new ServerErrorException("Error while trying to creating/executing the prepare statement.");
+        } catch (NullPointerException e) {
             throw new ServerErrorException("Error while trying to creating/executing the prepare statement.");
         } finally {
             dbImpl.saveConnection();
-            return msg;
-
         }
     }
 
@@ -219,12 +220,11 @@ public class DAOImplementationMysql implements DAO {
 
             msg.setOperation(Operation.OK);
             LOG.info("'OK': User created correctly");
-
+            return msg;
         } catch (SQLException e) {
             throw new ServerErrorException("Error while trying to creating/executing the prepare statement");
         } finally {
             dbImpl.saveConnection();
-            return msg;
 
         }
 
