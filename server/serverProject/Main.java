@@ -5,6 +5,7 @@
  */
 package serverProject;
 
+import exceptions.ServerFullException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
