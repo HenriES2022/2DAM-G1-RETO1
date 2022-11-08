@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import org.junit.Assert;
 import org.testfx.framework.junit.ApplicationTest;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -33,18 +34,18 @@ import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SignUpViewControllerTest extends ApplicationTest {
 
-    private TextField txtFullName;
-    private TextField txtUsername;
-    private TextField txtEmail;
-    private PasswordField txtPassword;
-    private PasswordField txtConfirmPassword;
-    private Button btnSignUp;
-    private Button btnBack;
-    private Label txtFullNameError;
-    private Label txtUsernameError;
-    private Label txtEmailError;
-    private Label txtPasswordError;
-    private Label txtPasswordConfirmError;
+    private static TextField txtFullName;
+    private static TextField txtUsername;
+    private static TextField txtEmail;
+    private static PasswordField txtPassword;
+    private static PasswordField txtConfirmPassword;
+    private static Button btnSignUp;
+    private static Button btnBack;
+    private static Label txtFullNameError;
+    private static Label txtUsernameError;
+    private static Label txtEmailError;
+    private static Label txtPasswordError;
+    private static Label txtPasswordConfirmError;
 
     /**
      * Start the application test for the sign Up window
@@ -82,6 +83,18 @@ public class SignUpViewControllerTest extends ApplicationTest {
     }
 
     /**
+     * This method clear all the text fields to prepare the fields to the next
+     * test
+     */
+    private void clearFields() {
+        txtFullName.setText("");
+        txtUsername.setText("");
+        txtEmail.setText("");
+        txtPassword.setText("");
+        txtConfirmPassword.setText("");
+    }
+
+    /**
      * Test of initStage method, of class SignUpViewController.
      */
     @Test
@@ -89,21 +102,96 @@ public class SignUpViewControllerTest extends ApplicationTest {
         clickOn("#btnSignUp");
         this.getFields();
         // Text fields
-        verifyThat("#txtFullName", hasText(""));
-        verifyThat("#txtFullName", (TextField t) -> t.isFocused());
-        verifyThat("#txtUsername", hasText(""));
-        verifyThat("#txtEmail", hasText(""));
-        verifyThat("#txtPassword", hasText(""));
-        verifyThat("#txtConfirmPassword", hasText(""));
+        verifyThat(txtFullName, hasText(""));
+        verifyThat(txtFullName, (TextField t) -> t.isFocused());
+        verifyThat(txtUsername, hasText(""));
+        verifyThat(txtEmail, hasText(""));
+        verifyThat(txtPassword, hasText(""));
+        verifyThat(txtConfirmPassword, hasText(""));
         //Labels
-        verifyThat("#txtFullNameError", isInvisible());
-        verifyThat("#txtUsernameError", isInvisible());
-        verifyThat("#txtEmailError", isInvisible());
-        verifyThat("#txtPasswordError", isInvisible());
-        verifyThat("#txtPasswordConfirmError", isInvisible());
+        verifyThat(txtFullNameError, isInvisible());
+        verifyThat(txtUsernameError, isInvisible());
+        verifyThat(txtEmailError, isInvisible());
+        verifyThat(txtPasswordError, isInvisible());
+        verifyThat(txtPasswordConfirmError, isInvisible());
         // Buttons
-        verifyThat("#btnSignUp", isDisabled());
-        verifyThat("#btnBack", isEnabled());
+        verifyThat(btnSignUp, isDisabled());
+        verifyThat(btnBack, isEnabled());
     }
 
+    /**
+     * Test method of a correct sign up case
+     */
+    @Test
+    public void testB_correctSignUp() {
+        clickOn(txtFullName);
+        //Text Fields
+        write("Ioritz Urkiri");
+        clickOn(txtEmail);
+        write("ioritz2002@hotmail.com");
+        clickOn(txtUsername);
+        write("ioritz");
+        clickOn(txtPassword);
+        write("Abcd?1234");
+        clickOn(txtConfirmPassword);
+        write("Abcd?1234");
+
+        //Validating the text and labels
+        Assert.assertNotEquals("", txtFullNameError.getText());
+        Assert.assertNotEquals("", txtEmail.getText());
+        Assert.assertNotEquals("", txtUsername.getText());
+        Assert.assertNotEquals("", txtPassword.getText());
+        Assert.assertNotEquals("", txtConfirmPassword.getText());
+
+        verifyThat(txtFullNameError, isInvisible());
+        verifyThat(txtUsernameError, isInvisible());
+        verifyThat(txtEmailError, isInvisible());
+        verifyThat(txtPasswordError, isInvisible());
+        verifyThat(txtPasswordConfirmError, isInvisible());
+
+        //Buttons
+        verifyThat(btnSignUp, isEnabled());
+        verifyThat(btnBack, isEnabled());
+
+        this.clearFields();
+    }
+
+    /**
+     * Test method of a not correct sign up case were the full name is not
+     * correct
+     */
+    @Test
+    public void testC_fullNameNotCorrect() {
+        clickOn(txtFullName);
+
+        //Text Fields
+        write("Ioritz");
+        clickOn(txtEmail);
+        write("ioritz2002@hotmail.com");
+        clickOn(txtUsername);
+        write("ioritz");
+        clickOn(txtPassword);
+        write("Abcd?1234");
+        clickOn(txtConfirmPassword);
+        write("Abcd?1234");
+
+        //Validating the text and labels
+        Assert.assertNotEquals("", txtFullNameError.getText());
+        Assert.assertNotEquals("", txtEmail.getText());
+        Assert.assertNotEquals("", txtUsername.getText());
+        Assert.assertNotEquals("", txtPassword.getText());
+        Assert.assertNotEquals("", txtConfirmPassword.getText());
+
+        verifyThat(txtFullNameError, isVisible());
+        verifyThat(txtUsernameError, isInvisible());
+        verifyThat(txtEmailError, isInvisible());
+        verifyThat(txtPasswordError, isInvisible());
+        verifyThat(txtPasswordConfirmError, isInvisible());
+
+        //Buttons
+        verifyThat(btnSignUp, isDisabled());
+        verifyThat(btnBack, isEnabled());
+
+        this.clearFields();
+    }
 }
