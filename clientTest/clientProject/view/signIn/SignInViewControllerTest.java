@@ -6,27 +6,19 @@
 package clientProject.view.signIn;
 
 import clientProject.Main;
-import clientProject.view.signIn.SignInViewController;
-import clientProject.view.signUp.SignUpViewController;
 import java.util.concurrent.TimeoutException;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.testfx.api.FxAssert;
 import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
-import org.testfx.matcher.base.NodeMatchers;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
@@ -97,5 +89,22 @@ public class SignInViewControllerTest extends ApplicationTest {
         write("Abcd?1234");
         
         verifyThat(btnSignIn, isEnabled());
+    }
+    
+    /**
+     * Test of the SignUp window with incorrect user and password
+     */
+    @Test
+    public void testC_IncorrectUserAndPassword(){
+        this.getFields();
+        clickOn(txtUser);
+        eraseText(txtUser.getText().length());
+        write("ioritz??");
+        
+        clickOn(txtPassword);
+        eraseText(txtPassword.getText().length());
+        write("Abcd1234");
+        
+        verifyThat(btnSignIn, isDisabled());
     }
 }
