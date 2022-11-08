@@ -5,6 +5,7 @@
  */
 package clientProject;
 
+import clientProject.logic.ClientSocket;
 import clientProject.logic.ClientSocketFactory;
 import clientProject.view.signIn.SignInViewController;
 import java.io.IOException;
@@ -26,8 +27,6 @@ public class Main extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-        ClientSocketFactory csf = new ClientSocketFactory();
-        csf.getImplementation();
     }
 
     @Override
@@ -36,7 +35,7 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("view/signIn/SignInView.fxml"));
             Parent root = (Parent) loader.load();
             SignInViewController controller = ((SignInViewController) loader.getController());
-            controller.initStage(root);
+            controller.initStage(root, ClientSocketFactory.getImplementation());
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }

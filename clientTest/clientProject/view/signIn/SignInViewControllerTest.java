@@ -32,7 +32,7 @@ public class SignInViewControllerTest extends ApplicationTest {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("view/signIn/SignInView.fxml"));
         root = (Parent) loader.load();
         myController = ((SignInViewController) loader.getController());
-        myController.initStage(root);
+        myController.initStage(root, clientProject.logic.ClientSocketFactory.getImplementation());
     }
 
     public SignInViewControllerTest() {
