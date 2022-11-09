@@ -321,7 +321,6 @@ public class SignUpViewController {
         Message message;
         User user;
 
-        LOG.info("Setting up the required variables");
         user = new User();
         user.setFullName(txtFullName.getText());
         user.setEmail(txtEmail.getText());

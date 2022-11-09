@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import model.Message;
 
@@ -20,25 +21,27 @@ import model.Message;
 public class ClientSocketImplementation implements ClientSocket {
     
     private static final Logger LOG = Logger.getLogger("clientProject.logic.ClientSocketImplementation");
-    
-    static final String HOST = "localhost";
-    static final int PORT = 5000;
+    private static final String HOST = ResourceBundle.getBundle("clientProject.configClient").getString("ip_address");
+    private static final Integer PORT = Integer.parseInt(ResourceBundle.getBundle("clientProject.configClient").getString("port"));
     
     @Override
     public Message connectToServer(Message message) throws ServerErrorException, ServerFullException {
-        
         Socket socket = null;
         try {
+            LOG.info("Establishing the connection to the server");
             // Se crea la conexión al servidor
             socket = new Socket(HOST, PORT);
-
+            
+            LOG.info("Connected: Opening I/O streams");
             // Se abren los streams de E/S
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             
+            LOG.info("Sending message to the server");
             // Envia el mensaje al servidor
             oos.writeObject(message);
-
+            
+            LOG.info("Reading message from the server");
             // Recibe la respuesta del servidor
             Message respuesta = (Message) ois.readObject();
             
