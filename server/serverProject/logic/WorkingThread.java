@@ -13,7 +13,6 @@ import model.Message;
 import serverProject.model.dao.*;
 import exceptions.*;
 import enumerations.Operation;
-import java.util.logging.Level;
 
 /**
  *
@@ -25,8 +24,8 @@ public class WorkingThread extends Thread {
     private static final Logger LOG = Logger.getLogger("serverProject.logic.WorkingThread");
     private static final DAO DAO = DAOFactory.getDAO();
     private final Socket sc;
-    private Message response;
-    
+    private static Message response = new Message();
+
     public WorkingThread(Socket sc) {
         super();
         this.sc = sc;
