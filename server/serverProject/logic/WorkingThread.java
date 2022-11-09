@@ -13,13 +13,14 @@ import model.Message;
 import serverProject.model.dao.*;
 import exceptions.*;
 import enumerations.Operation;
+import java.util.logging.Level;
 
 /**
  *
  * @author yeguo
  */
 public class WorkingThread extends Thread {
-
+    
     private static int threadCount = 0;
     private static final Logger LOG = Logger.getLogger("serverProject.logic.WorkingThread");
     private static final DAO DAO = DAOFactory.getDAO();
@@ -30,19 +31,27 @@ public class WorkingThread extends Thread {
         super();
         this.sc = sc;
     }
-
-    public int getThreadCount() {
+    
+    public static int getThreadCount() {
         return threadCount;
     }
-
+    
     @Override
     public void run() {
-        try ( ObjectOutputStream oos = new ObjectOutputStream(sc.getOutputStream());  
-                ObjectInputStream ois = new ObjectInputStream(sc.getInputStream());) {
+        try ( ObjectOutputStream oos = new ObjectOutputStream(sc.getOutputStream());  ObjectInputStream ois = new ObjectInputStream(sc.getInputStream());) {
+            //sleep(1000);
             try {
+                LOG.info("Opening I/O streams");
                 threadCount++;
+                LOG.info("Starting the " + threadCount + " thread");
+                if (threadCount > 10) {
+                    throw new ServerFullException();
+                }
                 // Retrieve Msg from the client
                 Message msg = (Message) ois.readObject();
+                
+                System.out.println(msg.getUserData().getLogin());
+                System.out.println(msg.getUserData().getPassword());
 
                 // Check the operation request
                 if (msg.getOperation().equals(Operation.SING_IN)) {
@@ -53,7 +62,6 @@ public class WorkingThread extends Thread {
 
                 // Send Message to the client
                 oos.writeObject(response);
-
             } catch (UserAlreadyExistsException ex) {
                 LOG.warning(ex.getMessage());
                 response.setOperation(Operation.USER_EXISTS);
@@ -63,13 +71,16 @@ public class WorkingThread extends Thread {
             } catch (ServerErrorException e) {
                 LOG.severe(e.getMessage());
                 response.setOperation(Operation.SERVER_ERROR);
+            } catch (ServerFullException e) {
+                LOG.warning(e.getMessage());
+                response.setOperation(Operation.SERVER_FULL);
             } finally {
                 oos.writeObject(response);
             }
-
+            
         } catch (IOException | ClassNotFoundException exc) {
             LOG.severe(exc.getMessage());
         }
     }
-
+    
 }
