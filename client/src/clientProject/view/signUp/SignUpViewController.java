@@ -163,6 +163,7 @@ public class SignUpViewController {
                 btnSignUp.setDisable(true);
                 txtEmailError.setVisible(true);
                 txtEmailError.setText(e.getMessage());
+                correctEmail = false;
             }
 
         }

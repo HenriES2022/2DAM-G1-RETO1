@@ -5,6 +5,9 @@
  */
 package clientProject.logic;
 
+
+import enumerations.Operation;
+
 import exceptions.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -46,12 +49,12 @@ public class ClientSocketImplementation implements ClientSocket {
             Message respuesta = (Message) ois.readObject();
             
             switch (respuesta.getOperation()) {
-                case OK:
-                    return respuesta;
                 case SERVER_FULL:
                     throw new ServerFullException("El servdor esta lleno, intentelo mas tarde");
                 case SERVER_ERROR:
-                    throw new ServerErrorException("Error al conectarse con el servidor, intentelo de nuevo más tarde");
+                    throw new ServerErrorException("Error al conectarse con el servidor, intentelo de nuevo mas tarde");
+                default:
+                    return respuesta;
             }
         } catch (IOException | ClassNotFoundException | NullPointerException ex) {
             LOG.severe(ex.getMessage());
@@ -66,6 +69,5 @@ public class ClientSocketImplementation implements ClientSocket {
             }
             
         }
-        return null;
     }
 }
