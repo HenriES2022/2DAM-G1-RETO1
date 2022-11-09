@@ -21,6 +21,7 @@ import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
+import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 
 /**
@@ -30,9 +31,7 @@ import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SignInViewControllerTest extends ApplicationTest {
 
-    private static SignInViewController myController = null;
-    private static Parent root = null;
-    private static Scene scene = null;
+    
     private TextField txtUser;
     private PasswordField txtPassword;
     private Button btnSignIn;
@@ -40,11 +39,12 @@ public class SignInViewControllerTest extends ApplicationTest {
 
     /**
      * Start the application test for the sign In window
+     *
      * @throws TimeoutException is thrown by the method
-     * 
+     *
      */
     @BeforeClass
-    public static void setUpClass() throws TimeoutException{
+    public static void setUpClass() throws TimeoutException {
         FxToolkit.registerPrimaryStage();
         FxToolkit.setupApplication(Main.class);
     }
@@ -52,60 +52,66 @@ public class SignInViewControllerTest extends ApplicationTest {
     /**
      * Method to obtain the components to use in the test
      */
-    private void getFields(){
+    private void getFields() {
         //Text fields
         txtUser = lookup("#txtUser").query();
         txtPassword = lookup("#txtPassword").query();
         btnSignIn = lookup("#btnSignIn").query();
         btnSignUp = lookup("#btnSignUp").query();
     }
-    
+
     /**
      * Test of initStage method, of class SignInViewController.
      */
     @Test
     public void testA_InitStage() {
         this.getFields();
-        
+
         //Verifying the textFields
         verifyThat(txtUser, hasText(""));
         verifyThat(txtUser, (t) -> t.isFocused());
         verifyThat(txtPassword, hasText(""));
-        
+
         //Buttons
         verifyThat(btnSignIn, isDisabled());
         verifyThat(btnSignUp, isEnabled());
     }
-    
+
     /**
      * Test of the SignUp window with correct data
      */
     @Test
-    public void testB_correctLoginFields(){
+    public void testB_correctLoginFields() {
         this.getFields();
-        
-        write("ioritz2002");
+
+        write("ioritz");
         clickOn(txtPassword);
         write("Abcd?1234");
-        
+
         verifyThat(btnSignIn, isEnabled());
         clickOn(btnSignIn);
+        clickOn("Cerrar Sesion");
+
     }
-    
+
     /**
      * Test of the SignUp window with incorrect user and password
      */
     @Test
-    public void testC_IncorrectUserAndPassword(){
+    public void testC_IncorrectUserAndPassword() {
         this.getFields();
         clickOn(txtUser);
         eraseText(txtUser.getText().length());
         write("ioritz??");
-        
+
         clickOn(txtPassword);
         eraseText(txtPassword.getText().length());
         write("Abcd1234");
-        
+       
+        clickOn(btnSignIn);
         verifyThat(btnSignIn, isEnabled());
+        verifyThat("Aceptar", isVisible());
+        clickOn("Aceptar");
+
     }
 }
