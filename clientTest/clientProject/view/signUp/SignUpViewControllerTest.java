@@ -6,7 +6,6 @@ package clientProject.view.signUp;
 
 import clientProject.Main;
 import java.util.concurrent.TimeoutException;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -15,6 +14,7 @@ import org.junit.Assert;
 import org.testfx.framework.junit.ApplicationTest;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -75,7 +75,7 @@ public class SignUpViewControllerTest extends ApplicationTest {
         txtPasswordError = lookup("#txtPasswordError").query();
         txtPasswordConfirmError = lookup("#txtPasswordConfirmError").query();
         // Buttons
-        btnSignUp = lookup("#tnSignUp").query();
+        btnSignUp = lookup("#btnSignUp").query();
         btnBack = lookup("#btnBack").query();
 
     }
@@ -141,7 +141,7 @@ public class SignUpViewControllerTest extends ApplicationTest {
         verifyThat(btnBack, isEnabled());
         
         clickOn(btnSignUp);
-        verifyThat("OK", isVisible());
+        //verifyThat(nodeQuery, nodeMatcher);
     }
 
     /**

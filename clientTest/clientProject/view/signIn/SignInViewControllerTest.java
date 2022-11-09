@@ -89,6 +89,7 @@ public class SignInViewControllerTest extends ApplicationTest {
         write("Abcd?1234");
         
         verifyThat(btnSignIn, isEnabled());
+        clickOn(btnSignIn);
     }
     
     /**
@@ -105,6 +106,6 @@ public class SignInViewControllerTest extends ApplicationTest {
         eraseText(txtPassword.getText().length());
         write("Abcd1234");
         
-        verifyThat(btnSignIn, isDisabled());
+        verifyThat(btnSignIn, isEnabled());
     }
 }
