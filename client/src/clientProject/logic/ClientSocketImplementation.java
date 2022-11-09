@@ -51,10 +51,11 @@ public class ClientSocketImplementation implements ClientSocket {
                 case SERVER_FULL:
                     throw new ServerFullException("El servdor esta lleno, intentelo mas tarde");
                 case SERVER_ERROR:
-                    throw new ServerErrorException("Error al conectarse con el servidor, intentelo de nuevo mas tarde");
+                    throw new ServerErrorException("Error al conectarse con el servidor, intentelo de nuevo más tarde");
             }
-        } catch (IOException | ClassNotFoundException ex) {
+        } catch (IOException | ClassNotFoundException | NullPointerException ex) {
             LOG.severe(ex.getMessage());
+            throw new ServerErrorException("Se ha cerrado la conexión con el servidor de forma inesperada, intentelo de nuevo más tarde");
         } finally {
             try {
                 if (socket != null) {
