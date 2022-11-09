@@ -5,10 +5,9 @@
  */
 package clientProject.view.signIn;
 
-import clientProject.logic.ClientSocket;
-import clientProject.logic.ClientSocketFactory;
 import clientProject.view.logged.LoggedViewController;
 import clientProject.view.signUp.SignUpViewController;
+import clientProject.logic.ClientSocket;
 import enumerations.Operation;
 import exceptions.IncorrectLoginException;
 import exceptions.ServerErrorException;
@@ -39,6 +38,7 @@ import model.User;
  * FXML Controller class
  *
  * @author Joritz
+ * @author Henrique
  */
 public class SignInViewController {
 
@@ -47,11 +47,11 @@ public class SignInViewController {
     private Matcher matcher = null;
     private Boolean usernameFilled = false;
     private Boolean passwordFilled = false;
-    private final ClientSocket clientSocket = ClientSocketFactory.getImplementation();
     private final Tooltip userTooltip = new Tooltip();
     private final Tooltip passTooltip = new Tooltip();
     private final Double offset = 35d;
     private Stage primaryStage;
+    private ClientSocket clientSocket;
 
     @FXML
     private TextField txtUser;
@@ -64,14 +64,15 @@ public class SignInViewController {
     @FXML
     private Label txtLogInError;
 
-    public void initStage(Parent root) {
+    public void initStage(Parent root, ClientSocket clientSocket) {
         LOG.info("Initiating Sign In View stage");
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle("Iniciar Sesion");
         this.primaryStage = stage;
-
+        this.clientSocket = clientSocket;
+        
         LOG.info("Setting validator for the username field");
         txtUser.textProperty().addListener((Observable) -> {
             try {
@@ -153,7 +154,7 @@ public class SignInViewController {
             txtLogInError.setVisible(false);
             txtLogInError.setText("LogIn incorrecto, usuario y/o contraseña incorrecto");
             stage.setResizable(false);
-            
+
         });
 
         btnSignIn.setOnAction(this::signIn);
@@ -162,7 +163,7 @@ public class SignInViewController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../signUp/SignUpView.fxml"));
                 Parent rootSignUp = (Parent) loader.load();
                 SignUpViewController signUp = ((SignUpViewController) loader.getController());
-                signUp.initStage(rootSignUp, stage);
+                signUp.initStage(rootSignUp, stage, this.clientSocket);
             } catch (IOException ex) {
                 LOG.info("No se puede abrir la ventana " + ex.getLocalizedMessage());
             }
