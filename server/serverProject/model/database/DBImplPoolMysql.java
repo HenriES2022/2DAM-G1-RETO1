@@ -28,15 +28,15 @@ public class DBImplPoolMysql implements DB {
     /**
      * The url of the database readed from a properties file
      */
-    private static final String URL = ResourceBundle.getBundle("serverProject.config").getString("url");
+    private static final String URL = ResourceBundle.getBundle("serverProject.configServer").getString("url");
     /**
      * The user of the database readed from a properties file
      */
-    private static final String USER = ResourceBundle.getBundle("serverProject.config").getString("user");
+    private static final String USER = ResourceBundle.getBundle("serverProject.configServer").getString("user");
     /**
      * The password of the database readed from a properties file
      */
-    private static final String PASSWORD = ResourceBundle.getBundle("serverProject.config").getString("pass");
+    private static final String PASSWORD = ResourceBundle.getBundle("serverProject.configServer").getString("pass");
     /**
      * The log object for saving logs of this class
      */

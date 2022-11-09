@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
  */
 public abstract class DAOFactory {
 
-    private static final String DB_TYPE = ResourceBundle.getBundle("serverProject").getString("model");
+    private static final String DB_TYPE = ResourceBundle.getBundle("serverProject.configServer").getString("model");
     private static final String MYSQL = "mysql";
 
     public static DAO getDAO() {
