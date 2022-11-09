@@ -223,7 +223,10 @@ public class DAOImplementationMysql implements DAO {
             return msg;
         } catch (SQLException e) {
             throw new ServerErrorException("Error while trying to creating/executing the prepare statement");
-        } finally {
+        } catch (NullPointerException e){
+            throw new ServerErrorException("Error while trying to creating/executing the prepare statement");
+        } 
+        finally {
             dbImpl.saveConnection();
 
         }
