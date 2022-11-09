@@ -59,7 +59,7 @@ public class DAOImplementationMysqlTest {
     public static void beforeClass() {
         poolImpl = DBFactory.getDB();
         username = "user1";
-        passwd = "password1234";
+        passwd = "Password1234?";
         try {
             con = poolImpl.getConnection();
             dao = new DAOImplementationMysql();
