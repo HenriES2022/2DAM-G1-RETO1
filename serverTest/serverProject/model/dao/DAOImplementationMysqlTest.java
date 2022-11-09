@@ -47,9 +47,9 @@ public class DAOImplementationMysqlTest {
     private static String username;
     private static String passwd;
     private static DB poolImpl;
-    private static final String URL = ResourceBundle.getBundle("serverProject.config").getString("url");
-    private static final String USER = ResourceBundle.getBundle("serverProject.config").getString("user");
-    private static final String PASS = ResourceBundle.getBundle("serverProject.config").getString("pass");
+    private static final String URL = ResourceBundle.getBundle("serverProject.configServer").getString("url");
+    private static final String USER = ResourceBundle.getBundle("serverProject.configServer").getString("user");
+    private static final String PASS = ResourceBundle.getBundle("serverProject.configServer").getString("pass");
     private static final Logger LOG = Logger.getLogger("serverProject.model.dao.DAOImplementationMysqlTest");
 
     private static final String DATA_TEST = "insert into user(login, email, full_name, user_password) values('user1', 'user1@example.com', 'User pepe', MD5('password1234'))";
@@ -113,8 +113,8 @@ public class DAOImplementationMysqlTest {
             assertTrue(Operation.OK.equals(msg.getOperation()));
 
         } catch (IncorrectLoginException | ServerErrorException ex) {
-            LOG.severe(ex.getMessage());
-            fail();
+            //LOG.severe(ex.getMessage());
+            fail("Statement throwed an exception");
         }
     }
 
