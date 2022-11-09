@@ -14,7 +14,6 @@ import org.junit.Assert;
 import org.testfx.framework.junit.ApplicationTest;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -141,7 +140,8 @@ public class SignUpViewControllerTest extends ApplicationTest {
         verifyThat(btnBack, isEnabled());
         
         clickOn(btnSignUp);
-        //verifyThat(nodeQuery, nodeMatcher);
+        verifyThat("Aceptar", isVisible());
+        clickOn("Aceptar");
     }
 
     /**
