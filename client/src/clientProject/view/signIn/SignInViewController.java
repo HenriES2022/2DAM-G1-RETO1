@@ -232,7 +232,7 @@ public class SignInViewController {
         //When the sign up buttton is clicked
         btnSignUpView.setOnAction((Event) -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("../signUp/SignUpView.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/clientProject/view/signUp/SignUpView.fxml"));
                 Parent rootSignUp = (Parent) loader.load();
                 SignUpViewController signUp = ((SignUpViewController) loader.getController());
                 signUp.initStage(rootSignUp, stage, this.clientSocket, css);
@@ -298,7 +298,7 @@ public class SignInViewController {
                 //If the obtained message says that everything is ok
                 case OK:
                     //Open the logged window and set the fields empty
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../logged/LoggedView.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/clientProject/view/logged/LoggedView.fxml"));
                     Parent root = (Parent) loader.load();
                     LoggedViewController controller = ((LoggedViewController) loader.getController());
                     controller.initStage(root, message.getUserData(), primaryStage, this.css);
