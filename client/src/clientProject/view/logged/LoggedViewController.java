@@ -33,7 +33,7 @@ public class LoggedViewController {
     @FXML
     private Button btnLogOut;
     @FXML
-    private Label txtUser;
+    private Label txtUserLogged;
 
     /**
      * This method initializes the stage {@code LoggedView}
@@ -74,7 +74,7 @@ public class LoggedViewController {
             LOG.info("Setting the status of the items shown on scene");
             btnLogOut.setDisable(false);
             stage.setResizable(false);
-            txtUser.setText(user.getFullName());
+            txtUserLogged.setText(user.getFullName());
             btnLogOut.setDefaultButton(true);
         });
         btnLogOut.setOnAction((ActionEvent) -> {

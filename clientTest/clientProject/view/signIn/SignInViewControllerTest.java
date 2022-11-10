@@ -7,11 +7,11 @@ package clientProject.view.signIn;
 
 import clientProject.Main;
 import java.util.concurrent.TimeoutException;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -31,11 +31,11 @@ import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SignInViewControllerTest extends ApplicationTest {
 
-    
     private TextField txtUser;
     private PasswordField txtPassword;
     private Button btnSignIn;
     private Button btnSignUp;
+    private Label txtUserLogged; 
 
     /**
      * Start the application test for the sign In window
@@ -84,12 +84,18 @@ public class SignInViewControllerTest extends ApplicationTest {
     public void testB_correctLoginFields() {
         this.getFields();
 
-        write("ioritz");
+        String logginUser = "ioritz";
+        write(logginUser);
+
         clickOn(txtPassword);
         write("Abcd?1234");
 
         verifyThat(btnSignIn, isEnabled());
         clickOn(btnSignIn);
+        //This label references the logged view user name label
+        //txtUserLogged = lookup("#txtUserLogged").query();
+       //TODO continue the comparation method
+        
         clickOn("Cerrar Sesion");
 
     }
@@ -107,7 +113,7 @@ public class SignInViewControllerTest extends ApplicationTest {
         clickOn(txtPassword);
         eraseText(txtPassword.getText().length());
         write("Abcd1234");
-       
+
         clickOn(btnSignIn);
         verifyThat(btnSignIn, isEnabled());
         verifyThat("Aceptar", isVisible());
