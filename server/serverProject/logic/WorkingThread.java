@@ -62,17 +62,18 @@ public class WorkingThread extends Thread {
         try ( ObjectOutputStream oos = new ObjectOutputStream(sc.getOutputStream());  ObjectInputStream ois = new ObjectInputStream(sc.getInputStream());) {
             //sleep(1000);
             try {
+                sleep(100);
                 LOG.info("Opening I/O streams");
                 threadCount++;
+                sleep(100);
                 LOG.info("Starting the " + threadCount + " thread");
-                if (threadCount > 10) {
-                    throw new ServerFullException();
+                sleep(100);
+                if (threadCount > 1) {
+                    throw new ServerFullException("Servidor lleno, no se puede atender a más usuarios");
                 }
                 // Retrieve Msg from the client
+                sleep(100);
                 Message msg = (Message) ois.readObject();
-                
-                System.out.println(msg.getUserData().getLogin());
-                System.out.println(msg.getUserData().getPassword());
 
                 // Check the operation request
                 if (msg.getOperation().equals(Operation.SING_IN)) {
@@ -89,7 +90,7 @@ public class WorkingThread extends Thread {
             } catch (IncorrectLoginException e) {
                 LOG.severe(e.getMessage());
                 response.setOperation(Operation.LOGIN_ERROR);
-            } catch (ServerErrorException e) {
+            } catch (ServerErrorException | InterruptedException e) {
                 LOG.severe(e.getMessage());
                 response.setOperation(Operation.SERVER_ERROR);
             } catch (ServerFullException e) {
@@ -97,6 +98,7 @@ public class WorkingThread extends Thread {
                 response.setOperation(Operation.SERVER_FULL);
             } finally {
                 oos.writeObject(response);
+                threadCount--;
             }
             
         } catch (IOException | ClassNotFoundException exc) {
