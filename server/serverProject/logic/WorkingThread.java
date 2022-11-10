@@ -75,7 +75,6 @@ public class WorkingThread extends Thread {
                 LOG.warning(e.getMessage());
                 response.setOperation(Operation.SERVER_FULL);
             } finally {
-                System.out.println(response.getOperation());
                 oos.writeObject(response);
                 threadCount--;
             }

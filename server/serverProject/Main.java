@@ -35,7 +35,7 @@ public class Main {
                 thread.start();
             }
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            LOG.severe(ex.getMessage());
         }
     }
 
