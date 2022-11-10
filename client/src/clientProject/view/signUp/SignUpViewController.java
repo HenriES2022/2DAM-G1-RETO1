@@ -37,42 +37,113 @@ import model.User;
  */
 public class SignUpViewController {
 
+    /**
+     * The field for the user full name
+     */
     @FXML
     private TextField txtFullName;
+    /**
+     * The field for the username
+     */
     @FXML
     private TextField txtUsername;
+    /**
+     * THe field for the email
+     */
     @FXML
     private TextField txtEmail;
+    /**
+     * The field for the password
+     */
     @FXML
     private PasswordField txtPassword;
+    /**
+     * The signUp button
+     */
     @FXML
     private Button btnSignUp;
+    /**
+     * The button to go back to the main window
+     */
     @FXML
     private Button btnBack;
+    /**
+     * The label to show error messages of the full name field
+     */
     @FXML
     private Label txtFullNameError;
+    /**
+     * The label to show error messages of the username field
+     */
     @FXML
     private Label txtUsernameError;
+    /**
+     * The label to show error messages of the email field
+     */
     @FXML
     private Label txtEmailError;
+    /**
+     * The label to show error messages of the password field
+     */
     @FXML
     private Label txtPasswordError;
+    /**
+     * The label to show error messages of the password confirmation field
+     */
     @FXML
     private Label txtPasswordConfirmError;
+    /**
+     * The field for the password confirmation
+     */
     @FXML
     private PasswordField txtConfirmPassword;
-
+    /**
+     * The stage where the scene is going to be displayed
+     */
     private Stage myStage = null;
+    /**
+     * The scene that is going to be displayed
+     */
     private Scene myScene = null;
+    /**
+     * Indicates if the email is valid
+     */
     private Boolean correctEmail = false;
+    /**
+     * Indicates if the password is valid
+     */
     private Boolean correctPassword = false;
+    /**
+     * Indicates if the full name is valid
+     */
     private Boolean correctFullName = false;
+    /**
+     * Indicates if the user name is valid
+     */
     private Boolean correctUserName = false;
+    /**
+     * Indicates if the password confirmation is valid
+     */
     private Boolean correctPasswordConfirmation = false;
+    /**
+     * The alert window
+     */
     private static Alert alert = null;
+    /**
+     * The pattern to validate diferent fields
+     */
     private Pattern pattern = null;
+    /**
+     * The matcher that validates if the field text matches the pattern
+     */
     private Matcher matcher = null;
+    /**
+     * The logger of this class
+     */
     private static final Logger LOG = Logger.getLogger("clientProject.view.signUp.SignUpViewController.class");
+    /**
+     * The socket to connect to the server
+     */
     private ClientSocket clientSocket;
     private Stage primaryStage = null;
 
@@ -84,6 +155,7 @@ public class SignUpViewController {
      */
     public void initStage(Parent root, Stage primaryStage, ClientSocket clientSocket, String css) {
         LOG.info("Starting the window and setting the components on the screen");
+        //Setting the scene, the css and the client socket
         myScene = new Scene(root);
         myScene.getStylesheets().add(css);
         myStage = new Stage();
@@ -92,6 +164,8 @@ public class SignUpViewController {
         this.primaryStage = primaryStage;
         
         myStage.setOnShowing((event) -> {
+            //When the screen launch the onShowing event
+
             myStage.setTitle("Registro");
             myStage.setScene(myScene);
             myStage.setResizable(false);
@@ -110,10 +184,13 @@ public class SignUpViewController {
         });
 
         LOG.info("Setting validator for the full name field");
+
         txtFullName.textProperty().addListener((Observable) -> {
+            //When the text is being modified in the text field
             try {
                 txtFullNameError.setVisible(false);
 
+                //Validating the full name
                 String fullNamePattern
                         = "^([A-Z][a-z]*((\\s)))+[A-Z][a-z]*$";
                 String fullName = txtFullName.getText();
@@ -121,15 +198,19 @@ public class SignUpViewController {
                 pattern = Pattern.compile(fullNamePattern);
                 matcher = pattern.matcher(fullName);
 
+                //If the full name is empty or the length is less than 5
                 if (fullName.length() == 0 || fullName.length() < 5) {
                     throw new Exception("Este campo debe de tener mínimo 5 carácteres");
-                } else if (fullName.length() > 100) {
+                } //If the full names length is bigger than 100
+                else if (fullName.length() > 100) {
                     txtFullName.setText(txtFullName.getText().substring(0, 100));
                     throw new Exception("Este campo no puede contener más de 100 carácteres");
-                } else if (!matcher.matches()) {
+                } //If it doesn't match to the pattern
+                else if (!matcher.matches()) {
                     throw new Exception("El nombre y apellido deben de estar separados con un espacio,"
                             + "\ncontener solo carácteres desde A-Z, y la primera letra en mayúscula ");
                 }
+                //Else
                 correctFullName = true;
                 btnSignUp.setDisable(!(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation));
 
@@ -144,6 +225,8 @@ public class SignUpViewController {
 
         LOG.info("Setting validator for the email field");
         txtEmail.textProperty().addListener((Observable) -> {
+            //When the text is being modified in the text field
+
             try {
                 txtEmailError.setVisible(false);
 
@@ -174,21 +257,27 @@ public class SignUpViewController {
 
         LOG.info("Setting validator for the username field");
         txtUsername.textProperty().addListener((Observable) -> {
+            //When the text is being modified in the text field
+
             try {
                 txtUsernameError.setVisible(false);
+                //Validating the username
                 String usernamePattern = "^[a-zA-Z0-9]+$";
-
                 pattern = Pattern.compile(usernamePattern);
                 matcher = pattern.matcher(txtUsername.getText());
 
+                //If the username lenghth is less than 5
                 if (txtUsername.getText().length() < 5) {
                     throw new Exception("El nombre de usuario debe tener mínimo 5 carácteres");
-                } else if (txtUsername.getText().length() > 50) {
+                } //If the username length is more than 50
+                else if (txtUsername.getText().length() > 50) {
                     txtUsername.setText(txtUsername.getText().substring(0, 50));
                     throw new Exception("El nombre de usuario no puede tener mas de 50 caracteres");
-                } else if (!matcher.matches()) {
+                } //If the text don't match with the pattern
+                else if (!matcher.matches()) {
                     throw new Exception("El nombre de usuario solo puede tener carácteres alfanuméricos");
                 }
+                //Else
                 correctUserName = true;
                 btnSignUp.setDisable(!(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation));
 
@@ -204,6 +293,8 @@ public class SignUpViewController {
 
         LOG.info("Setting validator for the password field");
         txtPassword.textProperty().addListener((Observable) -> {
+            //When the text is being modified in the text field
+
             try {
                 txtPasswordError.setVisible(false);
                 correctPassword = passwordValidator(txtPassword.getText());
@@ -220,15 +311,20 @@ public class SignUpViewController {
 
         LOG.info("Setting validator to check both the password and the confirmation is the same");
         txtConfirmPassword.textProperty().addListener((Observable) -> {
+            //When the text is being modified in the text field
+
             try {
                 txtPasswordConfirmError.setVisible(false);
-
+                
+                // If the password confirmation don't match with the password
                 if (!txtConfirmPassword.getText().equals(txtPassword.getText())) {
                     throw new Exception("La contraseña no coincide");
                 }
+                // If the password confirmation is empty
                 if (txtConfirmPassword.getText().length() == 0) {
                     throw new Exception("El campo no puede estar vacio");
                 }
+                //Else
                 correctPasswordConfirmation = true;
                 btnSignUp.setDisable(!(correctFullName && correctEmail && correctPassword && correctUserName && correctPasswordConfirmation));
 
@@ -242,8 +338,7 @@ public class SignUpViewController {
         }
         );
 
-        btnBack.setOnAction(
-                (ActionEvent) -> {
+        btnBack.setOnAction((ActionEvent) -> {
                     LOG.info("Closing the window");
                     myStage.close();
                     primaryStage.show();
@@ -325,6 +420,7 @@ public class SignUpViewController {
         Message message;
         User user;
 
+        //Setting the user data and the message data
         user = new User();
         user.setFullName(txtFullName.getText());
         user.setEmail(txtEmail.getText());
