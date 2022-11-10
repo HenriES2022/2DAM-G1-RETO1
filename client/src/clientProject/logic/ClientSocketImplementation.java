@@ -6,8 +6,6 @@
 package clientProject.logic;
 
 
-import enumerations.Operation;
-
 import exceptions.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -22,11 +20,11 @@ import model.Message;
  * @author Joritz
  */
 public class ClientSocketImplementation implements ClientSocket {
-    
+
     private static final Logger LOG = Logger.getLogger("clientProject.logic.ClientSocketImplementation");
     private static final String HOST = ResourceBundle.getBundle("clientProject.configClient").getString("ip_address");
     private static final Integer PORT = Integer.parseInt(ResourceBundle.getBundle("clientProject.configClient").getString("port"));
-    
+
     @Override
     public Message connectToServer(Message message) throws ServerErrorException, ServerFullException {
         Socket socket = null;
@@ -34,20 +32,20 @@ public class ClientSocketImplementation implements ClientSocket {
             LOG.info("Establishing the connection to the server");
             // Se crea la conexión al servidor
             socket = new Socket(HOST, PORT);
-            
+
             LOG.info("Connected: Opening I/O streams");
             // Se abren los streams de E/S
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            
+
             LOG.info("Sending message to the server");
             // Envia el mensaje al servidor
             oos.writeObject(message);
-            
+
             LOG.info("Reading message from the server");
             // Recibe la respuesta del servidor
             Message respuesta = (Message) ois.readObject();
-            
+
             switch (respuesta.getOperation()) {
                 case SERVER_FULL:
                     throw new ServerFullException("El servdor esta lleno, intentelo mas tarde");
@@ -67,7 +65,7 @@ public class ClientSocketImplementation implements ClientSocket {
             } catch (IOException ex) {
                 LOG.severe(ex.getMessage());
             }
-            
+
         }
     }
 }

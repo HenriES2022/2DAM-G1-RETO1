@@ -68,7 +68,7 @@ public class SignInViewController {
     public void initStage(Parent root, ClientSocket clientSocket, String css) {
         LOG.info("Initiating Sign In View stage");
         this.css = css;
-        
+
         Scene scene = new Scene(root);
         scene.getStylesheets().add(css);
         Stage stage = new Stage();
@@ -216,16 +216,18 @@ public class SignInViewController {
 
             message = clientSocket.connectToServer(message);
 
-            if (message.getOperation().equals(Operation.LOGIN_ERROR)) {
-                throw new IncorrectLoginException("Login Incorrecto, compruebe el usuario y/o la contraseña");
-            } else if (message.getOperation().equals(Operation.OK)) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("../logged/LoggedView.fxml"));
-                Parent root = (Parent) loader.load();
-                LoggedViewController controller = ((LoggedViewController) loader.getController());
-                controller.initStage(root, message.getUserData(), primaryStage, this.css);
-                txtUser.setText("");
-                txtPassword.setText("");
+            switch (message.getOperation()) {
+                case LOGIN_ERROR:
+                    throw new IncorrectLoginException("Login Incorrecto, compruebe el usuario y/o la contraseña");
+                case OK:
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../logged/LoggedView.fxml"));
+                    Parent root = (Parent) loader.load();
+                    LoggedViewController controller = ((LoggedViewController) loader.getController());
+                    controller.initStage(root, message.getUserData(), primaryStage, this.css);
+                    txtUser.setText("");
+                    txtPassword.setText("");
             }
+
         } catch (ServerErrorException | ServerFullException ex) {
             LOG.severe(ex.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
