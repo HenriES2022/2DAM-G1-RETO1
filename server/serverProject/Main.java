@@ -13,14 +13,20 @@ import java.util.logging.Logger;
 import serverProject.logic.WorkingThread;
 
 /**
- *
+ *  This is the main class of the server
  * @author Joritz
  * @author Henrique
  */
 public class Main {
 
     private static final Logger LOG = Logger.getLogger("serverProject.Main");
+    /**
+     * The initial stage of the server
+     */
     private static Boolean stop = false;
+    /**
+     * The port where the server is listening
+     */
     static final int PUERTO = 5000;
 
     public Main() {
@@ -30,6 +36,7 @@ public class Main {
             LOG.info("Listening on port: " + PUERTO);
             ServerSocket skServidor = new ServerSocket(PUERTO);
             while (!stop) {
+                //Accept the connection, create a thread and pass the socket to the thread
                 Socket skCliente = skServidor.accept();
                 WorkingThread thread = new WorkingThread(skCliente);
                 thread.start();
@@ -47,12 +54,22 @@ public class Main {
     private void shutdown() {
         System.exit(0);
     }
-
+    /**
+     * This class is for stay listening to write something in the keyboard, if exit is writen will close the server
+     */
     private class KeyboardListener extends Thread {
-
+        /**
+         * The exit sentence
+         */
         private final String EXIT = "exit";
+        /**
+         * The main class
+         */
         private final Main main;
-
+        /**
+         * The constructor of the keyboard listener
+         * @param main The main class
+         */
         public KeyboardListener(Main main) {
             this.main = main;
         }

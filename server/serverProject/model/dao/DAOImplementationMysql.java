@@ -26,12 +26,21 @@ import java.util.List;
  */
 public class DAOImplementationMysql implements DAO {
 
-    // TODO- This is a connection object for testing previous to pool impl
+    /**
+     * The connection
+     */
     private Connection con;
 
+    /**
+     * The empty contructor
+     */
     public DAOImplementationMysql() {
     }
 
+    /**
+     * The constructor with params
+     * @param con a connection object
+     */
     public DAOImplementationMysql(Connection con) {
         this.con = con;
     }
@@ -94,10 +103,7 @@ public class DAOImplementationMysql implements DAO {
      * has logged in</li>
      * </ol>
      *
-     * @param user
-     * @return Message
-     * @throws IncorrectLoginException if user and/or password is incorrect
-     * @throws ServerErrorException if the connection to the database is closed
+     * 
      */
     @Override
     public Message signIn(User user) throws IncorrectLoginException, ServerErrorException {
@@ -179,16 +185,7 @@ public class DAOImplementationMysql implements DAO {
         }
     }
 
-    /**
-     * This method will register the user to the database, checking first if the
-     * login username already exists
-     *
-     * @param user
-     * @return Message
-     * @throw UserAlreadyExistsException if the username is already in the
-     * database
-     * @throw ServerErrorException if the connection to the database is closed
-     */
+    
     @Override
     public Message signUp(User user) throws UserAlreadyExistsException, ServerErrorException {
         if (con == null) {
