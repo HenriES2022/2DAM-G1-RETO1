@@ -35,8 +35,8 @@ import model.Message;
 import model.User;
 
 /**
- * FXML Controller class
- *This class is the controller of the Sign In view
+ * FXML Controller class This class is the controller of the Sign In view
+ *
  * @author Joritz
  * @author Henrique
  */
@@ -51,7 +51,8 @@ public class SignInViewController {
      */
     private Pattern pattern = null;
     /**
-     * This is the matcher to compare that the field to validate that the field data matches to a valid pattern
+     * This is the matcher to compare that the field to validate that the field
+     * data matches to a valid pattern
      */
     private Matcher matcher = null;
     /**
@@ -59,11 +60,11 @@ public class SignInViewController {
      */
     private Boolean usernameFilled = false;
     /**
-     *Indicates that if the password field is filled
+     * Indicates that if the password field is filled
      */
     private Boolean passwordFilled = false;
     /**
-     * The constant tooltip of the user field 
+     * The constant tooltip of the user field
      */
     private final Tooltip userTooltip = new Tooltip();
     /**
@@ -71,11 +72,12 @@ public class SignInViewController {
      */
     private final Tooltip passTooltip = new Tooltip();
     /**
-     * Indicates to the tooltip how many is going to move from the original position
+     * Indicates to the tooltip how many is going to move from the original
+     * position
      */
     private final Double offset = 35d;
     /**
-     * The primary stage 
+     * The primary stage
      */
     private Stage primaryStage;
     /**
@@ -88,7 +90,7 @@ public class SignInViewController {
     private String css = null;
 
     /**
-     * The user name text field 
+     * The user name text field
      */
     @FXML
     private TextField txtUser;
@@ -112,17 +114,18 @@ public class SignInViewController {
      */
     @FXML
     private Label txtLogInError;
-    
+
     /**
      * This method initialize the stage (@code SignInView)
+     *
      * @param root the principal stage where this window will be showed
      * @param clientSocket The client socket to connect to the server
-     * @param css The css file reference 
+     * @param css The css file reference
      */
     public void initStage(Parent root, ClientSocket clientSocket, String css) {
         LOG.info("Initiating Sign In View stage");
         this.css = css;
-        
+
         //Set the scene, add the css and setting the client socket and the primary stage
         Scene scene = new Scene(root);
         scene.getStylesheets().add(css);
@@ -212,7 +215,6 @@ public class SignInViewController {
             }
         });
 
-        
         stage.setOnShowing((Event) -> {
             LOG.info("Setting the status of the items shown on scene");
             txtUser.setDisable(false);
@@ -242,7 +244,9 @@ public class SignInViewController {
     }
 
     /**
-     * This is the method that permit to sign in if the user and password are correct and the server returned that the operation is done correctly
+     * This is the method that permit to sign in if the user and password are
+     * correct and the server returned that the operation is done correctly
+     *
      * @param e The event object
      */
     private void signIn(ActionEvent e) {
@@ -260,7 +264,7 @@ public class SignInViewController {
             message.setOperation(Operation.SING_IN);
 
             String error = "Login incorrecto, compruebe el usuario y/o la contraseña";
-            
+
             //Validating that the username is valid
             String usernamePattern = "^[a-zA-Z0-9]+$";
             pattern = Pattern.compile(usernamePattern);
@@ -277,7 +281,7 @@ public class SignInViewController {
                     = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!¡@#$%&¿?]).{8,100}$";
             pattern = Pattern.compile(PASSWORD_PATTERN);
             matcher = pattern.matcher(txtPassword.getText());
-            
+
             //If the password is not valid
             if (!matcher.matches()) {
                 LOG.info("La contraseña no es válida, debe tener al menos una mayuscula, una minuscula, un número y un caracter especial");
@@ -287,19 +291,21 @@ public class SignInViewController {
             //connect to server, send the message and obtain the returned message
             message = clientSocket.connectToServer(message);
 
-            //If the obtained message says that login error has happend 
-            if (message.getOperation().equals(Operation.LOGIN_ERROR)) {
-                throw new IncorrectLoginException("Login Incorrecto, compruebe el usuario y/o la contraseña");
-            }//If the obtained message says that everything is ok
-            else if (message.getOperation().equals(Operation.OK)) {
-                //Open the logged window and set the fields empty
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("../logged/LoggedView.fxml"));
-                Parent root = (Parent) loader.load();
-                LoggedViewController controller = ((LoggedViewController) loader.getController());
-                controller.initStage(root, message.getUserData(), primaryStage, this.css);
-                txtUser.setText("");
-                txtPassword.setText("");
+            switch (message.getOperation()) {
+                //If the obtained message says that login error has happend 
+                case LOGIN_ERROR:
+                    throw new IncorrectLoginException("Login Incorrecto, compruebe el usuario y/o la contraseña");
+                //If the obtained message says that everything is ok
+                case OK:
+                    //Open the logged window and set the fields empty
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../logged/LoggedView.fxml"));
+                    Parent root = (Parent) loader.load();
+                    LoggedViewController controller = ((LoggedViewController) loader.getController());
+                    controller.initStage(root, message.getUserData(), primaryStage, this.css);
+                    txtUser.setText("");
+                    txtPassword.setText("");
             }
+
         } catch (ServerErrorException | ServerFullException ex) {
             LOG.severe(ex.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
@@ -314,9 +320,10 @@ public class SignInViewController {
             alert.showAndWait();
         }
     }
-    
+
     /**
      * Shows the corresponding tooltip in the corresponding field
+     *
      * @param stage The stage where is going to be showed
      * @param txtFfield The textField where is going to be attached
      * @param text The text that is going to be showed
@@ -328,7 +335,7 @@ public class SignInViewController {
         //Setting the tooltip to the field and setting that when focus is lost is going to auto hide
         txtFfield.setTooltip(tp);
         tp.setAutoHide(true);
-        
+
         //Setting the cordinates where is going to be showed
         tp.show(stage,
                 txtFfield.getLayoutX() + txtFfield.getScene().getX() + txtFfield.getScene().getWindow().getX(),

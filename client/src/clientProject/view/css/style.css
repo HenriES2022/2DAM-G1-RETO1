@@ -7,11 +7,7 @@
     -fx-alignment: center;
 }
 
-#title{
-
-}
-
-#btnSignIn, #btnSignUp{
+#btnSignIn, #btnSignUp, #btnLogOut{
     -fx-background-color: #5b0c50;
     -fx-text-fill: white;
     -fx-font-weight: bold;
@@ -27,7 +23,7 @@
     -fx-border-radius: 5px;
 }
 
-#btnSignUpView:hover, #btnSignIn:hover, #btnSignUp:hover, #btnBack:hover{
+#btnSignUpView:hover, #btnSignIn:hover, #btnSignUp:hover, #btnBack:hover, #btnLogOut:hover{
     -fx-background-color: pink;
     -fx-text-fill: black;
     -fx-font-weight: bold;

@@ -145,6 +145,7 @@ public class SignUpViewController {
      * The socket to connect to the server
      */
     private ClientSocket clientSocket;
+    private Stage primaryStage = null;
 
     /**
      * This method starts the Sign Up window
@@ -160,7 +161,8 @@ public class SignUpViewController {
         myStage = new Stage();
         primaryStage.hide();
         this.clientSocket = clientSocket;
-
+        this.primaryStage = primaryStage;
+        
         myStage.setOnShowing((event) -> {
             //When the screen launch the onShowing event
 
@@ -436,9 +438,11 @@ public class SignUpViewController {
                 case USER_EXISTS:
                     throw new UserAlreadyExistsException("El usuario ya existe, pruebe con otro");
                 case OK:
-                    alert = new Alert(Alert.AlertType.INFORMATION, "El usuario ha sido registrado correctamente", ButtonType.OK);
+                    alert = new Alert(Alert.AlertType.CONFIRMATION, "El usuario ha sido registrado correctamente", ButtonType.OK);
                     alert.showAndWait();
-                    LOG.info("The sign up has be done correctly. Exiting method...");
+                    LOG.info("Se ha registrado el usuario correctamente. Saliendo al anterior ventana...");
+                    this.myStage.close();
+                    this.primaryStage.show();
                     break;
                 case SERVER_FULL:
                     throw new ServerFullException("El servdor esta lleno, intentelo mas tarde");

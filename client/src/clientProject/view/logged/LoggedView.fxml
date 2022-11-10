@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -12,24 +7,24 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="780.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientProject.view.logged.LoggedViewController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="780.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientProject.view.logged.LoggedViewController">
     <children>
         <ImageView fitHeight="540.0" fitWidth="472.0" pickOnBounds="true">
             <image>
                 <Image url="@LoggedImage.png" />
             </image>
         </ImageView>
-        <Label fx:id="txtSaludo" layoutX="586.0" layoutY="102.0" text="Bienvenido">
+        <Label fx:id="txtSaludo" layoutX="471.0" layoutY="102.0" prefHeight="40.0" prefWidth="313.0" text="Bienvenido">
             <font>
                 <Font size="28.0" />
             </font>
         </Label>
-        <Button fx:id="btnLogOut" layoutX="586.0" layoutY="370.0" mnemonicParsing="false" text="Cerrar Sesion">
+        <Button fx:id="btnLogOut" layoutX="551.0" layoutY="366.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="153.0" text="Cerrar Sesion">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Label fx:id="txtUserLogged" layoutX="586.0" layoutY="184.0">
+        <Label fx:id="txtUserLogged" layoutX="473.0" layoutY="184.0" prefHeight="35.0" prefWidth="313.0">
             <font>
                 <Font size="24.0" />
             </font>

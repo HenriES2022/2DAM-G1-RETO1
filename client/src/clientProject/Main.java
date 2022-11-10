@@ -5,7 +5,6 @@
  */
 package clientProject;
 
-import clientProject.logic.ClientSocket;
 import clientProject.logic.ClientSocketFactory;
 import clientProject.view.signIn.SignInViewController;
 import java.io.IOException;

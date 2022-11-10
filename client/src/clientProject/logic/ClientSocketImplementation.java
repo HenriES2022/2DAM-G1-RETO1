@@ -6,8 +6,6 @@
 package clientProject.logic;
 
 
-import enumerations.Operation;
-
 import exceptions.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -35,7 +33,7 @@ public class ClientSocketImplementation implements ClientSocket {
      * The port where the server is listening, readed from a properties file.
      */
     private static final Integer PORT = Integer.parseInt(ResourceBundle.getBundle("clientProject.configClient").getString("port"));
-    
+
     @Override
     public Message connectToServer(Message message) throws ServerErrorException, ServerFullException {
         Socket socket = null;
@@ -43,21 +41,20 @@ public class ClientSocketImplementation implements ClientSocket {
             LOG.info("Establishing the connection to the server");
             // Create a connection to the server
             socket = new Socket(HOST, PORT);
-            
+
             LOG.info("Connected: Opening I/O streams");
             // Openning the I/O streams
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            
+
             LOG.info("Sending message to the server");
             // Sending the message to the server
             oos.writeObject(message);
-            
+
             LOG.info("Reading message from the server");
             // Receiving respones from the server
             Message respuesta = (Message) ois.readObject();
-            
-            
+
             switch (respuesta.getOperation()) {
                 //If the received message says that the server is full
                 case SERVER_FULL:
@@ -80,7 +77,7 @@ public class ClientSocketImplementation implements ClientSocket {
             } catch (IOException ex) {
                 LOG.severe(ex.getMessage());
             }
-            
+
         }
     }
 }
