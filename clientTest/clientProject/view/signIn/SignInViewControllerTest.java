@@ -93,9 +93,7 @@ public class SignInViewControllerTest extends ApplicationTest {
 
         verifyThat(btnSignIn, isEnabled());
         clickOn(btnSignIn);
-        //This label references the logged view user name label
-        //txtUserLogged = lookup("#txtUserLogged").query();
-        //TODO continue the comparation method
+        
         try {
             btnAceptar = lookup("Aceptar").query();
             if (btnAceptar.isVisible()) {
