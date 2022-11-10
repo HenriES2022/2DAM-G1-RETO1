@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -26,7 +25,7 @@ import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 
 /**
  *
- * @author iorit
+ * @author ioritz
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SignInViewControllerTest extends ApplicationTest {
@@ -35,7 +34,8 @@ public class SignInViewControllerTest extends ApplicationTest {
     private PasswordField txtPassword;
     private Button btnSignIn;
     private Button btnSignUp;
-    private Label txtUserLogged; 
+    private Button btnAceptar;
+    private Label txtUserLogged;
 
     /**
      * Start the application test for the sign In window
@@ -75,6 +75,7 @@ public class SignInViewControllerTest extends ApplicationTest {
         //Buttons
         verifyThat(btnSignIn, isDisabled());
         verifyThat(btnSignUp, isEnabled());
+
     }
 
     /**
@@ -92,23 +93,51 @@ public class SignInViewControllerTest extends ApplicationTest {
 
         verifyThat(btnSignIn, isEnabled());
         clickOn(btnSignIn);
-        //This label references the logged view user name label
-        //txtUserLogged = lookup("#txtUserLogged").query();
-       //TODO continue the comparation method
         
-        clickOn("Cerrar Sesion");
+        try {
+            btnAceptar = lookup("Aceptar").query();
+            if (btnAceptar.isVisible()) {
+                clickOn(btnAceptar);
+
+            } else {
+                clickOn("Cerrar Sesion");
+            }
+        } catch (NullPointerException e) {
+            clickOn("Cerrar Sesion");
+        }
 
     }
 
     /**
-     * Test of the SignUp window with incorrect user and password
+     * Test of the SignUp window with incorrect user
      */
     @Test
-    public void testC_IncorrectUserAndPassword() {
+    public void testC_IncorrectUser() {
         this.getFields();
         clickOn(txtUser);
         eraseText(txtUser.getText().length());
         write("ioritz??");
+
+        clickOn(txtPassword);
+        eraseText(txtPassword.getText().length());
+        write("Abcd?1234");
+
+        clickOn(btnSignIn);
+        verifyThat(btnSignIn, isEnabled());
+        verifyThat("Aceptar", isVisible());
+        clickOn("Aceptar");
+
+    }
+
+    /**
+     * Test of the SignUp window with incorrect password
+     */
+    @Test
+    public void testD_IncorrectPassword() {
+        this.getFields();
+        clickOn(txtUser);
+        eraseText(txtUser.getText().length());
+        write("ioritz");
 
         clickOn(txtPassword);
         eraseText(txtPassword.getText().length());

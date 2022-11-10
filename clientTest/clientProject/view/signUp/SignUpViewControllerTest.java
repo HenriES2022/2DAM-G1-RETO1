@@ -106,71 +106,12 @@ public class SignUpViewControllerTest extends ApplicationTest {
     }
 
     /**
-     * Test method of a correct sign up cas
-     */
-    @Test
-    public void testB_correctSignUp() {
-        clickOn(txtFullName);
-        //Text Fields
-        write("Ioritz Urkiri");
-        clickOn(txtEmail);
-        write("ioritz2002@hotmail.com");
-        clickOn(txtUsername);
-        write("ioritz");
-        clickOn(txtPassword);
-        write("Abcd?1234");
-        clickOn(txtConfirmPassword);
-        write("Abcd?1234");
-
-        //Validating the text and labels
-        Assert.assertNotEquals("", txtFullNameError.getText());
-        Assert.assertNotEquals("", txtEmail.getText());
-        Assert.assertNotEquals("", txtUsername.getText());
-        Assert.assertNotEquals("", txtPassword.getText());
-        Assert.assertNotEquals("", txtConfirmPassword.getText());
-
-        verifyThat(txtFullNameError, isInvisible());
-        verifyThat(txtUsernameError, isInvisible());
-        verifyThat(txtEmailError, isInvisible());
-        verifyThat(txtPasswordError, isInvisible());
-        verifyThat(txtPasswordConfirmError, isInvisible());
-
-        //Buttons
-        verifyThat(btnSignUp, isEnabled());
-        verifyThat(btnBack, isEnabled());
-        
-        clickOn(btnSignUp);
-        verifyThat("Aceptar", isVisible());
-        clickOn("Aceptar");
-    }
-
-    /**
      * Test method of a not correct sign up case were the full name is not
      * correct
      */
     @Test
-    public void testC_fullNameNotCorrect() {
-        //Clearing the fields
-        clickOn(txtConfirmPassword);
-        eraseText(txtConfirmPassword.getText().length());
-
-        clickOn(txtPassword);
-        eraseText(txtPassword.getText().length());
-
-        clickOn(txtUsername);
-        eraseText(txtUsername.getText().length());
-     
-        
-        clickOn(txtEmail);
-        eraseText(txtEmail.getText().length());
-        clickOn(txtEmail);
-        eraseText(txtEmail.getText().length());
-
+    public void testB_fullNameNotCorrect() {
         clickOn(txtFullName);
-        eraseText(txtFullName.getText().length());
-
-        //clickOn(txtFullName);
-
         //Text Fields
         write("Ioritz");
         clickOn(txtEmail);
@@ -200,14 +141,14 @@ public class SignUpViewControllerTest extends ApplicationTest {
         verifyThat(btnBack, isEnabled());
 
     }
-    
+
     /**
      * Test method of a not correct sign up case were the user name is not
      * correct
      */
     @Test
-    public void testD_UsernameNotCorrect(){
-         //Clearing the fields
+    public void testC_UsernameNotCorrect() {
+        //Clearing the fields
         clickOn(txtConfirmPassword);
         eraseText(txtConfirmPassword.getText().length());
 
@@ -216,7 +157,7 @@ public class SignUpViewControllerTest extends ApplicationTest {
 
         clickOn(txtUsername);
         eraseText(txtUsername.getText().length());
-     
+
         clickOn(txtEmail);
         eraseText(txtEmail.getText().length());
         clickOn(txtEmail);
@@ -254,13 +195,13 @@ public class SignUpViewControllerTest extends ApplicationTest {
         verifyThat(btnBack, isEnabled());
 
     }
+
     /**
-     * Test method of a not correct sign up case were the email is not
-     * correct
+     * Test method of a not correct sign up case were the email is not correct
      */
     @Test
-    public void testE_EmailNotCorrect(){
-         //Clearing the fields
+    public void testD_EmailNotCorrect() {
+        //Clearing the fields
         clickOn(txtConfirmPassword);
         eraseText(txtConfirmPassword.getText().length());
 
@@ -269,7 +210,7 @@ public class SignUpViewControllerTest extends ApplicationTest {
 
         clickOn(txtUsername);
         eraseText(txtUsername.getText().length());
-     
+
         clickOn(txtEmail);
         eraseText(txtEmail.getText().length());
         clickOn(txtEmail);
@@ -307,14 +248,14 @@ public class SignUpViewControllerTest extends ApplicationTest {
         verifyThat(btnBack, isEnabled());
 
     }
-    
+
     /**
      * Test method of a not correct sign up case were the password is not
      * correct
      */
     @Test
-    public void testF_PasswordNotCorrect(){
-         //Clearing the fields
+    public void testE_PasswordNotCorrect() {
+        //Clearing the fields
         clickOn(txtConfirmPassword);
         eraseText(txtConfirmPassword.getText().length());
 
@@ -323,10 +264,9 @@ public class SignUpViewControllerTest extends ApplicationTest {
 
         clickOn(txtUsername);
         eraseText(txtUsername.getText().length());
-     
+
         clickOn(txtEmail);
         eraseText(txtEmail.getText().length());
-        
 
         clickOn(txtFullName);
         eraseText(txtFullName.getText().length());
@@ -360,14 +300,14 @@ public class SignUpViewControllerTest extends ApplicationTest {
         verifyThat(btnBack, isEnabled());
 
     }
-    
+
     /**
-     * Test method of a not correct sign up case were the password confirmation is not
-     * correct
+     * Test method of a not correct sign up case were the password confirmation
+     * is not correct
      */
     @Test
-    public void testG_PasswordConfirmationNotCorrect(){
-         //Clearing the fields
+    public void testF_PasswordConfirmationNotCorrect() {
+        //Clearing the fields
         clickOn(txtConfirmPassword);
         eraseText(txtConfirmPassword.getText().length());
 
@@ -375,7 +315,6 @@ public class SignUpViewControllerTest extends ApplicationTest {
         eraseText(txtPassword.getText().length());
 
         //Text Fields
-       
         write("Abcd?1234");
         clickOn(txtConfirmPassword);
         write("Abcd1234");
@@ -397,5 +336,61 @@ public class SignUpViewControllerTest extends ApplicationTest {
         verifyThat(btnSignUp, isDisabled());
         verifyThat(btnBack, isEnabled());
 
+    }
+
+    /**
+     * Test method of a correct sign up cas
+     */
+    @Test
+    public void testG_correctSignUp() {
+        //Clearing the fields
+        clickOn(txtConfirmPassword);
+        eraseText(txtConfirmPassword.getText().length());
+
+        clickOn(txtPassword);
+        eraseText(txtPassword.getText().length());
+
+        clickOn(txtUsername);
+        eraseText(txtUsername.getText().length());
+
+        clickOn(txtEmail);
+        eraseText(txtEmail.getText().length());
+        clickOn(txtEmail);
+        eraseText(txtEmail.getText().length());
+
+        clickOn(txtFullName);
+        eraseText(txtFullName.getText().length());
+
+        //Text Fields
+        write("Ioritz Urkiri");
+        clickOn(txtEmail);
+        write("ioritz2002@hotmail.com");
+        clickOn(txtUsername);
+        write("ioritz");
+        clickOn(txtPassword);
+        write("Abcd?1234");
+        clickOn(txtConfirmPassword);
+        write("Abcd?1234");
+
+        //Validating the text and labels
+        Assert.assertNotEquals("", txtFullNameError.getText());
+        Assert.assertNotEquals("", txtEmail.getText());
+        Assert.assertNotEquals("", txtUsername.getText());
+        Assert.assertNotEquals("", txtPassword.getText());
+        Assert.assertNotEquals("", txtConfirmPassword.getText());
+
+        verifyThat(txtFullNameError, isInvisible());
+        verifyThat(txtUsernameError, isInvisible());
+        verifyThat(txtEmailError, isInvisible());
+        verifyThat(txtPasswordError, isInvisible());
+        verifyThat(txtPasswordConfirmError, isInvisible());
+
+        //Buttons
+        verifyThat(btnSignUp, isEnabled());
+        verifyThat(btnBack, isEnabled());
+
+        clickOn(btnSignUp);
+        verifyThat("Aceptar", isVisible());
+        clickOn("Aceptar");
     }
 }
