@@ -74,7 +74,7 @@ public class SignUpViewControllerTest extends ApplicationTest {
         txtPasswordError = lookup("#txtPasswordError").query();
         txtPasswordConfirmError = lookup("#txtPasswordConfirmError").query();
         // Buttons
-        btnSignUp = lookup("#btnSignUpView").query();
+        btnSignUp = lookup("#btnSignUp").query();
         btnBack = lookup("#btnBack").query();
 
     }
