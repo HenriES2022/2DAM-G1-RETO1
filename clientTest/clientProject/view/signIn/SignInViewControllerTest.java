@@ -57,7 +57,7 @@ public class SignInViewControllerTest extends ApplicationTest {
         txtUser = lookup("#txtUser").query();
         txtPassword = lookup("#txtPassword").query();
         btnSignIn = lookup("#btnSignIn").query();
-        btnSignUp = lookup("#btnSignUp").query();
+        btnSignUp = lookup("#btnSignUpView").query();
     }
 
     /**

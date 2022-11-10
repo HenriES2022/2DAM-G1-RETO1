@@ -7,6 +7,7 @@ package clientProject;
 
 import clientProject.logic.ClientSocketFactory;
 import clientProject.view.signIn.SignInViewController;
+import clientProject.logic.ClientSocket;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,11 +32,12 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
+            ClientSocket cs = ClientSocketFactory.getImplementation();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("view/signIn/SignInView.fxml"));
             Parent root = (Parent) loader.load();
             SignInViewController controller = ((SignInViewController) loader.getController());
             String css = this.getClass().getResource("view/css/style.css").toExternalForm();
-            controller.initStage(root, ClientSocketFactory.getImplementation(), css);
+            controller.initStage(root, cs, css);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }

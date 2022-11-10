@@ -232,7 +232,7 @@ public class SignInViewController {
         //When the sign up buttton is clicked
         btnSignUpView.setOnAction((Event) -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("../signUp/SignUpView.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/clientProject/view/signUp/SignUpView.fxml"));
                 Parent rootSignUp = (Parent) loader.load();
                 SignUpViewController signUp = ((SignUpViewController) loader.getController());
                 signUp.initStage(rootSignUp, stage, this.clientSocket, css);
@@ -275,7 +275,7 @@ public class SignInViewController {
                 LOG.info(error);
                 throw new IncorrectLoginException(error);
             }
-            //Else
+            
             //validate password
             String PASSWORD_PATTERN
                     = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!¡@#$%&¿?]).{8,100}$";
@@ -287,7 +287,7 @@ public class SignInViewController {
                 LOG.info("La contraseña no es válida, debe tener al menos una mayuscula, una minuscula, un número y un caracter especial");
                 throw new IncorrectLoginException(error);
             }
-            //Else
+            
             //connect to server, send the message and obtain the returned message
             message = clientSocket.connectToServer(message);
 
@@ -298,7 +298,7 @@ public class SignInViewController {
                 //If the obtained message says that everything is ok
                 case OK:
                     //Open the logged window and set the fields empty
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../logged/LoggedView.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/clientProject/view/logged/LoggedView.fxml"));
                     Parent root = (Parent) loader.load();
                     LoggedViewController controller = ((LoggedViewController) loader.getController());
                     controller.initStage(root, message.getUserData(), primaryStage, this.css);

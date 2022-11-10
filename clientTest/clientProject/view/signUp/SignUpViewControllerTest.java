@@ -74,7 +74,7 @@ public class SignUpViewControllerTest extends ApplicationTest {
         txtPasswordError = lookup("#txtPasswordError").query();
         txtPasswordConfirmError = lookup("#txtPasswordConfirmError").query();
         // Buttons
-        btnSignUp = lookup("#btnSignUp").query();
+        btnSignUp = lookup("#btnSignUpView").query();
         btnBack = lookup("#btnBack").query();
 
     }
@@ -84,7 +84,7 @@ public class SignUpViewControllerTest extends ApplicationTest {
      */
     @Test
     public void testA_initializationSignUp() {
-        clickOn("#btnSignUp");
+        clickOn("#btnSignUpView");
         this.getFields();
         // Text fields
         verifyThat(txtFullName, hasText(""));
