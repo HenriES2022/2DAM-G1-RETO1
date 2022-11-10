@@ -6,8 +6,6 @@
 package clientProject.logic;
 
 
-import enumerations.Operation;
-
 import exceptions.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -23,36 +21,48 @@ import model.Message;
  */
 public class ClientSocketImplementation implements ClientSocket {
     
+    /**
+     * This is the logger of the class.
+     */
     private static final Logger LOG = Logger.getLogger("clientProject.logic.ClientSocketImplementation");
+    /**
+     * The ip addres of the server, readed from a properties file.
+     */
     private static final String HOST = ResourceBundle.getBundle("clientProject.configClient").getString("ip_address");
+    /**
+     * The port where the server is listening, readed from a properties file.
+     */
     private static final Integer PORT = Integer.parseInt(ResourceBundle.getBundle("clientProject.configClient").getString("port"));
-    
+
     @Override
     public Message connectToServer(Message message) throws ServerErrorException, ServerFullException {
         Socket socket = null;
         try {
             LOG.info("Establishing the connection to the server");
-            // Se crea la conexión al servidor
+            // Create a connection to the server
             socket = new Socket(HOST, PORT);
-            
+
             LOG.info("Connected: Opening I/O streams");
-            // Se abren los streams de E/S
+            // Openning the I/O streams
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            
+
             LOG.info("Sending message to the server");
-            // Envia el mensaje al servidor
+            // Sending the message to the server
             oos.writeObject(message);
-            
+
             LOG.info("Reading message from the server");
-            // Recibe la respuesta del servidor
+            // Receiving respones from the server
             Message respuesta = (Message) ois.readObject();
-            System.out.println(respuesta.getOperation());
+
             switch (respuesta.getOperation()) {
+                //If the received message says that the server is full
                 case SERVER_FULL:
                     throw new ServerFullException("El servdor esta lleno, intentelo mas tarde");
+                //If the received message says that any error has happend in the server
                 case SERVER_ERROR:
                     throw new ServerErrorException("Error al conectarse con el servidor, intentelo de nuevo mas tarde");
+                //Any other case
                 default:
                     return respuesta;
             }
@@ -67,7 +77,7 @@ public class ClientSocketImplementation implements ClientSocket {
             } catch (IOException ex) {
                 LOG.severe(ex.getMessage());
             }
-            
+
         }
     }
 }

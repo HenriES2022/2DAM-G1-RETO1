@@ -25,13 +25,26 @@ import model.User;
  * @author yeguo
  */
 public class LoggedViewController {
-
+    
+    /**
+     * The logger of the class
+     */
     private static final Logger LOG = Logger.getLogger("view.logged.LoggedViewController");
 
+    
+    /**
+     * The label where the greeting of the window is going to be showed.
+     */
     @FXML
     private Label txtSaludo;
+    /**
+     * The button to log out from the application
+     */
     @FXML
     private Button btnLogOut;
+    /**
+     * The label where the logged user name is going to showed.
+     */
     @FXML
     private Label txtUserLogged;
 

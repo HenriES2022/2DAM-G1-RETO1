@@ -3,4 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+/**
+ * This is the package contains all the resources and classes of the sign in view.
+ */
 package clientProject.view.signIn;
