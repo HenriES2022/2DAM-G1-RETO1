@@ -47,7 +47,7 @@ public class ClientSocketImplementation implements ClientSocket {
             LOG.info("Reading message from the server");
             // Recibe la respuesta del servidor
             Message respuesta = (Message) ois.readObject();
-            
+            System.out.println(respuesta.getOperation());
             switch (respuesta.getOperation()) {
                 case SERVER_FULL:
                     throw new ServerFullException("El servdor esta lleno, intentelo mas tarde");
