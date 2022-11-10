@@ -42,23 +42,13 @@ public class DBImplPoolMysql implements DB {
      */
     private static final Logger LOG = Logger.getLogger("serverProject.model.database.DBImplPoolMysql");
 
-    /**
-     * This method ssave the openned connection in the pool
-     *
-     * @return Returns true if add has worked, false if it not
-     */
+    
     @Override
     public synchronized Boolean saveConnection() {
         LOG.info("Saving the connection");
         return pool.add(conex);
     }
 
-    /**
-     * This method obtain a connection from the pool, or if there is not any
-     * connections in the pool creates a new one
-     *
-     * @return Returns the connection to the database
-     */
     @Override
     public synchronized Connection getConnection() {
         LOG.info("Obtaining a connection");

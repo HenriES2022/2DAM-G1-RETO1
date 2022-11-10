@@ -7,23 +7,23 @@ package serverProject.model.database;
 import java.sql.Connection;
 
 /**
- *
+ * 
  * @author yeguo
  */
 public interface DB {
 
-    /**
-     * This method will save the connections into a pool to later use
+   /**
+     * This method save the openned connection in the pool
      *
-     * @return Boolean
+     * @return Returns true if add has worked, false if it not
      */
     public Boolean saveConnection();
 
     /**
-     * This method returns a connection already opened from the pool or creates
-     * a new one if no connection is available
+     * This method obtain a connection from the pool, or if there is not any
+     * connections in the pool creates a new one
      *
-     * @return Connection
+     * @return Returns the connection to the database
      */
     public Connection getConnection();
 

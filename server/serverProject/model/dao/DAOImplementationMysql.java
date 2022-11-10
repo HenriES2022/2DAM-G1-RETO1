@@ -91,7 +91,8 @@ public class DAOImplementationMysql implements DAO {
      * This method is for the SignIn, passes through parameter a user with the
      * Login Username and Password.
      * <br>
-     * <ol> Sequence of the statements
+     * Sequence of the statements
+     * <ul> 
      * <li>{@link #SIGN_IN} "Login" statement, retrieves the data of the logged
      * user</li>
      * <li>{@link #SIGN_IN_HISTORY_ADD} inserts a new row with the
@@ -101,7 +102,7 @@ public class DAOImplementationMysql implements DAO {
      * <li>{@link #SIGN_IN_HISTORY_DEL} deletes the oldest history login</li>
      * <li>{@link #SIGN_IN_HISTORY} retrieves the list of times that the user
      * has logged in</li>
-     * </ol>
+     * </ul>
      *
      * 
      */

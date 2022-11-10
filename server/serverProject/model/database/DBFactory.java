@@ -7,12 +7,17 @@ package serverProject.model.database;
 import java.util.ResourceBundle;
 
 /**
- *
+ * This is the factory that creates connection pool implementations
  * @author yeguo
  */
 public abstract class DBFactory {
-
+    /**
+     * The type of the database to use
+     */
     private static final String DB_TYPE = ResourceBundle.getBundle("serverProject.configServer").getString("model");
+    /**
+     * The expected type of the database
+     */
     private static final String MYSQL = "mysql";
     
     /**
