@@ -41,14 +41,15 @@ public class LoggedViewController {
      * @param root The parent stage for this view
      * @param user Object user who logged in
      */
-    public void initStage(Parent root, User user, Stage primaryStage) {
+    public void initStage(Parent root, User user, Stage primaryStage, String css) {
         LOG.info("Initiating Logged View stage");
 
         primaryStage.hide();
 
         // Create scene associated with the parent scene
         Scene scene = new Scene(root);
-
+        scene.getStylesheets().add(css);
+        
         // Sets the window properties
         Stage stage = new Stage();
         stage.setScene(scene);

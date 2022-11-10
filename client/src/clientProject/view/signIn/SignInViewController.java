@@ -52,6 +52,7 @@ public class SignInViewController {
     private final Double offset = 35d;
     private Stage primaryStage;
     private ClientSocket clientSocket;
+    private String css = null;
 
     @FXML
     private TextField txtUser;
@@ -60,25 +61,29 @@ public class SignInViewController {
     @FXML
     private Button btnSignIn;
     @FXML
-    private Button btnSignUp;
+    private Button btnSignUpView;
     @FXML
     private Label txtLogInError;
 
-    public void initStage(Parent root, ClientSocket clientSocket) {
+    public void initStage(Parent root, ClientSocket clientSocket, String css) {
         LOG.info("Initiating Sign In View stage");
+        this.css = css;
+        
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(css);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle("Iniciar Sesion");
         this.primaryStage = stage;
         this.clientSocket = clientSocket;
-        
+
         LOG.info("Setting validator for the username field");
         txtUser.textProperty().addListener((Observable) -> {
             try {
                 String error;
                 if (txtUser.getText().length() == 0) {
                     userTooltip.hide();
+                    throw new Exception("El nombre de usuario no puede estar vacío");
                 } else if (txtUser.getText().length() < 5) {
                     error = "El nombre de usuario debe tener mínimo 5 carácteres ";
                     showTooltip(stage, txtUser, error, userTooltip);
@@ -109,6 +114,7 @@ public class SignInViewController {
 
                 if (txtPassword.getText().length() == 0) {
                     passTooltip.hide();
+                    throw new Exception("La contraseña no puede estar vacío");
                 } else if (txtPassword.getText().length() < 8) {
                     error = "La contraseña debe tener mínimo 8 carácteres";
                     showTooltip(stage, txtPassword, error, passTooltip);
@@ -150,7 +156,7 @@ public class SignInViewController {
             txtPassword.setDisable(false);
             btnSignIn.setDisable(true);
             btnSignIn.setDefaultButton(true);
-            btnSignUp.setDisable(false);
+            btnSignUpView.setDisable(false);
             txtLogInError.setVisible(false);
             txtLogInError.setText("LogIn incorrecto, usuario y/o contraseña incorrecto");
             stage.setResizable(false);
@@ -158,12 +164,12 @@ public class SignInViewController {
         });
 
         btnSignIn.setOnAction(this::signIn);
-        btnSignUp.setOnAction((Event) -> {
+        btnSignUpView.setOnAction((Event) -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../signUp/SignUpView.fxml"));
                 Parent rootSignUp = (Parent) loader.load();
                 SignUpViewController signUp = ((SignUpViewController) loader.getController());
-                signUp.initStage(rootSignUp, stage, this.clientSocket);
+                signUp.initStage(rootSignUp, stage, this.clientSocket, css);
             } catch (IOException ex) {
                 LOG.info("No se puede abrir la ventana " + ex.getLocalizedMessage());
             }
@@ -216,7 +222,7 @@ public class SignInViewController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../logged/LoggedView.fxml"));
                 Parent root = (Parent) loader.load();
                 LoggedViewController controller = ((LoggedViewController) loader.getController());
-                controller.initStage(root, message.getUserData(), primaryStage);
+                controller.initStage(root, message.getUserData(), primaryStage, this.css);
                 txtUser.setText("");
                 txtPassword.setText("");
             }

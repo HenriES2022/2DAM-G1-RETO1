@@ -35,7 +35,8 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("view/signIn/SignInView.fxml"));
             Parent root = (Parent) loader.load();
             SignInViewController controller = ((SignInViewController) loader.getController());
-            controller.initStage(root, ClientSocketFactory.getImplementation());
+            String css = this.getClass().getResource("view/css/style.css").toExternalForm();
+            controller.initStage(root, ClientSocketFactory.getImplementation(), css);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }

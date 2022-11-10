@@ -99,12 +99,12 @@
             </font>
         </Label>
 
-        <Button fx:id="btnSignUp" layoutX="430.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Registrarse">
+        <Button fx:id="btnSignUp" layoutX="430.0" layoutY="495.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" text="Registrarse">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button fx:id="btnBack" layoutX="634.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Volver">
+        <Button fx:id="btnBack" layoutX="634.0" layoutY="495.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" text="Volver">
             <font>
                 <Font size="14.0" />
             </font>

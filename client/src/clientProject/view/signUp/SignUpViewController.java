@@ -74,16 +74,17 @@ public class SignUpViewController {
     private Matcher matcher = null;
     private static final Logger LOG = Logger.getLogger("clientProject.view.signUp.SignUpViewController.class");
     private ClientSocket clientSocket;
-    
+
     /**
      * This method starts the Sign Up window
      *
      * @param root The scene that is going to be loaded in the stage
      * @param primaryStage
      */
-    public void initStage(Parent root, Stage primaryStage, ClientSocket clientSocket) {
+    public void initStage(Parent root, Stage primaryStage, ClientSocket clientSocket, String css) {
         LOG.info("Starting the window and setting the components on the screen");
         myScene = new Scene(root);
+        myScene.getStylesheets().add(css);
         myStage = new Stage();
         primaryStage.hide();
         this.clientSocket = clientSocket;
