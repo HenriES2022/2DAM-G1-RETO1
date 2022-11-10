@@ -42,15 +42,15 @@ public class DAOImplementationMysqlTest {
     private static Connection con;
     private Message msg;
     private static DAOImplementationMysql dao;
-    private static String username;
-    private static String passwd;
+    private static String username = "user1";
+    private static String passwd = "Password1234?";
     private static DB poolImpl;
     private static final String URL = ResourceBundle.getBundle("serverProject.configServer").getString("url");
     private static final String USER = ResourceBundle.getBundle("serverProject.configServer").getString("user");
     private static final String PASS = ResourceBundle.getBundle("serverProject.configServer").getString("pass");
     private static final Logger LOG = Logger.getLogger("serverProject.model.dao.DAOImplementationMysqlTest");
 
-    private static final String DATA_TEST = "insert into user(login, email, full_name, user_password) values('user1', 'user1@example.com', 'User pepe', MD5('password1234'))";
+    private static final String DATA_TEST = "insert into user(login, email, full_name, user_password) values('user1', 'user1@example.com', 'User pepe', MD5('Password1234?'))";
 
     /**
      * BeforeClass opens the connection to the database
@@ -58,8 +58,6 @@ public class DAOImplementationMysqlTest {
     @BeforeClass
     public static void beforeClass() {
         poolImpl = DBFactory.getDB();
-        username = "user1";
-        passwd = "Password1234?";
         try {
             con = poolImpl.getConnection();
             dao = new DAOImplementationMysql();
@@ -80,7 +78,7 @@ public class DAOImplementationMysqlTest {
         if (con != null) {
             try {
 
-                PreparedStatement stat = con.prepareCall("DELETE FROM USER WHERE login = 'user1'");
+                PreparedStatement stat = con.prepareStatement("DELETE FROM USER WHERE login = 'user1'");
                 stat.executeUpdate();
 
                 con.close();
@@ -199,7 +197,7 @@ public class DAOImplementationMysqlTest {
         } catch (ServerErrorException e) {
             LOG.severe(e.getMessage());
         } finally {
-            try (PreparedStatement deleteUser = con.prepareStatement("delete from user where login = ?")) {
+            try ( PreparedStatement deleteUser = con.prepareStatement("delete from user where login = ?")) {
                 deleteUser.setString(1, login);
                 deleteUser.executeUpdate();
             } catch (Exception e) {
