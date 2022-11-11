@@ -68,7 +68,7 @@ public class WorkingThread extends Thread {
                 sleep(100);
                 LOG.info("Starting the " + threadCount + " thread");
                 sleep(100);
-                if (threadCount > 1) {
+                if (threadCount > 10) {
                     throw new ServerFullException("Servidor lleno, no se puede atender a más usuarios");
                 }
                 // Retrieve Msg from the client
