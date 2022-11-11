@@ -11,20 +11,20 @@ En el caso de que se use mysql query browser se deberá de eliminar la base de d
 <h2> Cliente </h2>
 El archivo de propiedades se encuentra en el paquete principal llamado "ClientProject",
 en este se guardará varias propiedades:
-  IP_ADDRESS: IP del servidor
-  PORT: Puerto que el servidor está usando
-  CONNECTION_TYPE= El tipo de conexión que se usa entre cliente-servidor
+  <li>IP_ADDRESS: IP del servidor</li>
+  <li>PORT: Puerto que el servidor está usando</li>
+  <li>CONNECTION_TYPE= El tipo de conexión que se usa entre cliente-servidor</li>
  
  
 
 <h2> Servidor</h2>
 El archivo de propiedades se encuentra en el paquete principal llamado "ServerProject",
 en este se guardará varias propiedades:
-  MODEL: La base de datos que se va usar 
-  URL: Dirección de la base de datos
-  USER= El usuario que se usará para la conexión
-  PASS= La contraseña del usuario
-  PORT= El puerto por el que se va escuchar
+  <li>MODEL: La base de datos que se va usar </li> 
+  <li>URL: Dirección de la base de datos</li>
+  <li>USER= El usuario que se usará para la conexión</li>
+  <li>PASS= La contraseña del usuario</li>
+  <li>PORT= El puerto por el que se va escuchar</li>
 
 
 
