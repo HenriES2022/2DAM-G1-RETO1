@@ -9,22 +9,22 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientProject.view.logged.LoggedViewController">
     <children>
-        <ImageView fitHeight="540.0" fitWidth="472.0" pickOnBounds="true">
+        <ImageView fitHeight="610.0" fitWidth="546.0" pickOnBounds="true">
             <image>
                 <Image url="@LoggedImage.png" />
             </image>
         </ImageView>
-        <Label fx:id="txtSaludo" layoutX="471.0" layoutY="102.0" prefHeight="40.0" prefWidth="313.0" text="Bienvenido">
+        <Label fx:id="txtSaludo" layoutX="550.0" layoutY="102.0" prefHeight="40.0" prefWidth="380.0" text="Bienvenido">
             <font>
                 <Font size="28.0" />
             </font>
         </Label>
-        <Button fx:id="btnLogOut" layoutX="551.0" layoutY="366.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="153.0" text="Cerrar Sesion">
+        <Button fx:id="btnLogOut" layoutX="670.0" layoutY="366.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="156.0" text="Cerrar Sesion">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Label fx:id="txtUserLogged" layoutX="473.0" layoutY="184.0" prefHeight="35.0" prefWidth="313.0">
+        <Label fx:id="txtUserLogged" layoutX="550.0" layoutY="184.0" prefHeight="35.0" prefWidth="380.0">
             <font>
                 <Font size="24.0" />
             </font>
