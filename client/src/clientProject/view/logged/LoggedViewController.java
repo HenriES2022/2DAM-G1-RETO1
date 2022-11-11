@@ -53,6 +53,8 @@ public class LoggedViewController {
      *
      * @param root The parent stage for this view
      * @param user Object user who logged in
+     * @param primaryStage Primary stage
+     * @param css Add CSS to stages
      */
     public void initStage(Parent root, User user, Stage primaryStage, String css) {
         LOG.info("Initiating Logged View stage");

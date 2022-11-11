@@ -151,7 +151,9 @@ public class SignUpViewController {
      * This method starts the Sign Up window
      *
      * @param root The scene that is going to be loaded in the stage
-     * @param primaryStage
+     * @param primaryStage Primary stage
+     * @param clientSocket Passes the client socket 
+     * @param css Adds CSS to stages
      */
     public void initStage(Parent root, Stage primaryStage, ClientSocket clientSocket, String css) {
         LOG.info("Starting the window and setting the components on the screen");
