@@ -1,0 +1,52 @@
+/*
+    This is the css from the application views
+*/
+.root{
+    -fx-background-color: #dddddd;
+}
+
+.text-field{
+    -fx-text-box-border: transparent;
+    -fx-border-style: hidden hidden solid hidden;
+    -fx-border-width: 1px;
+    -fx-border-color: pink;
+}
+
+.text-field:focused{
+    -fx-focus-color: #5b0c50;
+    -fx-border-style: hidden hidden hidden hidden;
+}
+
+.label{
+    -fx-font-family: "Roboto";
+    -fx-alignment: center;
+}
+
+#btnSignIn, #btnSignUp, #btnLogOut{
+    -fx-background-color: #5b0c50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+
+}
+
+#btnSignUpView, #btnBack{
+    -fx-background-color: white;
+    -fx-font-weight: bold;
+    -fx-border-color: gray;
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+}
+
+#btnSignUpView:hover, #btnSignIn:hover, #btnSignUp:hover, #btnBack:hover, #btnLogOut:hover{
+    -fx-background-color: pink;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+
+
+}
+
