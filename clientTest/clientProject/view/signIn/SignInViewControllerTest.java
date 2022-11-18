@@ -69,71 +69,101 @@ public class SignInViewControllerTest extends ApplicationTest {
 
         //Verifying the textFields
         verifyThat(txtUser, hasText(""));
-        verifyThat(txtUser, (t) -> t.isFocused());
         verifyThat(txtPassword, hasText(""));
 
         //Buttons
         verifyThat(btnSignIn, isDisabled());
         verifyThat(btnSignUp, isEnabled());
-
     }
 
     /**
-     * Test of the SignUp window with correct data
+     * Test to open the Sign Up window
      */
     @Test
-    public void testB_correctLoginFields() {
+    public void testB_SignUpView() {
         this.getFields();
 
-        String logginUser = "ioritz";
-        write(logginUser);
+        verifyThat(btnSignUp, isEnabled());
+        clickOn(btnSignUp);
+
+        try {
+            btnAceptar = lookup("Aceptar").query();
+            if (btnAceptar.isVisible()) {
+                clickOn(btnAceptar);
+            } else {
+                clickOn("Volver");
+            }
+        } catch (NullPointerException e) {
+            clickOn("Volver");
+        }
+    }
+
+    /**
+     * Test that checks button SignIn as disable if the fields are empty
+     */
+    @Test
+    public void testC_SignInDisable() {
+        this.getFields();
+        clickOn(txtUser);
+        write("Mondongo");
+
+        verifyThat(btnSignIn, isDisabled());
+        eraseText(8);
+
+        clickOn(txtPassword);
+        write("Abcd?1234");
+
+        verifyThat(btnSignIn, isDisabled());
+        eraseText(9);
+
+        verifyThat(btnSignIn, isDisabled());
+    }
+
+    /**
+     * Test that checks button SignIn as enable if the fields are full
+     */
+    @Test
+    public void testD_SignInEnable() {
+        this.getFields();
+
+        clickOn(txtUser);
+        write("Mondongo");
 
         clickOn(txtPassword);
         write("Abcd?1234");
 
         verifyThat(btnSignIn, isEnabled());
-        clickOn(btnSignIn);
-        
-        try {
-            btnAceptar = lookup("Aceptar").query();
-            if (btnAceptar.isVisible()) {
-                clickOn(btnAceptar);
 
-            } else {
-                clickOn("Cerrar Sesion");
-            }
-        } catch (NullPointerException e) {
-            clickOn("Cerrar Sesion");
-        }
+        clickOn(txtUser);
+        eraseText(8);
 
+        clickOn(txtPassword);
+        eraseText(9);
     }
 
     /**
-     * Test of the SignUp window with incorrect user
+     * Test of the SignIn window with incorrect user
      */
     @Test
-    public void testC_IncorrectUser() {
+    public void testE_IncorrectUser() {
         this.getFields();
         clickOn(txtUser);
-        eraseText(txtUser.getText().length());
         write("ioritz??");
 
         clickOn(txtPassword);
-        eraseText(txtPassword.getText().length());
         write("Abcd?1234");
 
         clickOn(btnSignIn);
         verifyThat(btnSignIn, isEnabled());
         verifyThat("Aceptar", isVisible());
         clickOn("Aceptar");
-
     }
 
     /**
-     * Test of the SignUp window with incorrect password
+     * Test of the SignIn window with incorrect password
      */
     @Test
-    public void testD_IncorrectPassword() {
+    public void testF_IncorrectPasswords() {
         this.getFields();
         clickOn(txtUser);
         eraseText(txtUser.getText().length());
@@ -148,5 +178,83 @@ public class SignInViewControllerTest extends ApplicationTest {
         verifyThat("Aceptar", isVisible());
         clickOn("Aceptar");
 
+        clickOn(txtUser);
+        eraseText(txtUser.getText().length());
+
+        clickOn(txtPassword);
+        eraseText(txtPassword.getText().length());
+    }
+
+    /**
+     * Test of the SignIn window with correct data
+     */
+    @Test
+    public void testG_correctLoginFields() {
+        this.getFields();
+
+        clickOn(txtUser);
+        write("ioritz");
+
+        clickOn(txtPassword);
+        write("Abcd?1234");
+
+        verifyThat(btnSignIn, isEnabled());
+        clickOn(btnSignIn);
+
+        try {
+            btnAceptar = lookup("Aceptar").query();
+            if (btnAceptar.isVisible()) {
+                clickOn(btnAceptar);
+            } else {
+                clickOn("Cerrar Sesion");
+            }
+        } catch (NullPointerException e) {
+            clickOn("Cerrar Sesion");
+        }
+    }
+
+    /**
+     * Test that check the user length
+     */
+    @Test
+    public void testH_UserLength() {
+        this.getFields();
+        clickOn(txtPassword);
+        write("Abcd?1234");
+
+        clickOn(txtUser);
+        write("hola");
+
+        verifyThat(btnSignIn, isDisabled());
+
+        clickOn(txtUser);
+        eraseText(4);
+        write("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+        verifyThat(btnSignIn, isDisabled());
+        eraseText(txtUser.getText().length());
+
+        clickOn(txtPassword);
+        eraseText(txtPassword.getText().length());
+    }
+
+    /**
+     * Test that check the user length
+     */
+    @Test
+    public void testI_PasswordLength() {
+        this.getFields();
+        clickOn(txtUser);
+        write("ioritz");
+
+        clickOn(txtPassword);
+        write("Abc123");
+
+        verifyThat(btnSignIn, isDisabled());
+
+        eraseText(6);
+        write("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+        verifyThat(btnSignIn, isDisabled());
     }
 }
