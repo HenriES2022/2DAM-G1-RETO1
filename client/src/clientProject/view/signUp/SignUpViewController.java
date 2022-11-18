@@ -151,9 +151,7 @@ public class SignUpViewController {
      * This method starts the Sign Up window
      *
      * @param root The scene that is going to be loaded in the stage
-     * @param primaryStage Primary stage
-     * @param clientSocket Passes the client socket 
-     * @param css Adds CSS to stages
+     * @param primaryStage
      */
     public void initStage(Parent root, Stage primaryStage, ClientSocket clientSocket, String css) {
         LOG.info("Starting the window and setting the components on the screen");
@@ -194,7 +192,7 @@ public class SignUpViewController {
 
                 //Validating the full name
                 String fullNamePattern
-                        = "^([A-Z][a-z]*((\\s)))+[A-Z][a-z]*$";
+                        = "^([A-Z\u00d1ÁÉÍÓÚÜ][a-z\u00f1áéíóúü]*((\\s)))+[A-Z\u00d1ÁÉÍÓÚÜ][a-z\u00f1áéíóúü]*$";
                 String fullName = txtFullName.getText();
 
                 pattern = Pattern.compile(fullNamePattern);
@@ -264,7 +262,7 @@ public class SignUpViewController {
             try {
                 txtUsernameError.setVisible(false);
                 //Validating the username
-                String usernamePattern = "^[a-zA-Z0-9]+$";
+                String usernamePattern = "^[a-zA-Z0-9Ññ]+$";
                 pattern = Pattern.compile(usernamePattern);
                 matcher = pattern.matcher(txtUsername.getText());
 
@@ -395,7 +393,7 @@ public class SignUpViewController {
      */
     private Boolean passwordValidator(String password) throws Exception {
         String PASSWORD_PATTERN
-                = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!¡@#$%&¿?]).{8,100}$";
+                = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!¡@#$%&¿?_.*,]).{8,100}$";
 
         if (password.length() < 8) {
             throw new Exception("La contraseña debe de tener al menos 8 caracteres");
@@ -409,7 +407,7 @@ public class SignUpViewController {
                 return true;
             }
         }
-        throw new Exception("La contraseña no es válida, debe tener al menos una mayúscula, \n una minúscula, un número y un carácter especial");
+        throw new Exception("La contraseña no es válida, debe tener al menos una mayúscula, \n una minúscula, un número y un carácter especial.\n Los caracteres especiales validos son: !¡@#$%&¿?_.*,");
     }
 
     /**

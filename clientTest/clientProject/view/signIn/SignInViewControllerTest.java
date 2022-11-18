@@ -21,6 +21,7 @@ import org.testfx.framework.junit.ApplicationTest;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
+import org.testfx.matcher.base.WindowMatchers;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 
 /**
@@ -34,8 +35,6 @@ public class SignInViewControllerTest extends ApplicationTest {
     private PasswordField txtPassword;
     private Button btnSignIn;
     private Button btnSignUp;
-    private Button btnAceptar;
-    private Label txtUserLogged;
 
     /**
      * Start the application test for the sign In window
@@ -65,6 +64,7 @@ public class SignInViewControllerTest extends ApplicationTest {
      */
     @Test
     public void testA_InitStage() {
+        verifyThat(window("Iniciar Sesion"), WindowMatchers.isShowing());
         this.getFields();
 
         //Verifying the textFields
@@ -79,40 +79,10 @@ public class SignInViewControllerTest extends ApplicationTest {
     }
 
     /**
-     * Test of the SignUp window with correct data
-     */
-    @Test
-    public void testB_correctLoginFields() {
-        this.getFields();
-
-        String logginUser = "ioritz";
-        write(logginUser);
-
-        clickOn(txtPassword);
-        write("Abcd?1234");
-
-        verifyThat(btnSignIn, isEnabled());
-        clickOn(btnSignIn);
-        
-        try {
-            btnAceptar = lookup("Aceptar").query();
-            if (btnAceptar.isVisible()) {
-                clickOn(btnAceptar);
-
-            } else {
-                clickOn("Cerrar Sesion");
-            }
-        } catch (NullPointerException e) {
-            clickOn("Cerrar Sesion");
-        }
-
-    }
-
-    /**
      * Test of the SignUp window with incorrect user
      */
     @Test
-    public void testC_IncorrectUser() {
+    public void testB_IncorrectUser() {
         this.getFields();
         clickOn(txtUser);
         eraseText(txtUser.getText().length());
@@ -124,7 +94,7 @@ public class SignInViewControllerTest extends ApplicationTest {
 
         clickOn(btnSignIn);
         verifyThat(btnSignIn, isEnabled());
-        verifyThat("Aceptar", isVisible());
+        verifyThat("Login incorrecto, compruebe el usuario y/o la contraseña", isVisible());
         clickOn("Aceptar");
 
     }
@@ -133,7 +103,7 @@ public class SignInViewControllerTest extends ApplicationTest {
      * Test of the SignUp window with incorrect password
      */
     @Test
-    public void testD_IncorrectPassword() {
+    public void testC_IncorrectPassword() {
         this.getFields();
         clickOn(txtUser);
         eraseText(txtUser.getText().length());
@@ -145,8 +115,34 @@ public class SignInViewControllerTest extends ApplicationTest {
 
         clickOn(btnSignIn);
         verifyThat(btnSignIn, isEnabled());
-        verifyThat("Aceptar", isVisible());
+        verifyThat("Login incorrecto, compruebe el usuario y/o la contraseña", isVisible());
         clickOn("Aceptar");
 
+    }
+
+    /**
+     * Test of the SignUp window with correct data
+     */
+    @Test
+    public void testD_correctLoginFields() {
+        this.getFields();
+
+        clickOn(txtPassword);
+        eraseText(txtPassword.getLength());
+
+        clickOn(txtUser);
+        eraseText(txtUser.getLength());
+
+        String logginUser = "ioritz";
+        write(logginUser);
+
+        clickOn(txtPassword);
+        write("Abcd?1234");
+
+        verifyThat(btnSignIn, isEnabled());
+        clickOn(btnSignIn);
+        
+        verifyThat(window("Bienvenido"), WindowMatchers.isShowing());
+        clickOn("Cerrar Sesion");
     }
 }

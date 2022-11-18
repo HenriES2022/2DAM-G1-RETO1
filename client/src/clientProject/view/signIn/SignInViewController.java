@@ -266,7 +266,7 @@ public class SignInViewController {
             String error = "Login incorrecto, compruebe el usuario y/o la contraseña";
 
             //Validating that the username is valid
-            String usernamePattern = "^[a-zA-Z0-9]+$";
+            String usernamePattern = "^[a-zA-Z0-9Ññ]+$";
             pattern = Pattern.compile(usernamePattern);
             matcher = pattern.matcher(txtUser.getText());
 
@@ -278,7 +278,7 @@ public class SignInViewController {
             
             //validate password
             String PASSWORD_PATTERN
-                    = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!¡@#$%&¿?]).{8,100}$";
+                    = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!¡@#$%&¿?_.*,]).{8,100}$";
             pattern = Pattern.compile(PASSWORD_PATTERN);
             matcher = pattern.matcher(txtPassword.getText());
 
@@ -343,3 +343,4 @@ public class SignInViewController {
     }
 
 }
+
